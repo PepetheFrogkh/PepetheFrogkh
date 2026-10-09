@@ -5,6 +5,3 @@ out/
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
-public/film/*.jpg
-public/film/*.mp4
-public/film/manifest.json

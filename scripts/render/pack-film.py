@@ -60,10 +60,6 @@ def main():
         make_video(a.dst, a.video)
 
 
-if __name__ == "__main__":
-    main()
-
-
 def make_video(src_dir, out_path, fps=25, crf=18):
     """Also emit an MP4 of the same frames.
 
@@ -82,3 +78,7 @@ def make_video(src_dir, out_path, fps=25, crf=18):
         out_path,
     ], check=True, capture_output=True)
     print(f"{out_path}: {os.path.getsize(out_path) / 1e6:.1f} MB")
+
+
+if __name__ == "__main__":
+    main()
