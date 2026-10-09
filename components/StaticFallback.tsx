@@ -1,9 +1,10 @@
 import { PLANS } from '@/lib/copy'
+import { BEERS, BREWERY } from '@/lib/brand'
 
 /**
- * Served to everyone, always. It is the page's real content: the crawler, a
- * browser without WebGL and anyone on `prefers-reduced-motion` get exactly
- * the same words the canvas is narrating, in the same order.
+ * Served to everyone, always. It is the page's real content: a crawler, and
+ * anyone on `prefers-reduced-motion`, get exactly the words the film is
+ * narrating, in the same order.
  */
 export default function StaticFallback() {
   return (
@@ -17,20 +18,13 @@ export default function StaticFallback() {
       ))}
       <section id="beers">
         <h2>Our beers</h2>
-        <p>
-          <strong>Hanuman Premium Lager</strong> — 4.9% — brewed from barley malt and a blend of
-          premium hops. Gold medal, Monde Selection 2024.
-        </p>
-        <p>
-          <strong>Hanuman Black</strong> — a 100% malt dark beer in the German tradition, with
-          caramel and honey notes, a fine bead and a rounded, hop-finished palate. Gold medal,
-          Monde Selection 2024.
-        </p>
-        <p>
-          <strong>Hanuman Lite</strong> — 3.9% — naturally fermented and German-lagered, light and
-          soft.
-        </p>
-        <p>Brewed in Sen Sok, Phnom Penh, Cambodia.</p>
+        {BEERS.map((b) => (
+          <p key={b.id}>
+            <strong>{b.name}</strong>
+            {b.abv ? ` — ${b.abv}` : ''} — {b.notes}
+          </p>
+        ))}
+        <p>{BREWERY}</p>
       </section>
     </>
   )

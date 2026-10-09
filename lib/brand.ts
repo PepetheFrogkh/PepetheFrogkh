@@ -1,61 +1,50 @@
 /**
- * Hanuman brand constants.
+ * The brand's own facts, in one place.
  *
- * Navy is sampled straight from the official logo banner (rgb 1,62,106).
- * Gold, copy and tasting notes come from the packaging and the brief — the
- * identity is staged here, never redesigned.
+ * Material and colour values used to live here too, for the realtime build.
+ * They now belong to the Blender scene (`scripts/render/scene.py`), which is
+ * where the look is actually decided — keeping a second copy here would only be
+ * a copy to fall out of date.
  */
-export const BRAND = {
-  navy: '#013e6a',
-  navyDeep: '#01243d',
-  navyInk: '#000d17',
-  gold: '#d9a441',
-  goldLight: '#f4d58d',
-  goldDeep: '#9c6b1c',
-  cream: '#f6f1e6',
-  black: '#0a0a0c',
-  blackWarm: '#15100b',
-} as const
-
-export type BeerId = 'lager' | 'black'
+export type BeerId = 'lager' | 'black' | 'lite'
 
 export interface Beer {
   id: BeerId
   name: string
   khmer: string
-  /** Undefined where the brand has not published a figure (Black). */
+  /** Omitted where the brand has not published a figure. */
   abv?: string
-  notes: string[]
-  labelBg: string
-  /** Transmissive glass tint. */
-  glass: string
-  liquid: string
-  foam: string
+  notes: string
+  /** Out of scope for the maquette; the selector greys these out. */
+  inFilm: boolean
 }
 
-export const BEERS: Record<BeerId, Beer> = {
-  lager: {
+export const BEERS: Beer[] = [
+  {
     id: 'lager',
-    name: 'Premium Lager',
+    name: 'Hanuman Premium Lager',
     khmer: 'ហនុមាន',
     abv: '4.9%',
-    notes: ['Barley malt', 'Premium hops'],
-    labelBg: BRAND.navy,
-    glass: '#8d5a16',
-    liquid: '#d99323',
-    foam: '#f7edd8',
+    notes: 'Barley malt and a blend of premium hops. Gold medal, Monde Selection 2024.',
+    inFilm: true,
   },
-  black: {
+  {
     id: 'black',
     name: 'Hanuman Black',
     khmer: 'ហនុមាន',
-    notes: ['Caramel', 'Honey', 'Roasted malt'],
-    labelBg: '#06060a',
-    glass: '#0a0703',
-    liquid: '#120903',
-    foam: '#d9bd92',
+    notes:
+      'A 100% malt dark beer in the German tradition — caramel and honey notes, a fine bead, '
+      + 'and a rounded, hop-finished palate. Gold medal, Monde Selection 2024.',
+    inFilm: true,
   },
-}
+  {
+    id: 'lite',
+    name: 'Hanuman Lite',
+    khmer: 'ហនុមាន',
+    abv: '3.9%',
+    notes: 'Naturally fermented and German-lagered. Light and soft.',
+    inFilm: false,
+  },
+]
 
-/** Real-world 330 ml long-neck, in metres — the scene is modelled to scale. */
-export const BOTTLE_HEIGHT = 0.23
+export const BREWERY = 'Brewed in Sen Sok, Phnom Penh, Cambodia.'

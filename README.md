@@ -1,11 +1,18 @@
-# Hanuman — scroll-driven WebGL homepage
+# Hanuman — scroll-driven product film
 
-A three-day pitch maquette for [Hanuman Beverages](https://hanumanbeverages.com.kh): the
-homepage rebuilt around the product instead of the company. One persistent WebGL canvas,
-one continuous camera move, six plans driven entirely by scroll.
+A pitch maquette for [Hanuman Beverages](https://hanumanbeverages.com.kh): the homepage
+rebuilt around the product instead of the company. A raytraced film, scrubbed by the
+scroll — one continuous camera move, six plans, no cut.
 
 > The current site is a corporate shop window — brewery, CEO, a minimal carousel. It talks
 > about the business. This talks about the beer: cold, gold, carbonated, poured.
+
+**The hero is not realtime 3D.** It was, for a first pass, and it could not be made to
+look like a beer ad: a browser rasteriser has no refraction through curved glass, no
+caustics and no volumetric absorption, and those are most of the difference between "a 3D
+demo" and "a photograph". The frames now come out of Cycles (`scripts/render/`) and the
+page simply scrubs them, the way Apple's product pages do. The site ships 157 kB of
+JavaScript instead of 530 kB, needs no WebGL at all, and looks the same on every device.
 
 ---
 
@@ -53,98 +60,54 @@ and no-WebGL fallbacks, and server-rendered copy for SEO.
 
 ```
 app/            Next.js App Router — server-rendered copy, fonts, metadata
-components/     the HTML layer (gate, overlay, chrome) and the canvas
-components/three/
-  Director.tsx  ← the storyboard. Every beat in the scroll is a number in here.
-  Scene.tsx     the set: bottles, glass, pour, drop, rays, plinth, post
-  Bottle.tsx    lathe glass + sleeved label + neck foil + crown
-  Tumbler.tsx   the glass, its beer, its bubbles and its head
-  shaders/      condensation, shared noise
-lib/            scroll driver state, brand constants, label painter, profiles
-scripts/        one-off asset preparation (Python)
+components/     the page: age gate, the scrubber, the overlay, the chrome
+  FilmScrubber  decodes and draws the rendered frames against scroll
+lib/            scroll driver, scene timings, brand facts, copy
+public/film/    the frames and their manifest
+public/stills/  one high-quality still per plan, and the reduced-motion poster
+scripts/render/ the Blender/Cycles pipeline that makes all of the above
 ```
 
 ### Scroll
 
 Lenis smooths the wheel, one GSAP `ScrollTrigger` spanning the document converts it to a
-single 0 → 1 number, and `Director` turns that number into the whole scene every frame.
+single 0 → 1 number, and that number picks a frame. The overlay copy is the only thing
+React re-renders, and only when the active plan changes.
 
-Nothing animated is a React prop. The scroll value and all the derived state live in
-plain mutable objects (`lib/scrollState.ts`, `lib/stageState.ts`) that components read
-inside their own `useFrame`. React re-renders a handful of times across the whole page —
-only when the active plan changes, so the overlay copy can cross-fade.
+The scene timings in `lib/scrollState.ts` must match the plan boundaries in
+`scripts/render/scene.py` — the copy is timed to what the frames are actually showing.
 
-The camera is expressed as an orbit (angle, radius, height, target, fov) that runs
-monotonically from 0 to about 2π. There is never a cut, which is the point of the format.
+### The film
 
-### Why the bottles are not the Meshy GLBs
+`scripts/render/scene.py` builds the whole set and renders it. There are no Blender
+keyframes: each frame rebuilds the scene from its position in the scroll, so any frame can
+be rendered on any machine with no shared state and the render farm is just the same
+command with a different index.
 
-The four GLBs supplied are 221k–364k triangles and 22–27 MB each — 15× to 24× the budget
-— and, worse, Meshy welded the glass and the label into one opaque material with the
-label chopped across hundreds of UV islands. You cannot make the glass transmissive
-without losing the label, and you cannot replace the label without losing the glass. The
-entire hero shot depends on both.
+```bash
+python3 scripts/render/scene.py --frame 42 --frames 120 --res 1600 --samples 96 \
+    --tex <tex-dir> --out 0042.png
+python3 scripts/render/pack-film.py <frames-dir> public/film --width 1600 \
+    --video public/film/hanuman.mp4
+```
 
-So the bottles are lathes of revolution. The profile is measured off the official
-packshots (`scripts/measure-packshot.py`, raw data in `public/data/`) — both bottles come
-out at 3.70–3.76 heights per body diameter, which matches a real 330 ml long-neck. The
-label and the neck foil are thin cylinders sleeved over the glass, exactly as the real
-object is assembled. About 15k triangles each, generated at load, no download.
+`scripts/render/README.md` covers why the glass has real thickness, why the colour comes
+from volume absorption rather than surface tint, and why the rig is lit from behind.
 
-The GLBs remain useful as a cross-check on proportion, and a decimated one would stand in
-for a far background shot. They are not in this repository — they are too large to commit.
+### Loading
 
-### Why the label is painted in the browser
-
-The packshots Hanuman publishes are 335–554 px wide. That is a wireframe asset, not a
-texture for a label the camera sits on for half the scroll. `lib/labelTexture.ts` paints
-it instead, at 2048 × 1024, from the brand's own parts: the Hanuman figure lifted from the
-full-resolution logo and re-sharpened (`scripts/extract-brand-marks.py`), the sunburst,
-the Khmer name, the wordmark, the gold rules, the baseline. One 192 kB PNG mask ships; the
-rest is canvas.
-
-**This is the one thing to get from the client before the full build**: the vector label
-artwork, or photography at 2000 px or better. A soft label is the first thing anyone
-notices on their own bottle.
-
-### Lighting
-
-No downloaded HDRI. The environment probe is rendered in-engine from Lightformers — two
-tall soft strips either side (exactly what a product photographer rigs to draw the two
-bright edges down a bottle), a warm top bounce, a navy floor bounce so shadows are never
-neutral grey, and a gold ring behind. `look.warmth` crossfades the whole rig from the
-Lager's daylight to Black's bar, so plan 6 is a light change rather than a cut.
-
-### The effects, in the order they matter
-
-1. **Glass** — `MeshPhysicalMaterial`, transmission 1, IOR 1.52, attenuation tuned per
-   beer (amber for the Lager, almost opaque for Black).
-2. **Condensation** — patched into the bottle's own material rather than laid on as a
-   decal shell. Transmission plus roughness is already frosted glass in three, so the
-   effect is two fragment edits: raise roughness where the bottle has misted, drop it
-   back inside each droplet and bend the normal. The droplets are lit, refracted and
-   blurred by the same path as the glass; an alpha-blended shell never is.
-3. **Pour** — a tapered cylinder with noise displacement, clipped from the top down by
-   progress so it reads as falling. Deliberately not transmissive: that forces a second
-   render-target pass every frame and, in motion, looks the same.
-4. **Head** — a cylinder with a noise-displaced cap and a bubble field in the fragment
-   shader, sheen on, slightly transmissive. It overshoots and settles.
-5. **Bubbles** — points, not instanced spheres. A bubble is two or three pixels; a sprite
-   with a rim highlight is cheaper and more convincing. Sized in metres and projected
-   properly, so they do not blow up at close range.
-6. **The drop** — a lathe of the teardrop curve `r = sinθ · sin(θ/2)`. It opens plan 1,
-   returns black to hand over to plan 6, and settles between the bottles at the end.
+Frames load out of order: every eighth first, so the whole film is coarsely scrubbable
+within about a second, then the gaps fill in. Until a frame has decoded the nearest one
+that has is drawn, so scrolling is never blocked on a download. 120 frames at 1600 px is
+about 6 MB in total, and none of it is on the critical path.
 
 ### Performance
 
-- One `<Canvas>`, never remounted. Scenes are groups that fade.
-- Capability check at boot picks a quality tier: coarse pointer, small viewport or ≤ 4
-  cores drops radial segments, particle counts, shadow maps, MSAA and depth of field, and
-  caps DPR at 1.4.
-- `AdaptiveDpr` + `AdaptiveEvents` give back resolution under load.
-- Total 3D payload: 0 bytes of model data, ~220 kB of brand masks, everything else
-  generated. First Load JS is ~530 kB, dominated by three.js.
-- `prefers-reduced-motion` skips the canvas entirely and serves the static narrative.
+- No WebGL, no 3D runtime, no shader compilation. A canvas and decoded JPEGs.
+- 157 kB First Load JS, almost all of it Next and React.
+- `prefers-reduced-motion` skips the sequence entirely and serves one still behind the
+  static narrative.
+- The heaviest thing on the page is the film, and it streams in coarse-to-fine.
 
 ### SEO and accessibility
 
@@ -162,10 +125,12 @@ no duplication, nothing to keep in sync.
 | --- | --- |
 | Label artwork | ask the brand for vector or 2000 px photography |
 | Khmer copy | needs a translator; the type is already loaded (Noto Sans Khmer) |
-| Mobile | checked at 390 × 844 in a headless browser — layout reflows, nav collapses, quality tier drops — but not profiled on a real handset |
+| Mobile | checked at 390 × 844 in a headless browser, not profiled on a handset |
 | Sound | the "pssht" is a real win and needs a mute control before it ships |
 | Ingredients, Lite, medals, export map | plans 5, 7, 8 and the map half of 9 |
-| Pre-baked fluid sim | the shader pour is a stand-in for the full site |
+| Fluid simulation | the pour is a modelled stream, not a sim |
+| Bubbles, condensation droplets | geometry-nodes work in Blender, not yet done |
+| Motion blur | off, to keep render times down while art-directing |
 
 ## Brand safety
 

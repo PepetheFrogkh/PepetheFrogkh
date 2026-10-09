@@ -5,7 +5,7 @@ import { useApp } from '@/lib/useAppStore'
 import { SCROLL_VH } from '@/lib/scrollState'
 import Boot from './Boot'
 import ScrollDriver from './ScrollDriver'
-import Experience from './Experience'
+import FilmScrubber, { type FilmManifest } from './FilmScrubber'
 import Overlay from './Overlay'
 import Header from './Header'
 import ProgressDrop from './ProgressDrop'
@@ -16,17 +16,21 @@ import Loader from './Loader'
 /**
  * Decides which version of the page the visitor gets.
  *
- * `story` is the server-rendered narrative. When WebGL is available and the
- * visitor has not asked for reduced motion it stays in the document as
- * screen-reader/crawler text and the canvas does the talking; otherwise the
- * same markup is simply shown, which is the brief's static fallback — same
- * words, same order, no second copy to keep in sync.
+ * `story` is the server-rendered narrative. With the film running it stays in
+ * the document as screen-reader and crawler text; on `prefers-reduced-motion`
+ * the same markup is simply shown over a single still. There is no WebGL path
+ * any more and so no "your browser cannot do this" case — a canvas drawing
+ * decoded JPEGs works everywhere.
  */
-export default function Shell({ story }: { story: ReactNode }) {
-  const webgl = useApp((s) => s.webgl)
+export default function Shell({
+  story,
+  manifest,
+}: {
+  story: ReactNode
+  manifest: FilmManifest
+}) {
   const reduced = useApp((s) => s.reducedMotion)
   const ageOk = useApp((s) => s.ageOk)
-  const flat = !webgl || reduced
 
   return (
     <>
@@ -35,13 +39,16 @@ export default function Shell({ story }: { story: ReactNode }) {
       <AgeGate />
       <Header />
 
-      {flat ? (
-        <main className="static" id="story">
-          {story}
-        </main>
+      {reduced ? (
+        <>
+          <div className="still-layer" aria-hidden="true" />
+          <main className="static" id="story">
+            {story}
+          </main>
+        </>
       ) : (
         <>
-          <Experience />
+          <FilmScrubber manifest={manifest} />
           {ageOk && (
             <>
               <ScrollDriver />

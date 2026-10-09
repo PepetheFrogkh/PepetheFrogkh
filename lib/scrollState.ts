@@ -26,37 +26,38 @@ export interface Scene {
 }
 
 /**
- * The six plans in the three-day maquette. Plans 5 (ingredients), 7 (Lite) and
- * 8 (medals) are deliberately out of scope — see README.
+ * The six plans of the film, as ranges of the scroll. These boundaries must
+ * match the ones in `scripts/render/scene.py`: the copy is timed to what the
+ * rendered frames are actually showing.
  */
 export const SCENES: Scene[] = [
-  { id: 'drop', plan: 1, start: 0.0, end: 0.14, title: 'Greatness in every drop.' },
+  { id: 'drop', plan: 1, start: 0.0, end: 0.17, title: 'Greatness in every drop.' },
   {
     id: 'condensation',
     plan: 2,
-    start: 0.14,
-    end: 0.34,
+    start: 0.17,
+    end: 0.35,
     title: 'Ice cold. Always.',
     sub: 'Hanuman Premium Lager',
   },
-  { id: 'open', plan: 3, start: 0.34, end: 0.46, title: 'Pssht.' },
+  { id: 'open', plan: 3, start: 0.35, end: 0.5, title: 'Pssht.' },
   {
     id: 'pour',
     plan: 4,
-    start: 0.46,
-    end: 0.68,
+    start: 0.5,
+    end: 0.7,
     title: 'Golden. Crisp. 4.9%.',
     sub: 'Barley malt · Premium hops',
   },
   {
     id: 'black',
     plan: 6,
-    start: 0.68,
-    end: 0.86,
+    start: 0.7,
+    end: 0.87,
     title: 'Deep. Dark. Smooth.',
     sub: 'Caramel · Honey · Roasted malt',
   },
-  { id: 'cta', plan: 9, start: 0.86, end: 1.0, title: 'Find your Hanuman.' },
+  { id: 'cta', plan: 9, start: 0.87, end: 1.0, title: 'Find your Hanuman.' },
 ]
 
 /** Total page height. Roughly one and a bit viewports per plan. */

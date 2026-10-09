@@ -31,7 +31,7 @@ import addon_utils
 import bmesh
 from mathutils import Vector
 
-# ── the measured bottle, shared with lib/bottleProfile.ts ──────────────────
+# ── the measured bottle (scripts/measure-packshot.py, public/data/) ───────
 BOTTLE_H = 0.23
 BOTTLE_R = BOTTLE_H / 3.72 / 2
 
@@ -392,7 +392,8 @@ def assign(obj, mat):
     obj.data.materials.append(mat)
 
 
-def build_bottle(tex_dir, variant="lager", location=(0, 0, 0), rotation_z=0.0):
+def build_bottle(tex_dir, variant="lager", location=(0, 0, 0), rotation_z=0.0,
+                 cap_lift=0.0, cap_spin=0.0):
     amber = (0.42, 0.14, 0.02) if variant == "lager" else (0.30, 0.12, 0.04)
     density = 95.0 if variant == "lager" else 420.0
     # the bottle is narrower than the glass, so the same beer needs a lower
@@ -421,9 +422,11 @@ def build_bottle(tex_dir, variant="lager", location=(0, 0, 0), rotation_z=0.0):
     # crown cap, with its 21 flutes
     cap_r = radius_at(0.99) + 0.0013
     bpy.ops.mesh.primitive_cylinder_add(vertices=21, radius=cap_r, depth=0.0062,
-                                        location=(0, 0, BOTTLE_H + 0.0031))
+                                        location=(0, 0, BOTTLE_H + 0.0031 + cap_lift))
     cap = bpy.context.active_object
     cap.name = f"cap_{variant}"
+    # a crown does not lift straight off, it tips and tumbles
+    cap.rotation_euler = (cap_spin * 0.8, cap_spin * 0.45, cap_spin * 0.2)
     bpy.ops.object.shade_auto_smooth()
     assign(cap, metal_mat(f"m_cap_{variant}",
                           (0.02, 0.10, 0.22) if variant == "lager" else (0.75, 0.58, 0.22), 0.30))
@@ -739,6 +742,130 @@ def floor(cyc=True, radius=3.0, height=2.6):
     return obj
 
 
+# ── the film: one continuous timeline, one scene rebuilt per frame ────────
+#
+# There are no Blender keyframes here. Each frame rebuilds the whole set from
+# its position in the scroll, which means any frame can be rendered on any
+# machine with no shared state — the render farm is just the same command with
+# a different index. Building the meshes costs about a second; the render
+# costs minutes.
+
+
+def ease(t):
+    t = min(max(t, 0.0), 1.0)
+    return t * t * (3 - 2 * t)
+
+
+def seg(t, a, b):
+    """Normalise t within [a, b], clamped."""
+    return min(max((t - a) / (b - a), 0.0), 1.0) if b > a else 0.0
+
+
+def key(t, frames):
+    """Piecewise interpolation over (time, value) pairs, smoothstepped.
+
+    Values may be numbers or equal-length tuples.
+    """
+    if t <= frames[0][0]:
+        return frames[0][1]
+    for i in range(1, len(frames)):
+        t0, v0 = frames[i - 1]
+        t1, v1 = frames[i]
+        if t <= t1:
+            k = ease(seg(t, t0, t1))
+            if isinstance(v0, (tuple, list)):
+                return tuple(a + (b - a) * k for a, b in zip(v0, v1))
+            return v0 + (v1 - v0) * k
+    return frames[-1][1]
+
+
+# The six plans of the brief, as time ranges on one unbroken shot.
+PLAN_DROP = (0.00, 0.17)
+PLAN_COLD = (0.17, 0.35)
+PLAN_NECK = (0.35, 0.47)
+PLAN_POUR = (0.47, 0.70)
+PLAN_BLACK = (0.70, 0.87)
+PLAN_CTA = (0.87, 1.00)
+
+GLASS_X = 0.062
+
+
+def film(t, tex_dir):
+    """Build the frame of the film at normalised scroll position `t`."""
+    floor()
+
+    # ── the Lager: upright, tipped over the glass, then set down ─────────
+    # Position is given as the base of the bottle and the mouth derived from
+    # it, so the tip and the travel stay consistent with each other at every
+    # value of t instead of being two animations that have to agree.
+    tilt = key(t, [(0.00, 0.0), (0.49, 0.0), (0.61, math.radians(62)),
+                   (0.665, math.radians(62)), (0.725, 0.0)])
+    base = (key(t, [(0.00, 0.0), (0.47, 0.0), (0.61, -0.151), (0.725, -0.090)]),
+            0.0,
+            key(t, [(0.00, 0.0), (0.47, 0.0), (0.61, 0.192), (0.725, 0.0)]))
+    spin = key(t, [(0.00, 13.0), (0.47, 13.0), (0.55, 0.0), (0.74, 0.0), (1.0, -3.0)])
+
+    # The crown comes off during the neck macro and keeps going, out of
+    # frame. It is the one beat in the brief that needs a moving part, and it
+    # costs two numbers because the cap is already its own object.
+    cap_lift = key(t, [(0.00, 0.0), (0.395, 0.0), (0.425, 0.013),
+                       (0.47, 0.090), (0.55, 0.45)])
+    cap_spin = key(t, [(0.00, 0.0), (0.395, 0.0), (0.55, 7.5)])
+
+    lager = build_bottle(tex_dir, "lager", location=base,
+                         rotation_z=math.radians(spin) if tilt < 1e-4 else 0.0,
+                         cap_lift=cap_lift, cap_spin=cap_spin)
+    if tilt > 1e-4:
+        lager.rotation_euler = (0.0, tilt, 0.0)
+
+    # ── Black walks on during the light dip, so the swap is never seen ───
+    swap = 0.755
+    if t >= swap:
+        build_bottle(tex_dir, "black",
+                     location=(key(t, [(swap, 0.0), (0.90, 0.0)]), 0.012, 0),
+                     rotation_z=math.radians(key(t, [(swap, 13.0), (1.0, 11.0)])))
+
+    # ── the glass: wheeled in for the pour, kept for the line-up ─────────
+    glass_x = key(t, [(0.50, GLASS_X), (0.725, GLASS_X), (0.90, 0.090)])
+    if t >= 0.50:
+        level = key(t, [(0.52, 0.02), (0.655, 0.70), (1.0, 0.70)])
+        foam_h = key(t, [(0.52, 0.004), (0.60, 0.034), (0.70, 0.024), (1.0, 0.022)])
+        build_glass(level, foam_h, location=(glass_x, 0, 0), tex_dir=tex_dir)
+
+        if 0.555 <= t <= 0.655:
+            beer_top = 0.013 + (GLASS_H - 0.013 - 0.004) * level
+            mouth = Vector(base) + Vector((BOTTLE_H * math.sin(tilt), 0.0,
+                                           BOTTLE_H * math.cos(tilt)))
+            build_stream(tuple(mouth + Vector((0.004, 0, -0.004))),
+                         (glass_x + 0.002, 0.0, beer_top + foam_h * 0.45))
+
+    # ── light: warm studio, a dip to near-black at the cut, then the bar ──
+    warm = key(t, [(0.00, 0.0), (0.70, 0.0), (swap, 0.9), (1.0, 0.55)])
+    dip = key(t, [(0.715, 1.0), (swap - 0.012, 0.03), (swap + 0.012, 0.03), (0.825, 1.0)])
+    lighting(warm, target=(0.0, 0, 0.12))
+    for name in ("rim_l", "rim_r", "back", "front", "top"):
+        bpy.data.lights[name].energy *= dip
+    bpy.context.scene.world.node_tree.nodes["Background"].inputs[1].default_value = dip
+
+    # ── camera: one orbit, never cut ─────────────────────────────────────
+    az = key(t, [(0.00, 14), (0.17, 22), (0.35, 178), (0.47, 196),
+                 (0.61, 9), (0.70, 3), (swap, 9), (1.0, 5)])
+    elev = key(t, [(0.00, 9), (0.35, 4), (0.47, 13), (0.70, 4), (1.0, 8)])
+    lens = key(t, [(0.00, 100), (0.35, 100), (0.47, 135), (0.61, 85),
+                   (0.70, 100), (1.0, 105)])
+    subject = key(t, [(0.00, 0.30), (0.17, 0.245), (0.35, 0.245), (0.47, 0.085),
+                      (0.61, 0.345), (0.70, 0.30), (0.87, 0.30), (1.0, 0.40)])
+    tz = key(t, [(0.00, 0.118), (0.35, 0.118), (0.47, 0.214), (0.61, 0.145),
+                 (0.70, 0.112), (1.0, 0.108)])
+    tx = key(t, [(0.00, 0.0), (0.47, 0.0), (0.61, 0.012), (0.70, 0.0),
+                 (0.90, 0.010), (1.0, 0.010)])
+
+    tgt = (tx, 0.0, tz)
+    d = frame_subject(subject, lens, fill=0.84)
+    camera(orbit(az, elev, d, tgt), tgt, lens=lens,
+           fstop=key(t, [(0.00, 5.0), (0.47, 3.2), (0.70, 4.5), (1.0, 7.5)]))
+
+
 SHOTS = {}
 
 
@@ -854,7 +981,11 @@ def configure(res, samples, threads=0, caustics=True):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--shot", default="hero", choices=sorted(SHOTS))
+    ap.add_argument("--shot", default="hero",
+                    help="a still from SHOTS, or 'film' with --frame")
+    ap.add_argument("--frame", type=int, default=-1,
+                    help="film frame index; implies --shot film")
+    ap.add_argument("--frames", type=int, default=160, help="length of the film")
     ap.add_argument("--res", type=int, default=1280)
     ap.add_argument("--samples", type=int, default=128)
     ap.add_argument("--tex", required=True)
@@ -866,7 +997,12 @@ def main():
 
     clear()
     configure(a.res, a.samples, a.threads, not a.no_caustics)
-    SHOTS[a.shot](a.tex)
+    if a.frame >= 0:
+        film(a.frame / max(a.frames - 1, 1), a.tex)
+    else:
+        if a.shot not in SHOTS:
+            raise SystemExit(f"unknown shot {a.shot!r}; have {sorted(SHOTS)}")
+        SHOTS[a.shot](a.tex)
 
     if a.save_blend:
         bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(a.save_blend))
