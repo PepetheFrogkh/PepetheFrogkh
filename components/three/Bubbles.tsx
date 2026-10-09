@@ -39,9 +39,11 @@ export default function Bubbles({
     const pos = new Float32Array(count * 3)
     const seed = new Float32Array(count)
     for (let i = 0; i < count; i++) {
-      // stratified in a disc so the column looks evenly carbonated
+      // Biased to the outer shell. The beer is opaque (see Tumbler), so a
+      // bubble in the middle of the column is a bubble nobody sees — and real
+      // carbonation nucleates on the glass anyway.
       const a = Math.random() * Math.PI * 2
-      const r = Math.sqrt(Math.random()) * radius
+      const r = radius * (0.72 + 0.28 * Math.sqrt(Math.random()))
       pos[i * 3] = Math.cos(a) * r
       pos[i * 3 + 1] = Math.random()
       pos[i * 3 + 2] = Math.sin(a) * r

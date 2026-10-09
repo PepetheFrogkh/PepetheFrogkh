@@ -167,17 +167,48 @@ export async function makeLabelTexture(beer: Beer, fonts: LabelFonts) {
   ctx.fillText('GREATNESS IN EVERY MOMENT', cx, 942)
   ctx.letterSpacing = '0px'
 
-  // the back of the wrap: brewing line, so a 360° orbit never shows blank vinyl
+  // The back of the wrap. The camera orbits a full half-turn in plan 2, so
+  // these panels are on screen as long as the emblem is and have to hold up.
+  const ink = dark ? BRAND.goldLight : BRAND.cream
   for (const side of [cx - W * 0.33, cx + W * 0.33]) {
     ctx.save()
-    ctx.fillStyle = dark ? 'rgba(217,164,65,0.55)' : 'rgba(246,241,230,0.5)'
-    ctx.font = `600 24px ${fonts.display}`
-    ctx.letterSpacing = '6px'
-    ctx.fillText('FINEST GERMAN BREW', side, 470)
+    ctx.translate(side, 0)
+
+    ctx.fillStyle = dark ? BRAND.gold : BRAND.goldLight
+    ctx.font = `italic 400 54px ${fonts.script}`
+    ctx.fillText('Finest German Brew', 0, 300)
+
+    goldSheen(ctx, -200, 346, 400, 4)
+
+    ctx.fillStyle = ink
+    ctx.font = `600 30px ${fonts.display}`
+    ctx.letterSpacing = '8px'
+    ctx.fillText(beer.name.toUpperCase(), 0, 412)
+
+    ctx.globalAlpha = 0.72
+    ctx.font = `400 24px ${fonts.display}`
+    ctx.letterSpacing = '4px'
+    ctx.fillText('BREWED AND BOTTLED BY', 0, 478)
+    ctx.fillText('HANUMAN BEVERAGES', 0, 516)
+    ctx.fillText('SEN SOK · PHNOM PENH · CAMBODIA', 0, 554)
+    ctx.globalAlpha = 1
+
+    goldSheen(ctx, -200, 596, 400, 4)
+
+    ctx.fillStyle = dark ? BRAND.gold : BRAND.goldLight
+    ctx.font = `600 30px ${fonts.display}`
+    ctx.letterSpacing = '8px'
+    ctx.fillText(beer.abv ? `ALC. ${beer.abv} VOL.` : '100% MALT', 0, 660)
+
+    ctx.fillStyle = ink
+    ctx.globalAlpha = 0.6
     ctx.font = `400 22px ${fonts.display}`
     ctx.letterSpacing = '3px'
-    ctx.fillText('BREWED IN PHNOM PENH · CAMBODIA', side, 520)
-    if (beer.abv) ctx.fillText(`ALC. ${beer.abv} VOL.`, side, 566)
+    ctx.fillText('330 ML', 0, 716)
+    ctx.globalAlpha = 1
+
+    // the sunburst again, small, so the panel is never flat
+    drawRays(ctx, 0, 818, 110, dark ? BRAND.goldDeep : 'rgba(244,213,141,0.55)', 32)
     ctx.restore()
   }
 

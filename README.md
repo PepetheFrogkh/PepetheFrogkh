@@ -142,8 +142,8 @@ Lager's daylight to Black's bar, so plan 6 is a light change rather than a cut.
   cores drops radial segments, particle counts, shadow maps, MSAA and depth of field, and
   caps DPR at 1.4.
 - `AdaptiveDpr` + `AdaptiveEvents` give back resolution under load.
-- Total 3D payload: 0 bytes of model data, 192 kB of brand mask, everything else
-  generated. First Load JS is ~529 kB, dominated by three.js.
+- Total 3D payload: 0 bytes of model data, ~220 kB of brand masks, everything else
+  generated. First Load JS is ~530 kB, dominated by three.js.
 - `prefers-reduced-motion` skips the canvas entirely and serves the static narrative.
 
 ### SEO and accessibility
@@ -162,7 +162,7 @@ no duplication, nothing to keep in sync.
 | --- | --- |
 | Label artwork | ask the brand for vector or 2000 px photography |
 | Khmer copy | needs a translator; the type is already loaded (Noto Sans Khmer) |
-| Mobile | the layout reflows and the quality tier drops, but it has not been tuned on device |
+| Mobile | checked at 390 × 844 in a headless browser — layout reflows, nav collapses, quality tier drops — but not profiled on a real handset |
 | Sound | the "pssht" is a real win and needs a mute control before it ships |
 | Ingredients, Lite, medals, export map | plans 5, 7, 8 and the map half of 9 |
 | Pre-baked fluid sim | the shader pour is a stand-in for the full site |

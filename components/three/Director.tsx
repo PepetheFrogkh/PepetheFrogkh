@@ -100,8 +100,8 @@ export default function Director() {
       shot.current.fov = 34
     }
 
-    // the bottle is revealed by the impact and then stays for three plans
-    lager.opacity = range(p, S[0].start + 0.055, S[0].start + 0.1)
+    // the impact reveals the bottle, which then stays for three plans
+    lager.opacity = easeOut(range(p, S[0].start + 0.062, S[0].start + 0.105))
 
     // ── plan 2 · condensation ────────────────────────────────────────────
     if (p >= S[1].start) {
@@ -123,16 +123,17 @@ export default function Director() {
     // ── plan 3 · the crown comes off ─────────────────────────────────────
     if (p >= S[2].start) {
       const l = localProgress(p, S[2])
-      const pop = range(l, 0.34, 0.52)
-      lager.capLift = easeOut(pop) * 0.055 + range(l, 0.52, 1) * 0.6
-      lager.capSpin = lager.capLift * 26
-      capBurst.t = range(l, 0.36, 0.95)
+      // the crown lifts, hangs for a beat so the pop is readable, then goes
+      const pop = range(l, 0.34, 0.5)
+      lager.capLift = easeOut(pop) * 0.045 + easeIn(range(l, 0.68, 1)) * 0.34
+      lager.capSpin = easeOut(pop) * 1.6 + easeIn(range(l, 0.68, 1)) * 12
+      capBurst.t = range(l, 0.36, 0.96)
 
       shot.current.angle = mix(Math.PI, Math.PI * 1.2, smoothstep(l))
-      shot.current.radius = mix(0.42, 0.16, smoothstep(l)) * widen
-      shot.current.height = mix(0.115, 0.245, smoothstep(l))
-      shot.current.target.set(0, mix(0.112, BOTTLE_H * 0.99, smoothstep(l)), 0)
-      shot.current.fov = mix(32, 28, smoothstep(l))
+      shot.current.radius = mix(0.42, 0.26, smoothstep(l)) * widen
+      shot.current.height = mix(0.115, 0.27, smoothstep(l))
+      shot.current.target.set(0, mix(0.112, BOTTLE_H * 1.12, smoothstep(l)), 0)
+      shot.current.fov = mix(32, 30, smoothstep(l))
     } else {
       lager.capLift = 0
       lager.capSpin = 0
@@ -157,14 +158,14 @@ export default function Director() {
 
       // orbit back round to the front, then dive on the glass
       shot.current.angle = mix(Math.PI * 1.2, Math.PI * 2, smoothstep(range(l, 0, 0.55)))
-      shot.current.radius = mix(0.16, 0.56, smoothstep(range(l, 0, 0.42))) * widen
+      shot.current.radius = mix(0.26, 0.56, smoothstep(range(l, 0, 0.42))) * widen
       shot.current.radius = mix(shot.current.radius, 0.34 * widen, smoothstep(range(l, 0.64, 1)))
-      shot.current.height = mix(0.245, 0.17, smoothstep(range(l, 0, 0.42)))
+      shot.current.height = mix(0.27, 0.17, smoothstep(range(l, 0, 0.42)))
       shot.current.height = mix(shot.current.height, 0.085, smoothstep(range(l, 0.64, 1)))
       const tx = mix(0, GLASS_X, smoothstep(range(l, 0.1, 0.62)))
       const ty = mix(0.112, GLASS_H * 0.52, smoothstep(range(l, 0.1, 0.72)))
       shot.current.target.set(tx, ty, 0)
-      shot.current.fov = mix(28, 33, smoothstep(range(l, 0, 0.42)))
+      shot.current.fov = mix(30, 33, smoothstep(range(l, 0, 0.42)))
     } else {
       layout.lagerX = 0
       layout.tilt = 0
@@ -211,7 +212,7 @@ export default function Director() {
     if (p >= S[5].start) {
       const l = localProgress(p, S[5])
       layout.plinth = smoothstep(range(l, 0, 0.4))
-      look.warmth = mix(1, 0.45, smoothstep(range(l, 0, 0.5)))
+      look.warmth = mix(1, 0.62, smoothstep(range(l, 0, 0.5)))
       lager.opacity = range(l, 0.08, 0.35)
       lager.frost = 0
       lager.drip = 0
@@ -221,11 +222,12 @@ export default function Director() {
       black.opacity = 1
       layout.lagerX = mix(0, -0.082, smoothstep(range(l, 0.05, 0.45)))
       layout.blackX = mix(0, 0.082, smoothstep(range(l, 0.05, 0.45)))
-      layout.blackSpin = mix(2.0, 2.0 + 0.4, l)
+      // finish the turn so Black faces the camera square-on beside the Lager
+      layout.blackSpin = mix(2.0, Math.PI * 2, smoothstep(l))
       rays.intensity = mix(0.55, 0.85, smoothstep(l))
 
       // the drop settles between the two bottles
-      drop.scale = range(l, 0.3, 0.5) * 0.55
+      drop.scale = range(l, 0.3, 0.5) * 0.8
       drop.y = mix(0.26, 0.012, smoothstep(range(l, 0.3, 0.72)))
       drop.squash = 1 - range(l, 0.72, 0.9) * 0.25
       drop.dark = 1 - smoothstep(range(l, 0.1, 0.45))

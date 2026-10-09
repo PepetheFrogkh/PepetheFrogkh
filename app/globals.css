@@ -528,11 +528,32 @@ a {
 }
 
 @media (max-width: 760px) {
+  /* the nav links live in the static story below on small screens; the
+     header keeps only what the brand needs on screen */
+  .site-nav a {
+    display: none;
+  }
+
   .plan {
     top: auto;
     bottom: clamp(5.5rem, 16vh, 9rem);
     transform: none;
     max-width: none;
+  }
+
+  /* a scrim so short copy stays readable over whatever the canvas is doing */
+  .overlay::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 62vh;
+    background: linear-gradient(180deg, transparent, rgba(0, 9, 17, 0.82) 62%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .plan__title {
+    font-size: clamp(2.2rem, 10vw, 3.2rem);
   }
 
   .progress {

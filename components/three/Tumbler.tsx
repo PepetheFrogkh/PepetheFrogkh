@@ -59,7 +59,7 @@ export default function Tumbler({ beer, quality, anim }: Props) {
 
   const liquidGeo = useMemo(() => {
     // unit-height cylinder; scaled on Y by the fill level
-    const g = new THREE.CylinderGeometry(GLASS_R - WALL - 0.0004, GLASS_R * 0.96 - WALL, 1, segments, 1)
+    const g = new THREE.CylinderGeometry(GLASS_R - WALL - 0.0017, GLASS_R * 0.96 - WALL, 1, segments, 1)
     g.translate(0, 0.5, 0)
     return g
   }, [segments])
@@ -91,41 +91,42 @@ export default function Tumbler({ beer, quality, anim }: Props) {
   return (
     <group ref={groupRef} visible={false}>
       <mesh ref={liquidRef} geometry={liquidGeo} position={[0, 0.014, 0]}>
-        {/* Transmission alone disappears against a near-black set, so the
-            beer keeps a little of its own colour and a warm emissive lift —
-            the same trick a photographer plays with a card behind the glass. */}
+        {/* Opaque on purpose. three renders transmissive materials into a
+            target that excludes every other transmissive object, so a
+            transmissive beer inside a transmissive glass is invisible through
+            it. Making the beer opaque — colour, a little emissive lift,
+            low roughness — puts it back in the glass's refraction and is what
+            every product render does anyway. */}
         <meshPhysicalMaterial
           color={beer.liquid}
-          roughness={0.04}
+          roughness={0.08}
           metalness={0}
-          transmission={beer.id === 'black' ? 0.14 : 0.55}
-          thickness={0.045}
-          ior={1.34}
-          attenuationColor={new THREE.Color(beer.liquid)}
-          attenuationDistance={beer.id === 'black' ? 0.006 : 0.035}
+          clearcoat={1}
+          clearcoatRoughness={0.06}
           emissive={new THREE.Color(beer.liquid)}
-          emissiveIntensity={beer.id === 'black' ? 0.06 : 0.26}
-          envMapIntensity={1.6}
+          emissiveIntensity={beer.id === 'black' ? 0.04 : 0.16}
+          envMapIntensity={2.4}
         />
       </mesh>
 
       <group position={[0, 0.014, 0]}>
         <Bubbles
           count={quality === 'high' ? 1400 : 500}
-          radius={GLASS_R - WALL - 0.002}
+          // just outside the beer, just inside the glass
+          radius={GLASS_R - WALL - 0.0008}
           height={innerH}
           anim={column.current}
           color={beer.id === 'black' ? '#e8d4ad' : '#fff6df'}
           speed={beer.id === 'black' ? 0.7 : 1.1}
-          size={beer.id === 'black' ? 2.0 : 2.8}
+          size={beer.id === 'black' ? 0.0006 : 0.0009}
         />
       </group>
 
       <Foam
-        radius={GLASS_R - WALL - 0.0006}
+        radius={GLASS_R - WALL - 0.0004}
         anim={foamAnim.current}
         color={beer.foam}
-        bead={beer.id === 'black' ? 70 : 42}
+        bead={beer.id === 'black' ? 46 : 30}
       />
 
       <mesh geometry={glassGeo}>

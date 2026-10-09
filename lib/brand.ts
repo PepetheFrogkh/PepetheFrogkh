@@ -50,9 +50,9 @@ export const BEERS: Record<BeerId, Beer> = {
     name: 'Hanuman Black',
     khmer: 'ហនុមាន',
     notes: ['Caramel', 'Honey', 'Roasted malt'],
-    labelBg: '#07070a',
-    glass: '#140d05',
-    liquid: '#160c03',
+    labelBg: '#06060a',
+    glass: '#0a0703',
+    liquid: '#120903',
     foam: '#d9bd92',
   },
 }

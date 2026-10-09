@@ -2,12 +2,11 @@
   "name": "hanuman-webgl",
   "version": "0.1.0",
   "private": true,
-  "description": "Hanuman Beverages — scroll-driven WebGL homepage prototype",
+  "description": "Hanuman Beverages \u2014 scroll-driven WebGL homepage prototype",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

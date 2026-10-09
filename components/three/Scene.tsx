@@ -96,9 +96,9 @@ export default function Scene({ quality }: { quality: Quality }) {
                   anim={capBurst}
                   count={quality === 'high' ? 260 : 120}
                   color="#dff0ff"
-                  spread={0.035}
-                  lift={0.05}
-                  size={9}
+                  spread={0.075}
+                  lift={0.1}
+                  size={0.011}
                   opacity={0.5}
                 />
               </group>
@@ -113,10 +113,10 @@ export default function Scene({ quality }: { quality: Quality }) {
           anim={splashBurst}
           count={quality === 'high' ? 180 : 90}
           color={BRAND.goldLight}
-          spread={0.08}
-          lift={0.055}
-          gravity={0.07}
-          size={5}
+          spread={0.075}
+          lift={0.06}
+          gravity={0.075}
+          size={0.0022}
         />
       </group>
 
@@ -143,7 +143,7 @@ export default function Scene({ quality }: { quality: Quality }) {
           mipmapBlur
         />
         {quality === 'high' ? (
-          <DepthOfField target={focusPoint} focalLength={0.02} bokehScale={2.4} height={512} />
+          <DepthOfField target={focusPoint} focalLength={0.035} bokehScale={1.5} height={512} />
         ) : (
           <></>
         )}

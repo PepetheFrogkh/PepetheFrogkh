@@ -8,8 +8,8 @@ import { NOISE } from './shaders/noise.glsl'
 /**
  * The head. A cylinder whose cap is pushed around by noise in the vertex
  * shader and whose surface is broken up by a bubble field in the fragment
- * shader. Physical material with sheen and a little transmission is what makes
- * it read as wet foam rather than polystyrene.
+ * shader. Sheen plus a soft clearcoat is what makes it read as wet foam
+ * rather than polystyrene.
  *
  * The mesh is a unit-height cylinder scaled on Y, so the vertex displacement
  * divides its Y component back out — otherwise a 20 mm head would flatten the
@@ -44,8 +44,7 @@ export default function Foam({ radius, anim, color = '#f7edd8', bead = 44 }: Pro
       color: new THREE.Color(color),
       roughness: 0.92,
       metalness: 0,
-      transmission: 0.12,
-      thickness: 0.01,
+      // opaque: the head lives inside transmissive glass (see Tumbler)
       sheen: 1,
       sheenRoughness: 0.9,
       sheenColor: new THREE.Color('#ffffff'),
@@ -87,7 +86,7 @@ export default function Foam({ radius, anim, color = '#f7edd8', bead = 44 }: Pro
           '#include <roughnessmap_fragment>',
           `#include <roughnessmap_fragment>
            float bubbles = fbm(vFoamPos.xz * uBead * 14.0 + vFoamPos.y * 60.0);
-           roughnessFactor = clamp(roughnessFactor - bubbles * 0.25, 0.4, 1.0);`,
+           roughnessFactor = clamp(roughnessFactor - bubbles * 0.14, 0.6, 1.0);`,
         )
         .replace(
           '#include <normal_fragment_maps>',
@@ -101,7 +100,7 @@ export default function Foam({ radius, anim, color = '#f7edd8', bead = 44 }: Pro
              vec3 r1 = cross(dpy, nn), r2 = cross(nn, dpx);
              float det = dot(dpx, r1);
              vec3 surf = sign(det) * (dhx * r1 + dhy * r2);
-             normal = normalize(abs(det) * nn - 2.2 * surf);
+             normal = normalize(abs(det) * nn - 1.1 * surf);
            }`,
         )
     }

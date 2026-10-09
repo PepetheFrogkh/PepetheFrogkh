@@ -75,7 +75,7 @@ const Bottle = forwardRef<THREE.Group, Props>(function Bottle({ beer, quality, a
       thickness: beer.id === 'black' ? 0.05 : 0.022,
       ior: 1.52,
       attenuationColor: new THREE.Color(beer.glass),
-      attenuationDistance: beer.id === 'black' ? 0.012 : 0.05,
+      attenuationDistance: beer.id === 'black' ? 0.0055 : 0.05,
       clearcoat: 1,
       clearcoatRoughness: 0.03,
       side: THREE.DoubleSide,
@@ -89,16 +89,16 @@ const Bottle = forwardRef<THREE.Group, Props>(function Bottle({ beer, quality, a
     () =>
       new THREE.MeshPhysicalMaterial({
         color: new THREE.Color(beer.liquid),
+        // opaque for the same reason as the beer in the glass: a transmissive
+        // liquid inside transmissive glass is dropped from three's
+        // transmission pass and simply vanishes
         roughness: 0.1,
         metalness: 0,
-        transmission: beer.id === 'black' ? 0.12 : 0.55,
-        thickness: 0.05,
-        ior: 1.33,
-        attenuationColor: new THREE.Color(beer.liquid),
-        attenuationDistance: beer.id === 'black' ? 0.008 : 0.04,
+        clearcoat: 1,
+        clearcoatRoughness: 0.08,
         emissive: new THREE.Color(beer.liquid),
-        emissiveIntensity: beer.id === 'black' ? 0.05 : 0.2,
-        envMapIntensity: 1.2,
+        emissiveIntensity: beer.id === 'black' ? 0.03 : 0.12,
+        envMapIntensity: 2.0,
       }),
     [beer],
   )
@@ -120,12 +120,13 @@ const Bottle = forwardRef<THREE.Group, Props>(function Bottle({ beer, quality, a
 
     const g = groupRef.current
     if (g) {
-      g.visible = anim.opacity > 0.01
-      // transmissive glass does not fade gracefully, so the bottle scales and
-      // sinks out of frame instead of dissolving
+      // Transmissive glass cannot cross-fade — three renders it in its own
+      // pass and material opacity does nothing useful there — so the bottle
+      // is revealed by scale instead. In plan 1 it grows out of the splash;
+      // in plan 6 it shrinks away as Black takes over.
       const o = anim.opacity
-      g.scale.setScalar(0.9 + o * 0.1)
-      g.position.y = (1 - o) * -0.05
+      g.visible = o > 0.015
+      g.scale.setScalar(o)
     }
     if (liquidRef.current) liquidRef.current.scale.y = Math.max(0.001, anim.fill)
     if (capRef.current) {
@@ -176,12 +177,17 @@ const Bottle = forwardRef<THREE.Group, Props>(function Bottle({ beer, quality, a
         <mesh geometry={labelGeo}>
           <meshPhysicalMaterial
             map={label}
-            roughness={0.55}
-            metalness={0.08}
-            clearcoat={0.25}
-            clearcoatRoughness={0.4}
+            roughness={0.5}
+            metalness={0.1}
+            clearcoat={0.2}
+            clearcoatRoughness={0.45}
             side={THREE.DoubleSide}
-            envMapIntensity={0.9}
+            // Black's label is gold on near-black and sits behind very dark
+            // glass; without the extra bounce it disappears entirely.
+            envMapIntensity={beer.id === 'black' ? 2.2 : 1.0}
+            emissive={new THREE.Color('#ffffff')}
+            emissiveMap={label}
+            emissiveIntensity={beer.id === 'black' ? 0.22 : 0.06}
           />
         </mesh>
       )}
