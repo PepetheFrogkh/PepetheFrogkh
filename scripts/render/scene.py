@@ -209,7 +209,12 @@ def amber_glass(name, absorb=(0.42, 0.14, 0.02), density=90.0, rough=0.015):
     return m
 
 
-def beer_mat(name, absorb=(0.98, 0.73, 0.26), density=55.0):
+def beer_mat(name, absorb=(1.0, 0.797, 0.249), density=42.0):
+    # Solved rather than eyeballed: the absorption coefficient is
+    # density·(1 − colour), so for a target transmittance T through a depth d
+    # the colour is 1 + ln(T)/(d·density). Aiming at T = (1, 0.55, 0.11)
+    # through 70 mm of beer is what makes it read as lager gold instead of
+    # the red-amber that guessing at the numbers always produces.
     m, nt, out = node_mat(name)
     bsdf = nt.nodes.new("ShaderNodeBsdfPrincipled")
     bsdf.location = (300, 100)
@@ -292,7 +297,7 @@ def clear_glass(name, rough=0.01):
     return m
 
 
-def foam_mat(name, colour=(0.97, 0.93, 0.84)):
+def foam_mat(name, colour=(1.0, 0.975, 0.92)):
     """Dense fine-bubble head: bright, rough, and translucent at the edge."""
     m, nt, out = node_mat(name)
     b = nt.nodes.new("ShaderNodeBsdfPrincipled")
@@ -393,13 +398,15 @@ def assign(obj, mat):
 
 
 def build_bottle(tex_dir, variant="lager", location=(0, 0, 0), rotation_z=0.0,
-                 cap_lift=0.0, cap_spin=0.0):
+                 cap_lift=0.0, cap_spin=0.0, frost=0.0, run=0.0):
     amber = (0.42, 0.14, 0.02) if variant == "lager" else (0.30, 0.12, 0.04)
     density = 95.0 if variant == "lager" else 420.0
     # the bottle is narrower than the glass, so the same beer needs a lower
     # density to arrive at the same colour through less liquid
-    beer_absorb = (0.98, 0.73, 0.26) if variant == "lager" else (0.55, 0.22, 0.05)
-    beer_density = 38.0 if variant == "lager" else 520.0
+    # the bottle is narrower than the glass, so less liquid for light to
+    # cross: a lower density arrives at the same colour
+    beer_absorb = (1.0, 0.797, 0.249) if variant == "lager" else (0.62, 0.26, 0.05)
+    beer_density = 30.0 if variant == "lager" else 420.0
     foil = (0.84, 0.66, 0.28)
 
     root = bpy.data.objects.new(f"bottle_{variant}", None)
@@ -431,7 +438,12 @@ def build_bottle(tex_dir, variant="lager", location=(0, 0, 0), rotation_z=0.0,
     assign(cap, metal_mat(f"m_cap_{variant}",
                           (0.02, 0.10, 0.22) if variant == "lager" else (0.75, 0.58, 0.22), 0.30))
 
-    for o in (shell, liq, lab, col, cap):
+    kids = [shell, liq, lab, col, cap]
+    drops = build_condensation(frost, run)
+    if drops is not None:
+        kids.append(drops)
+
+    for o in kids:
         o.parent = root
     return root
 
@@ -446,7 +458,7 @@ def build_glass(level=0.74, foam_h=0.022, location=(0, 0, 0), etch=True, tex_dir
 
     beer_pts, top = glass_beer(level)
     b = lathe("glass_beer", beer_pts, 256)
-    assign(b, beer_mat("m_glass_beer", (0.98, 0.73, 0.26), 55.0))
+    assign(b, beer_mat("m_glass_beer", (1.0, 0.797, 0.249), 42.0))
 
     # the head: a slightly domed disc sitting on the beer
     def outer(t):
@@ -462,7 +474,9 @@ def build_glass(level=0.74, foam_h=0.022, location=(0, 0, 0), etch=True, tex_dir
     f = lathe("head", foam_pts, 192)
     assign(f, foam_mat("m_foam"))
 
-    objs = [g, b, f]
+    bub = build_bubbles(GLASS_R - GLASS_WALL - 0.0016, 0.016, top - 0.0015,
+                        count=340)
+    objs = [g, b, f, bub]
 
     if etch and tex_dir:
         # the Hanuman mark printed on the glass, as the real glassware carries it
@@ -494,6 +508,155 @@ def build_glass(level=0.74, foam_h=0.022, location=(0, 0, 0), etch=True, tex_dir
     for o in objs:
         o.parent = root
     return root
+
+
+def _sphere_blob(bm, centre, rx, ry, rz, rings=7, segs=10):
+    """A squashed UV sphere welded into an existing bmesh.
+
+    Hundreds of separate objects would crawl; one mesh of hundreds of blobs
+    renders as fast as one blob. Cycles instances it all the same.
+    """
+    verts = []
+    for i in range(rings + 1):
+        phi = math.pi * i / rings
+        row = []
+        for j in range(segs):
+            th = math.tau * j / segs
+            row.append(bm.verts.new((
+                centre[0] + rx * math.sin(phi) * math.cos(th),
+                centre[1] + ry * math.sin(phi) * math.sin(th),
+                centre[2] + rz * math.cos(phi),
+            )))
+        verts.append(row)
+    for i in range(rings):
+        for j in range(segs):
+            k = (j + 1) % segs
+            a, b2, c, d = verts[i][j], verts[i][k], verts[i + 1][k], verts[i + 1][j]
+            try:
+                bm.faces.new((a, b2, c, d))
+            except ValueError:
+                pass            # degenerate at the poles; harmless
+    return verts
+
+
+def bubble_mat(name):
+    """Air inside beer. The IOR is the ratio, not the absolute: going from
+    liquid (1.345) into air (1.0) is 0.74, and getting that backwards is why
+    CG bubbles so often look like glass beads."""
+    m, nt, out = node_mat(name)
+    b = nt.nodes.new("ShaderNodeBsdfPrincipled")
+    b.location = (300, 0)
+    b.inputs["Base Color"].default_value = (1, 1, 1, 1)
+    b.inputs["Roughness"].default_value = 0.0
+    b.inputs["IOR"].default_value = 0.74
+    b.inputs["Transmission Weight"].default_value = 1.0
+    nt.links.new(b.outputs[0], out.inputs["Surface"])
+    return m
+
+
+def build_bubbles(radius, bottom, top, count=320, streams=7, seed=11):
+    """Carbonation: a few nucleation columns plus scattered strays.
+
+    Real bubbles do not appear uniformly through the liquid — they come off a
+    handful of imperfections on the glass and rise in near-vertical chains,
+    growing as the pressure drops. Scattering them evenly is the tell.
+    """
+    import random
+    rng = random.Random(seed)
+    mesh = bpy.data.meshes.new("bubbles")
+    obj = bpy.data.objects.new("bubbles", mesh)
+    bpy.context.collection.objects.link(obj)
+    bm = bmesh.new()
+
+    height = max(top - bottom, 1e-4)
+    for s in range(streams):
+        a = rng.uniform(0, math.tau)
+        r = radius * rng.uniform(0.55, 0.93)
+        per = count // (streams + 3)
+        for i in range(per):
+            t = (i + rng.uniform(0, 1)) / per
+            # chains drift and widen as they climb
+            aa = a + rng.gauss(0, 0.05) + t * rng.uniform(-0.25, 0.25)
+            rr = r * (1 - 0.06 * t) + rng.gauss(0, radius * 0.012)
+            z = bottom + height * t
+            rad = (0.00018 + 0.00055 * t) * rng.uniform(0.7, 1.4)
+            _sphere_blob(bm, (math.cos(aa) * rr, math.sin(aa) * rr, z), rad, rad, rad)
+
+    for _ in range(count // 4):            # strays
+        a = rng.uniform(0, math.tau)
+        rr = radius * math.sqrt(rng.random()) * 0.95
+        z = bottom + height * rng.random()
+        rad = 0.00016 * rng.uniform(0.6, 1.6)
+        _sphere_blob(bm, (math.cos(a) * rr, math.sin(a) * rr, z), rad, rad, rad)
+
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
+    for f in mesh.polygons:
+        f.use_smooth = True
+    mesh.shade_smooth()
+    assign(obj, bubble_mat("m_bubble"))
+    return obj
+
+
+def surface_radius(t):
+    """Radius of whatever is outermost at height `t` — glass, label or foil.
+
+    Droplets placed at the glass radius disappear under the label, which is
+    sleeved over it. Condensation beads on the paper too.
+    """
+    r = radius_at(t)
+    if LABEL_BAND[0] <= t <= LABEL_BAND[1]:
+        r = radius_at((LABEL_BAND[0] + LABEL_BAND[1]) / 2) + 0.00012
+    elif COLLAR_BAND[0] <= t <= COLLAR_BAND[1]:
+        r += 0.00018
+    return r
+
+
+def build_condensation(amount, run, band=(0.025, 0.775), count=2600, seed=5):
+    """Droplets on the outside of the bottle, as geometry rather than a map.
+
+    A normal map cannot bend the silhouette, and the silhouette is exactly
+    where condensation reads — the bottle's edge should go bumpy. These are
+    squashed spheres sitting on the surface, with the larger ones stretched
+    downward by `run` to become the drips that have started to travel.
+    """
+    import random
+    if amount <= 0.01:
+        return None
+    rng = random.Random(seed)
+    mesh = bpy.data.meshes.new("condensation")
+    obj = bpy.data.objects.new("condensation", mesh)
+    bpy.context.collection.objects.link(obj)
+    bm = bmesh.new()
+
+    placed = 0
+    for _ in range(int(count * 2)):
+        if placed >= count * amount:
+            break
+        t = rng.uniform(*band)
+        # the chill creeps up from the base, so the mist fills bottom-first
+        if rng.random() > min(1.0, amount * 1.9 - (t - band[0]) * 0.65):
+            continue
+        r = surface_radius(t)
+        a = rng.uniform(0, math.tau)
+        z = t * BOTTLE_H
+        big = rng.random() < 0.07
+        rad = (0.00095 if big else 0.00024) * rng.uniform(0.55, 1.5)
+        # droplets wet the glass: wider than they are tall
+        stretch = 1.0 + (run * 3.2 if big else run * 0.5) * rng.uniform(0.4, 1.0)
+        cx, cy = math.cos(a) * (r + rad * 0.35), math.sin(a) * (r + rad * 0.35)
+        _sphere_blob(bm, (cx, cy, z), rad * 1.15, rad * 1.15, rad * stretch, 6, 8)
+        placed += 1
+
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
+    for f in mesh.polygons:
+        f.use_smooth = True
+    mesh.shade_smooth()
+    assign(obj, clear_glass("m_condens", 0.02))
+    return obj
 
 
 def build_stream(p0, p1, r0=0.0048, r1=0.0030, rings=64, segs=28, wobble=0.22):
@@ -545,7 +708,7 @@ def build_stream(p0, p1, r0=0.0048, r1=0.0030, rings=64, segs=28, wobble=0.22):
     for f in mesh.polygons:
         f.use_smooth = True
     mesh.shade_smooth()
-    assign(obj, beer_mat("m_stream", (0.98, 0.72, 0.24), 190.0))
+    assign(obj, beer_mat("m_stream", (1.0, 0.78, 0.22), 150.0))
     return obj
 
 
@@ -648,8 +811,9 @@ def lighting(warm=0.0, target=(0, 0, 0.10)):
                2.4 * (1 - 0.55 * warm), (1.00, 0.97, 0.93), target)
 
     # separation on the foam and the shoulders
-    area_light("top", (0.04, 0.06, 0.40), 0.26, 0.26,
-               2.6 * (1 - 0.3 * warm), (1.00, 0.94, 0.84), target)
+    # the head needs its own light or it sits in the shadow of everything
+    area_light("top", (0.03, 0.04, 0.38), 0.24, 0.24,
+               4.2 * (1 - 0.3 * warm), (1.00, 0.95, 0.88), target)
 
 
 def frame_subject(height, lens, fill=0.78, aspect=16 / 10):
@@ -812,9 +976,15 @@ def film(t, tex_dir):
                        (0.47, 0.090), (0.55, 0.45)])
     cap_spin = key(t, [(0.00, 0.0), (0.395, 0.0), (0.55, 7.5)])
 
+    # the bottle comes out of the chiller: mist builds, then the big drops
+    # start to run. It fades once the bottle is tipped and poured.
+    frost = key(t, [(0.00, 0.0), (0.13, 0.0), (0.30, 1.0), (0.50, 1.0), (0.62, 0.35)])
+    run = key(t, [(0.00, 0.0), (0.22, 0.0), (0.50, 1.0)])
+
     lager = build_bottle(tex_dir, "lager", location=base,
                          rotation_z=math.radians(spin) if tilt < 1e-4 else 0.0,
-                         cap_lift=cap_lift, cap_spin=cap_spin)
+                         cap_lift=cap_lift, cap_spin=cap_spin,
+                         frost=frost, run=run)
     if tilt > 1e-4:
         lager.rotation_euler = (0.0, tilt, 0.0)
 
@@ -878,7 +1048,7 @@ def shot(fn):
 def hero(tex_dir):
     """Plan 1–2: the Lager alone, three-quarter, full height."""
     floor()
-    build_bottle(tex_dir, "lager", rotation_z=math.radians(13))
+    build_bottle(tex_dir, "lager", rotation_z=math.radians(13), frost=1.0, run=0.8)
     lighting(0.0)
     tgt = (0, 0, 0.118)
     d = frame_subject(BOTTLE_H, 100, fill=0.88)
@@ -965,7 +1135,7 @@ def configure(res, samples, threads=0, caustics=True):
     sc.cycles.adaptive_threshold = 0.012
     sc.cycles.use_denoising = True
     sc.cycles.max_bounces = 32
-    sc.cycles.transmission_bounces = 24      # glass inside glass inside beer
+    sc.cycles.transmission_bounces = 20      # glass in glass in beer in bubbles
     sc.cycles.transparent_max_bounces = 24
     sc.cycles.glossy_bounces = 8
     sc.cycles.caustics_reflective = caustics
@@ -986,7 +1156,7 @@ def configure(res, samples, threads=0, caustics=True):
     # PBR Neutral is built for product rendering: it keeps hue and saturation
     # and still rolls highlights off gracefully.
     sc.view_settings.view_transform = "Khronos PBR Neutral"
-    sc.view_settings.exposure = -0.40
+    sc.view_settings.exposure = -0.60
 
 
 def main():
