@@ -949,7 +949,17 @@ def configure(res, samples, threads=0, caustics=True):
     sc = bpy.context.scene
     addon_utils.enable("cycles", default_set=True)
     sc.render.engine = "CYCLES"
-    sc.cycles.device = "CPU"
+    # CYCLES_DEVICE=GPU on a machine that has one; Blender picks the backend
+    # (OptiX, CUDA, HIP, Metal) itself.
+    want_gpu = os.environ.get("CYCLES_DEVICE", "CPU").upper() == "GPU"
+    if want_gpu:
+        prefs = bpy.context.preferences.addons["cycles"].preferences
+        prefs.refresh_devices()
+        for dev in prefs.devices:
+            dev.use = dev.type != "CPU"
+        sc.cycles.device = "GPU"
+    else:
+        sc.cycles.device = "CPU"
     sc.cycles.samples = samples
     sc.cycles.use_adaptive_sampling = True
     sc.cycles.adaptive_threshold = 0.012
