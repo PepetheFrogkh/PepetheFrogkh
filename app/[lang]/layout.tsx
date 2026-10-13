@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Fraunces, Nunito, Nunito_Sans } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { dict } from '@/content'
@@ -36,6 +36,18 @@ const nunito = Nunito({
   display: 'swap',
   variable: '--font-nunito',
 })
+
+/**
+ * Sans cette balise, un telephone rend la page en largeur bureau puis la
+ * dezoome : le texte devient minuscule et la mise en page mobile ne s'applique
+ * jamais. `viewportFit` laisse le fond couvrir les encoches.
+ */
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#FFF8F3',
+}
 
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }))

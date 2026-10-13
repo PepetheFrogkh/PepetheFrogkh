@@ -11,6 +11,7 @@ import Fan from '@/components/Fan'
 import Faq from '@/components/Faq'
 import FinalCta from '@/components/FinalCta'
 import Heading from '@/components/Heading'
+import HeroStory from '@/components/HeroStory'
 import LogoStrip from '@/components/LogoStrip'
 import MaskReveal from '@/components/MaskReveal'
 import PinnedManifesto from '@/components/PinnedManifesto'
@@ -40,39 +41,39 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
   return (
     <>
-      {/* 2 · en-tete : titre revele mot a mot, deux boutons, particules */}
-      <section className="hero">
-        <div className="container hero__grid">
-          <div>
-            <span className="eyebrow">{t.hero.eyebrow}</span>
-            <ScrambleHeading className="hero__title" text={t.hero.title} as="h1" />
-            <p className="lead">{t.hero.sub}</p>
-            <div className="row hero__actions">
-              <Cta
-                locale={lang}
-                href={t.hero.primary.href}
-                label={t.hero.primary.label}
-                event="diagnostic_click"
-              />
-              <Cta
-                locale={lang}
-                href={t.hero.secondary.href}
-                label={t.hero.secondary.label}
-                variant="secondary"
-                event="book_call_click"
-              />
-            </div>
-            <p className="hero__note">{t.hero.note}</p>
-          </div>
+      {/* 2 · en-tete : quatre actes menes par le defilement, particules */}
+      <HeroStory
+        captions={t.story}
+        field={
           <Belt
             label={
               lang === 'fr'
-                ? 'Un champ de particules orange en orbite autour d’un petit soleil, qui réagit à la souris'
-                : 'A field of orange particles orbiting a small sun, reacting to the pointer'
+                ? 'Un champ de particules qui passe de la ceinture de Kuiper à un nuage d\u2019avis, puis à un histogramme, puis aux cadres de trois écrans'
+                : 'A particle field moving from the Kuiper belt to a cloud of reviews, then a bar chart, then three screen frames'
             }
           />
+        }
+      >
+        <span className="eyebrow">{t.hero.eyebrow}</span>
+        <ScrambleHeading className="hero__title" text={t.hero.title} as="h1" />
+        <p className="lead">{t.hero.sub}</p>
+        <div className="row hero__actions">
+          <Cta
+            locale={lang}
+            href={t.hero.primary.href}
+            label={t.hero.primary.label}
+            event="diagnostic_click"
+          />
+          <Cta
+            locale={lang}
+            href={t.hero.secondary.href}
+            label={t.hero.secondary.label}
+            variant="secondary"
+            event="book_call_click"
+          />
         </div>
-      </section>
+        <p className="hero__note">{t.hero.note}</p>
+      </HeroStory>
 
       {/* 3 · eventail de realisations : les ecrans montent de l'horizon */}
       <SectionBlock tone="cream">

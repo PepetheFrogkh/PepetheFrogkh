@@ -1395,6 +1395,10 @@ html.lenis {
 .fan {
   position: relative;
   padding: var(--s8) 0 var(--s5);
+  /* La courbe d'horizon fait 160 % de large : sans decoupe elle depasse de
+     chaque cote et le document devient plus large que l'ecran. `clip` sur le
+     seul axe horizontal laisse passer les ombres des cartes. */
+  overflow-x: clip;
 }
 
 /* la courbe d'horizon creme et lumineuse d'ou montent les ecrans */
@@ -1415,7 +1419,10 @@ html.lenis {
 .fan__cards {
   position: relative;
   display: flex;
-  justify-content: center;
+  /* Pas de justify-content: center sur un conteneur qui defile : quand les
+     cartes depassent, le centrage pousse la premiere en x negatif, hors
+     d'atteinte, et le document devient plus large que l'ecran. */
+  justify-content: flex-start;
   gap: var(--s2);
   overflow-x: auto;
   padding: 0 var(--s2) var(--s3);
@@ -1458,8 +1465,10 @@ html.lenis {
 }
 
 @media (min-width: 900px) {
+  /* au-dela, les trois cartes tiennent : le centrage redevient sans danger */
   .fan__cards {
     overflow: visible;
+    justify-content: center;
     gap: 0;
   }
 
@@ -1508,115 +1517,6 @@ html.lenis {
 
   .manifesto__word {
     color: var(--ink) !important;
-  }
-}
-
-/* ── la frise epinglee de la methode ───────────────────────────────────── */
-
-.method-pin {
-  display: flex;
-  align-items: center;
-  min-height: 100svh;
-}
-
-.frieze {
-  position: relative;
-  list-style: none;
-  margin: 0;
-  padding: var(--s6) 0 0;
-  display: grid;
-  gap: var(--s4);
-}
-
-@media (min-width: 720px) {
-  .frieze {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1000px) {
-  .frieze {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-.frieze__rail {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1.5px;
-  background: var(--border);
-}
-
-.frieze__progress {
-  display: block;
-  height: 100%;
-  background: var(--orange);
-  transform: scaleX(0);
-  transform-origin: left center;
-}
-
-.frieze__step {
-  position: relative;
-  padding-top: var(--s3);
-  opacity: 0.4;
-  transition:
-    opacity 0.35s var(--ease),
-    transform 0.35s var(--ease);
-}
-
-.frieze__step[data-active='true'] {
-  opacity: 1;
-}
-
-.frieze__dot {
-  position: absolute;
-  top: -5px;
-  left: 0;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--border);
-  transition: background-color 0.35s var(--ease);
-}
-
-.frieze__step[data-active='true'] .frieze__dot {
-  background: var(--orange);
-}
-
-.frieze__index {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 13px;
-  color: var(--terra);
-}
-
-.frieze__title {
-  display: block;
-  margin-top: 4px;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 22px;
-  line-height: 1.15;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .method-pin {
-    min-height: 0;
-  }
-
-  .frieze__step {
-    opacity: 1;
-  }
-
-  .frieze__dot {
-    background: var(--orange);
-  }
-
-  .frieze__progress {
-    transform: scaleX(1);
   }
 }
 
@@ -1725,4 +1625,307 @@ body.has-view-cursor [data-cursor='voir'] {
 
 .portrait--empty {
   border: 1px dashed var(--terra);
+}
+
+/* ══ L'en-tete en quatre actes ════════════════════════════════════════════ */
+
+.story {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-top: 72px;
+  padding-bottom: var(--s9);
+  overflow: clip;
+}
+
+/* le champ occupe tout l'en-tete, derriere le texte */
+.story__field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.story__field .belt {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  aspect-ratio: auto;
+}
+
+.story__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--s6);
+}
+
+@media (min-width: 1000px) {
+  .story__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    align-items: center;
+    gap: var(--s8);
+  }
+}
+
+/* Sur un ecran etroit le champ passe sous le texte : un voile garde le
+   contraste de l'encre sur le creme, sans assombrir la page. */
+.story__text {
+  position: relative;
+}
+
+@media (max-width: 999px) {
+  .story__text::before {
+    content: '';
+    position: absolute;
+    inset: -24px -20px;
+    z-index: -1;
+    background: radial-gradient(
+      120% 90% at 20% 40%,
+      rgba(255, 248, 243, 0.96),
+      rgba(255, 248, 243, 0.72) 60%,
+      rgba(255, 248, 243, 0) 100%
+    );
+  }
+}
+
+/* ── les legendes du recit ─────────────────────────────────────────────── */
+
+/* Un bandeau bas : les trois legendes se superposent au meme endroit, donc le
+   passage d'un acte a l'autre ne deplace rien et ne vient jamais sous les
+   particules du haut. */
+.story__captions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--s6);
+  z-index: 2;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-height: 3.2em;
+}
+
+.story__caption {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.45s var(--ease);
+  pointer-events: none;
+}
+
+.story__caption[data-shown='true'] {
+  opacity: 1;
+  transform: none;
+}
+
+.story__caption-inner {
+  display: flex;
+  gap: var(--s2);
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(22px, 2.6vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  /* pas de max-width ici : elle ecraserait celle de .container et la legende
+     se recentrerait au lieu de s'aligner sur le titre */
+}
+
+.story__act {
+  flex: none;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--terra);
+}
+
+/* Sur un ecran etroit, le bandeau prend sa place dans le flux : en absolu il
+   se posait sur la note « 30 minutes avec Arnaud ». */
+@media (max-width: 999px) {
+  .story__captions {
+    position: relative;
+    margin-top: var(--s6);
+    bottom: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story {
+    min-height: 0;
+  }
+
+  /* sans animation, les trois propositions se lisent empilees */
+  .story__captions {
+    position: static;
+    margin-top: var(--s6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2);
+    min-height: 0;
+  }
+
+  .story__caption {
+    position: static;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ══ La methode, en piste horizontale ════════════════════════════════════ */
+
+.method {
+  overflow: clip;
+}
+
+.method__viewport {
+  margin-top: var(--s5);
+  padding: 0 var(--gutter);
+}
+
+.track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s3);
+}
+
+@media (min-width: 720px) {
+  .track {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Sans JavaScript, la piste reste une grille lisible de haut en bas. Elle ne
+   devient une piste qu'une fois l'effet installe. */
+.method[data-enhanced='true'] .track {
+  display: flex;
+  grid-template-columns: none;
+  width: max-content;
+  gap: var(--s3);
+  will-change: transform;
+}
+
+.track__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: var(--s4);
+  transition:
+    box-shadow 0.4s var(--ease),
+    border-color 0.4s var(--ease),
+    opacity 0.4s var(--ease);
+}
+
+.method[data-enhanced='true'] .track__card {
+  flex: 0 0 min(78vw, 420px);
+  opacity: 0.55;
+}
+
+.method[data-enhanced='true'] .track__card[data-active='true'] {
+  opacity: 1;
+  border-color: var(--peach);
+  box-shadow: var(--lift);
+}
+
+.track__index {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--terra);
+}
+
+.track__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.track__demo,
+.dia {
+  margin-top: auto;
+  border-radius: var(--r-image);
+  background: var(--cream);
+  padding: var(--s3);
+}
+
+.dia svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* le trait se trace quand la carte devient la carte courante */
+.dia__line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.9s var(--ease);
+}
+
+.track__card[data-active='true'] .dia__line {
+  stroke-dashoffset: 0;
+}
+
+.dia__grow {
+  transform-box: fill-box;
+  transform-origin: center;
+  scale: 0.72;
+  opacity: 0;
+  transition:
+    scale 0.5s var(--ease),
+    opacity 0.5s var(--ease);
+}
+
+.track__card[data-active='true'] .dia__grow {
+  scale: 1;
+  opacity: 1;
+}
+
+.track__progress {
+  margin-top: var(--s5);
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.track__bar {
+  display: block;
+  height: 100%;
+  background: var(--orange);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.track__counter {
+  margin-top: var(--s2);
+  font-family: var(--font-ui);
+}
+
+.track__counter b {
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dia__line {
+    stroke-dashoffset: 0;
+  }
+
+  .dia__grow {
+    scale: 1;
+    opacity: 1;
+  }
+
+  .track__bar {
+    transform: scaleX(1);
+  }
 }

@@ -147,6 +147,16 @@ export const fr: Dict = {
   manifesto:
     'L’expérience client ne se devine pas. Elle se mesure, et elle s’améliore avec les bons outils.',
 
+  /**
+   * Les trois propositions du manifeste, une par acte de l'en-tete. Elles
+   * doivent rester la phrase du cahier, decoupee : c'est le meme texte.
+   */
+  story: [
+    'L\u2019expérience client ne se devine pas.',
+    'Elle se mesure,',
+    'et elle s\u2019améliore avec les bons outils.',
+  ],
+
   founders: {
     title: 'Les fondateurs',
     people: [

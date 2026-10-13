@@ -146,6 +146,8 @@ export interface Dict {
     cards: SituationCard[]
   }
   manifesto: string
+  /** Le manifeste decoupe en actes, pour le recit de l'en-tete. */
+  story: string[]
   founders: {
     title: string
     people: { name: string; role: string | null; bio: string | null; photo: string | null }[]

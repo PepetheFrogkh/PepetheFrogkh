@@ -1,11 +1,21 @@
 /**
  * Les shaders du champ de particules de l'en-tete.
  *
- * Tout le mouvement est calcule par la carte graphique, dans le vertex
- * shader : la position au repos, la respiration par bruit, la gravite du
- * curseur, l'onde de choc du clic et la morphologie vers les cadres d'ecrans
- * au defilement. Le processeur ne fait que pousser cinq uniformes par image,
- * ce qui permet de tenir 20 000 particules sans y laisser le fil principal.
+ * Le champ raconte le manifeste du cahier en quatre actes, et c'est le
+ * defilement qui les enchaine :
+ *
+ *   0 · la ceinture de Kuiper          la signature du studio
+ *   1 · un nuage disperse              « L'experience client ne se devine pas. »
+ *   2 · un histogramme qui monte       « Elle se mesure, »
+ *   3 · trois cadres d'ecrans          « et elle s'ameliore avec les bons outils. »
+ *
+ * Chaque particule porte donc trois positions cibles en plus de son orbite, et
+ * `uStage`, un flottant de 0 a 3, dit entre quels deux actes elle se trouve.
+ * Le melange n'interpole jamais plus de deux formes a la fois.
+ *
+ * Tout le mouvement est calcule par la carte graphique : le processeur ne
+ * pousse que quelques uniformes par image, ce qui permet de tenir 20 000
+ * particules sans y laisser le fil principal.
  *
  * Le fond du site est clair : le melange est donc normal et non additif, sinon
  * les particules blanchiraient sur le creme au lieu de s'y poser.
@@ -87,7 +97,9 @@ attribute float aSpread;  // la dispersion autour de l'orbite
 attribute float aSize;    // 1 a 3 px
 attribute float aSeed;    // pour que chaque particule respire autrement
 attribute vec3 aColor;
-attribute vec3 aTarget;   // la place de la particule dans les cadres d'ecrans
+attribute vec3 aCloud;    // acte 1 : sa place dans le nuage disperse
+attribute vec3 aChart;    // acte 2 : sa place dans l'histogramme
+attribute vec3 aFrames;   // acte 3 : sa place sur le cadre d'un ecran
 
 uniform float uTime;
 uniform float uTilt;
@@ -95,8 +107,9 @@ uniform vec2 uPointer;        // en unites de scene
 uniform float uPointerActive; // 0 hors de la zone, 1 dedans
 uniform vec2 uBurstOrigin;
 uniform float uBurst;         // 1 au clic, retombe a 0 en une seconde
-uniform float uMorph;         // 0 ceinture, 1 cadres d'ecrans
+uniform float uStage;         // 0 ceinture, 1 nuage, 2 histogramme, 3 cadres
 uniform float uIntro;         // 1 au chargement, retombe a 0 : l'arrivee
+uniform float uOffsetX;       // la scene glisse a droite quand l'ecran est large
 uniform float uPixelRatio;
 uniform float uScale;
 
@@ -133,16 +146,30 @@ void main() {
   float n = snoise(vec3(belt.xy * 1.6, uTime * 0.12 + aSeed * 8.0));
   belt += normalize(belt + vec3(0.001)) * n * 0.028 * uScale;
 
-  // ── la morphologie vers les cadres d'ecrans ─────────────────────────────
-  float morph = smoothstep(0.0, 1.0, uMorph);
-  vec3 pos = mix(belt, aTarget * uScale, morph);
+  // ── l'enchainement des quatre actes ─────────────────────────────────────
+  // Les formes sont rangees dans l'ordre du recit ; on ne melange que les
+  // deux voisines de la position courante, sinon l'histogramme et les cadres
+  // se contamineraient et aucune forme ne serait lisible.
+  // Un melange sequentiel plutot qu'un tableau indexe : l'indexation
+  // dynamique d'un tableau est refusee en GLSL ES 1.00, et le resultat est le
+  // meme. A l'etape 1,5 les deux premiers mix sont satures et il ne reste que
+  // le melange nuage vers histogramme.
+  float stage = clamp(uStage, 0.0, 3.0);
+  vec3 pos = belt;
+  pos = mix(pos, aCloud * uScale, smoothstep(0.0, 1.0, clamp(stage, 0.0, 1.0)));
+  pos = mix(pos, aChart * uScale, smoothstep(0.0, 1.0, clamp(stage - 1.0, 0.0, 1.0)));
+  pos = mix(pos, aFrames * uScale, smoothstep(0.0, 1.0, clamp(stage - 2.0, 0.0, 1.0)));
+
+  // la part de ceinture encore presente : elle commande les effets qui n'ont
+  // de sens que sur l'orbite
+  float morph = smoothstep(0.0, 1.0, min(stage, 1.0));
 
   // ── la gravite du curseur ───────────────────────────────────────────────
   // Les particules s'ecartent autour du curseur et s'enroulent dans son
   // sillage : une composante radiale qui repousse, une tangentielle qui fait
   // tourner. L'effet s'eteint avec la morphologie, pour ne pas desorganiser
   // les cadres.
-  vec2 toPointer = pos.xy - uPointer;
+  vec2 toPointer = pos.xy + vec2(uOffsetX, 0.0) - uPointer;
   float dist = length(toPointer);
   float reach = 0.42 * uScale;
   float pull = (1.0 - smoothstep(0.0, reach, dist)) * uPointerActive * (1.0 - morph);
@@ -158,7 +185,7 @@ void main() {
   // Un anneau d'impulsion part du curseur et s'eloigne : chaque particule
   // n'est poussee que lorsque le front la traverse.
   if (uBurst > 0.001) {
-    vec2 toBurst = pos.xy - uBurstOrigin;
+    vec2 toBurst = pos.xy + vec2(uOffsetX, 0.0) - uBurstOrigin;
     float d = length(toBurst);
     float front = (1.0 - uBurst) * 1.9 * uScale;
     float band = 1.0 - smoothstep(0.0, 0.16 * uScale, abs(d - front));
@@ -181,6 +208,8 @@ void main() {
     float sn = sin(spin);
     pos.xy = vec2(pos.x * cs - pos.y * sn, pos.x * sn + pos.y * cs);
   }
+
+  pos.x += uOffsetX;
 
   vec4 mv = modelViewMatrix * vec4(pos, 1.0);
   gl_Position = projectionMatrix * mv;

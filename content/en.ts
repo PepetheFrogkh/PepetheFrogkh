@@ -142,6 +142,16 @@ export const en: Dict = {
 
   manifesto: 'Guest experience isn’t guesswork. It can be measured, and it improves with the right tools.',
 
+  /**
+   * Les trois propositions du manifeste, une par acte de l'en-tete. Elles
+   * doivent rester la phrase du cahier, decoupee : c'est le meme texte.
+   */
+  story: [
+    'Customer experience isn\u2019t guesswork.',
+    'It can be measured,',
+    'and it improves with the right tools.',
+  ],
+
   founders: {
     title: 'The founders',
     people: [

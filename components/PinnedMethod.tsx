@@ -2,16 +2,21 @@
 
 import { useEffect, useRef } from 'react'
 import type { MethodStep } from '@/content'
-import { reduced, useGsap } from '@/lib/motion'
+import { reduced, small, useGsap } from '@/lib/motion'
+import StepDiagram from './StepDiagram'
 
 /**
- * La methode : une section epinglee, une etape par cran de defilement, la
- * frise qui avance.
+ * La methode : six etapes qui defilent horizontalement, menees par le
+ * defilement vertical.
  *
- * Chaque cran allume l'etape suivante et fait avancer le trait de la frise.
- * Les six intitules sont dans le HTML des le depart et restent lisibles :
- * l'etape courante est mise en avant, les autres sont en retrait, aucune
- * n'est cachee.
+ * Une frise de six mots ne montre rien. Ici chaque etape est une carte plein
+ * format, avec son schema, et le defilement fait avancer la piste : le geste
+ * du visiteur est le geste de la methode. La barre de progression et le
+ * compteur disent ou on en est.
+ *
+ * Sans JavaScript et quand le visiteur reduit les animations, la piste est une
+ * grille qui se lit de haut en bas : les six etapes et leurs schemas sont
+ * tous presents, rien n'est cache derriere une animation.
  */
 export default function PinnedMethod({
   title,
@@ -29,67 +34,82 @@ export default function PinnedMethod({
     if (!node || reduced()) return
 
     const gsap = useGsap()
-    const items = [...node.querySelectorAll<HTMLElement>('.frieze__step')]
-    const line = node.querySelector<HTMLElement>('.frieze__progress')
-    if (items.length === 0) return
+    const track = node.querySelector<HTMLElement>('.track')
+    const cards = [...node.querySelectorAll<HTMLElement>('.track__card')]
+    const bar = node.querySelector<HTMLElement>('.track__bar')
+    const counter = node.querySelector<HTMLElement>('.track__counter b')
+    if (!track || cards.length === 0) return
+
+    node.dataset.enhanced = 'true'
 
     const ctx = gsap.context(() => {
-      // L'etape courante est deduite de la progression, pas d'une suite de
-      // callbacks : avec un scrub, un onComplete par etape se declenche en
-      // rafale et les six s'allument d'un coup.
-      const last = items.length - 1
-      // Sans JavaScript et avec les animations reduites, les six etapes sont
-      // actives : le script ne fait que resserrer sur l'etape courante.
-      const apply = (progress: number) => {
-        const current = Math.round(progress * last)
-        items.forEach((item, i) => item.setAttribute('data-active', String(i <= current)))
-        if (line) line.style.transform = `scaleX(${progress.toFixed(4)})`
-      }
+      const last = cards.length - 1
 
-      apply(0)
+      const distance = () => Math.max(0, track.scrollWidth - node.clientWidth + 48)
 
       gsap.timeline({
         scrollTrigger: {
           trigger: node,
           start: 'top top',
-          // un cran par etape
-          end: () => `+=${items.length * 55}%`,
+          // la course verticale correspond a la course horizontale
+          end: () => `+=${distance() + window.innerHeight * 0.5}`,
           pin: true,
-          scrub: 0.4,
+          scrub: 0.45,
           anticipatePin: 1,
-          snap: {
-            snapTo: 1 / last,
-            duration: 0.25,
-            ease: 'power2.inOut',
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const x = -distance() * self.progress
+            gsap.set(track, { x })
+            if (bar) bar.style.transform = `scaleX(${self.progress.toFixed(4)})`
+
+            // la carte au centre est mise en avant, les autres restent
+            // lisibles mais en retrait
+            const current = Math.round(self.progress * last)
+            cards.forEach((card, i) => card.setAttribute('data-active', String(i === current)))
+            if (counter) counter.textContent = String(current + 1).padStart(2, '0')
           },
-          onUpdate: (self) => apply(self.progress),
-          onRefresh: (self) => apply(self.progress),
         },
       })
     }, node)
 
-    return () => ctx.revert()
-  }, [steps])
+    return () => {
+      ctx.revert()
+      delete node.dataset.enhanced
+    }
+  }, [steps.length])
 
   return (
-    <section className="section section--cream method-pin" ref={ref}>
+    <section className="section section--cream method" ref={ref}>
       <div className="container">
         <div className="section__head">
           <h2>{title}</h2>
           <p className="lead">{intro}</p>
         </div>
-        <ol className="frieze">
-          <div className="frieze__rail" aria-hidden="true">
-            <span className="frieze__progress" />
-          </div>
+      </div>
+
+      <div className="method__viewport">
+        <ol className="track">
           {steps.map((step, i) => (
-            <li className="frieze__step" key={step.title} data-active={true}>
-              <span className="frieze__dot" aria-hidden="true" />
-              <span className="frieze__index">{String(i + 1).padStart(2, '0')}</span>
-              <span className="frieze__title">{step.title}</span>
+            <li className="track__card" key={step.title} data-active={i === 0}>
+              <div className="track__index">{String(i + 1).padStart(2, '0')}</div>
+              <h3 className="track__title">{step.title}</h3>
+              {step.demo ? (
+                <img className="track__demo" src={step.demo} alt={step.title} loading="lazy" />
+              ) : (
+                <StepDiagram index={i} />
+              )}
             </li>
           ))}
         </ol>
+      </div>
+
+      <div className="container">
+        <div className="track__progress" aria-hidden="true">
+          <span className="track__bar" />
+        </div>
+        <p className="track__counter small muted">
+          <b>01</b> / {String(steps.length).padStart(2, '0')}
+        </p>
       </div>
     </section>
   )
