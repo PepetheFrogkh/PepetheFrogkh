@@ -3,6 +3,7 @@ import type { Locale } from '@/lib/i18n'
 import CaseCard from '@/components/CaseCard'
 import Cta from '@/components/Cta'
 import Heading from '@/components/Heading'
+import Measures from '@/components/Measures'
 import Reveal from '@/components/Reveal'
 import FinalCta from '@/components/FinalCta'
 import { Tbd, TbdBlock } from '@/components/Tbd'
@@ -27,30 +28,36 @@ export default function SituationView({
     <>
       {/* 1 · en-tete : la phrase du client, puis le titre */}
       <section className="hero">
-        <div className="container measure">
-          <p className="card__quote lead" style={{ marginBottom: 'var(--s3)' }}>
+        <div className="container hero__grid">
+          <div>
+            <p className="card__quote lead" style={{ marginBottom: 'var(--s3)' }}>
             {page.quote.startsWith('[') ? (
               <Tbd locale={locale} what={locale === 'fr' ? 'phrase du client' : 'client sentence'} />
             ) : (
               page.quote
             )}
           </p>
-          <Heading text={page.title} as="h1" animate />
-          <div className="row hero__actions">
-            <Cta
-              locale={locale}
-              href="diagnostic"
-              label={t.hero.primary.label}
-              event="diagnostic_click"
-            />
-            <Cta
-              locale={locale}
-              href="booking"
-              label={t.finalCta.secondary.label}
-              variant="secondary"
-              event="book_call_click"
-            />
+            <Heading text={page.title} as="h1" animate />
+            <div className="row hero__actions">
+              <Cta
+                locale={locale}
+                href="diagnostic"
+                label={t.hero.primary.label}
+                event="diagnostic_click"
+              />
+              <Cta
+                locale={locale}
+                href="booking"
+                label={t.finalCta.secondary.label}
+                variant="secondary"
+                event="book_call_click"
+              />
+            </div>
           </div>
+          <TbdBlock
+            locale={locale}
+            what={locale === 'fr' ? 'visuel de la situation' : 'situation visual'}
+          />
         </div>
       </section>
 
@@ -96,20 +103,7 @@ export default function SituationView({
             <div className="section__head">
               <h2>{labels.measures}</h2>
             </div>
-            <div className="grid grid--3">
-              {page.measures.map((measure) => (
-                <div key={measure}>
-                  <div
-                    className="figure__value"
-                    style={{ fontSize: 24, color: 'var(--terra)' }}
-                    aria-hidden="true"
-                  >
-                    ·
-                  </div>
-                  <h3>{measure}</h3>
-                </div>
-              ))}
-            </div>
+            <Measures locale={locale} measures={page.measures} labels={labels} />
           </Reveal>
         </div>
       </section>

@@ -1200,3 +1200,216 @@ p:last-child {
     opacity: 1 !important;
   }
 }
+
+/* ── eventail de realisations ──────────────────────────────────────────── */
+
+.fan {
+  display: flex;
+  gap: var(--s2);
+  overflow-x: auto;
+  padding: var(--s3) 0;
+  scroll-snap-type: x proximity;
+}
+
+.fan__card {
+  flex: 0 0 60%;
+  margin: 0;
+  aspect-ratio: 3 / 4;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-image);
+  overflow: hidden;
+  scroll-snap-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fan__card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fan__empty {
+  padding: var(--s2);
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  /* inclinees et legerement chevauchees, comme chez TechFlow */
+  .fan {
+    overflow: visible;
+    justify-content: center;
+    gap: 0;
+    padding: var(--s5) 0;
+  }
+
+  .fan__card {
+    flex: 0 0 22%;
+    margin-inline: -1.5%;
+    box-shadow: var(--lift);
+    transition:
+      transform 0.35s var(--ease),
+      box-shadow 0.35s var(--ease);
+  }
+
+  .fan__card[data-tilt='left'] {
+    transform: rotate(-5deg);
+  }
+
+  .fan__card[data-tilt='right'] {
+    transform: rotate(5deg) translateY(12px);
+  }
+
+  .fan__card:hover {
+    transform: rotate(0deg) translateY(-10px) scale(1.04);
+    z-index: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fan__card,
+  .fan__card:hover {
+    transform: none !important;
+  }
+}
+
+/* ── manifeste ─────────────────────────────────────────────────────────── */
+
+.manifesto {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  max-width: 24ch;
+  margin: 0;
+}
+
+.manifesto__word {
+  display: inline-block;
+  color: var(--slate-light);
+  transition: color 0.35s var(--ease);
+}
+
+.manifesto__word[data-lit='true'] {
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .manifesto__word {
+    color: var(--ink);
+  }
+}
+
+/* ── ce que vous mesurez, en grands chiffres ───────────────────────────── */
+
+.measure-card__pair {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s2);
+  margin-top: var(--s3);
+}
+
+.measure-card__label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--slate);
+}
+
+.measure-card__value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-top: 4px;
+}
+
+.measure-card__arrow {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  color: var(--orange);
+  margin-bottom: 6px;
+}
+
+/* ── etude de cas : la grande capture, ordinateur et telephone ─────────── */
+
+.shot {
+  display: grid;
+  gap: var(--s2);
+  grid-template-columns: 1fr;
+  align-items: end;
+}
+
+.shot__desktop,
+.shot__phone {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-image);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shot__desktop {
+  aspect-ratio: 16 / 10;
+}
+
+.shot__phone {
+  aspect-ratio: 9 / 16;
+  max-width: 220px;
+}
+
+@media (min-width: 900px) {
+  .shot {
+    grid-template-columns: 1fr 220px;
+    gap: var(--s3);
+  }
+}
+
+/* le resultat cle de l'en-tete d'une etude de cas, en grand */
+.case-result {
+  margin-top: var(--s4);
+}
+
+.case-result__label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--slate);
+}
+
+.case-result__value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--terra);
+  margin-top: 4px;
+}
+
+/* ── la demo de chaque etape de la methode ─────────────────────────────── */
+
+.step__demo {
+  margin-top: var(--s2);
+  min-height: 96px;
+  border: 1px dashed var(--terra);
+  border-radius: var(--r-image);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s2);
+  text-align: center;
+}
+
+.step__demo img,
+.step__demo video {
+  border-radius: 12px;
+}

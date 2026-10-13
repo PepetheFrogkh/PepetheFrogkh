@@ -214,12 +214,12 @@ export const fr: Dict = {
     title: 'Six étapes, sans surprise',
     intro: 'Le délai démarre à la réception de vos contenus.',
     steps: [
-      { title: 'Comprendre', body: null },
-      { title: 'Cadrer', body: null },
-      { title: 'Dessiner', body: null },
-      { title: 'Construire', body: null },
-      { title: 'Lancer', body: null },
-      { title: 'Faire grandir', body: null },
+      { title: 'Comprendre', body: null, demo: null },
+      { title: 'Cadrer', body: null, demo: null },
+      { title: 'Dessiner', body: null, demo: null },
+      { title: 'Construire', body: null, demo: null },
+      { title: 'Lancer', body: null, demo: null },
+      { title: 'Faire grandir', body: null, demo: null },
     ],
   },
 
@@ -412,6 +412,8 @@ export const fr: Dict = {
   ],
 
   situationLabels: {
+    before: 'Avant',
+    after: 'Après',
     problem: 'Le problème',
     steps: 'Ce qu’on fait',
     measures: 'Ce que vous mesurez',

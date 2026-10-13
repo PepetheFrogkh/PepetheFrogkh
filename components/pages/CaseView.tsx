@@ -31,9 +31,12 @@ export default function CaseView({ locale, study }: { locale: Locale; study: Cas
           </div>
           <Heading className="hero__title" text={study.name} as="h1" animate />
           <p className="lead">{study.summary}</p>
-          <p className="lead" style={{ color: 'var(--ink)', fontWeight: 700 }}>
-            {t.work.resultLabel} : {study.result ?? <Tbd locale={locale} />}
-          </p>
+          <div className="case-result">
+            <div className="case-result__label">{t.work.resultLabel}</div>
+            <div className="case-result__value">
+              {study.result ?? <Tbd locale={locale} />}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -41,19 +44,25 @@ export default function CaseView({ locale, study }: { locale: Locale; study: Cas
       <section className="section">
         <div className="container">
           <Reveal>
-            {study.shot ? (
-              <img
-                src={study.shot}
-                alt={study.name}
-                loading="lazy"
-                style={{ borderRadius: 'var(--r-image)', width: '100%' }}
-              />
-            ) : (
-              <TbdBlock
-                locale={locale}
-                what={locale === 'fr' ? 'capture du projet' : 'project screenshot'}
-              />
-            )}
+            {/* le projet sur ordinateur et sur telephone, comme au wireframe */}
+            <div className="shot">
+              <div className="shot__desktop">
+                {study.shot ? (
+                  <img src={study.shot} alt={study.name} loading="lazy" />
+                ) : (
+                  <Tbd
+                    locale={locale}
+                    what={locale === 'fr' ? 'capture ordinateur' : 'desktop screenshot'}
+                  />
+                )}
+              </div>
+              <div className="shot__phone">
+                <Tbd
+                  locale={locale}
+                  what={locale === 'fr' ? 'capture téléphone' : 'phone screenshot'}
+                />
+              </div>
+            </div>
           </Reveal>
         </div>
       </section>

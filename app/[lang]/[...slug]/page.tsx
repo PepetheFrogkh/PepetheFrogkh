@@ -215,6 +215,14 @@ export default async function Page({
                   <p className="small muted" style={{ marginTop: 8 }}>
                     {step.body ?? <Tbd locale={lang} />}
                   </p>
+                  {/* une demo a chaque etape, comme le demande le wireframe */}
+                  <div className="step__demo">
+                    {step.demo ? (
+                      <img src={step.demo} alt={step.title} loading="lazy" />
+                    ) : (
+                      <Tbd locale={lang} what={lang === 'fr' ? 'démo' : 'demo'} />
+                    )}
+                  </div>
                 </li>
               ))}
             </ol>

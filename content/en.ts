@@ -209,12 +209,12 @@ export const en: Dict = {
     title: 'Six steps, no surprises',
     intro: 'The clock starts when we receive your content.',
     steps: [
-      { title: 'Understand', body: null },
-      { title: 'Scope', body: null },
-      { title: 'Design', body: null },
-      { title: 'Build', body: null },
-      { title: 'Launch', body: null },
-      { title: 'Grow', body: null },
+      { title: 'Understand', body: null, demo: null },
+      { title: 'Scope', body: null, demo: null },
+      { title: 'Design', body: null, demo: null },
+      { title: 'Build', body: null, demo: null },
+      { title: 'Launch', body: null, demo: null },
+      { title: 'Grow', body: null, demo: null },
     ],
   },
 
@@ -399,6 +399,8 @@ export const en: Dict = {
   ],
 
   situationLabels: {
+    before: 'Before',
+    after: 'After',
     problem: 'The problem',
     steps: 'What we do',
     measures: 'What you measure',

@@ -5,6 +5,8 @@ import Belt from '@/components/Belt'
 import CaseCard from '@/components/CaseCard'
 import ConfiguratorSlot from '@/components/ConfiguratorSlot'
 import Counter from '@/components/Counter'
+import Fan from '@/components/Fan'
+import Manifesto from '@/components/Manifesto'
 import Cta from '@/components/Cta'
 import DiagnosticForm from '@/components/DiagnosticForm'
 import Faq from '@/components/Faq'
@@ -71,11 +73,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               <h2>{t.showcase.title}</h2>
               <p className="lead">{t.showcase.note}</p>
             </div>
-            <div className="grid grid--3">
-              {t.work.cases.map((study) => (
-                <TbdBlock key={study.slug} locale={lang} what={study.name} />
-              ))}
-            </div>
+            <Fan locale={lang} shots={t.work.cases} />
           </Reveal>
         </div>
       </section>
@@ -114,19 +112,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <section className="section">
         <div className="container">
           <Reveal>
-            <p
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontWeight: 600,
-                fontSize: 'clamp(28px, 4vw, 44px)',
-                lineHeight: 1.15,
-                letterSpacing: '-0.015em',
-                maxWidth: '22ch',
-                margin: 0,
-              }}
-            >
-              {t.manifesto}
-            </p>
+            <Manifesto text={t.manifesto} />
           </Reveal>
         </div>
       </section>
@@ -217,6 +203,16 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <div className="section__head">
               <h2>{t.work.title}</h2>
               <p className="lead">{t.work.intro}</p>
+            </div>
+            <div className="row" style={{ gap: 8, marginBottom: 'var(--s5)' }}>
+              <span className="tag" style={{ background: 'var(--peach)', color: 'var(--ink)' }}>
+                {t.work.all}
+              </span>
+              {t.work.filters.map((filter) => (
+                <span className="tag" key={filter}>
+                  {filter}
+                </span>
+              ))}
             </div>
             <div className="grid grid--3">
               {t.work.cases.map((study) => (

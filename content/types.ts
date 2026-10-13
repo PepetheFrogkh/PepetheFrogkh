@@ -83,6 +83,8 @@ export interface CaseStudy {
 export interface MethodStep {
   title: string
   body: string | null
+  /** La demo de l'etape : une image ou une video, ou null. */
+  demo: string | null
 }
 
 export interface FaqItem {
@@ -219,6 +221,9 @@ export interface Dict {
   situationPages: SituationPage[]
   /** Les blocs du gabarit d'une page situation. */
   situationLabels: {
+    /** Le bloc « Ce que vous mesurez » affiche l'avant et l'apres. */
+    before: string
+    after: string
     problem: string
     steps: string
     measures: string
