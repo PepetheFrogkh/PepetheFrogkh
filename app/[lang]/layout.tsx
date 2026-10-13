@@ -18,9 +18,15 @@ import '../globals.css'
  * construction et les sert depuis notre domaine, comme le demande le cahier.
  */
 
+/**
+ * Fraunces est une police variable : en demandant ses axes SOFT et WONK, la
+ * derniere ligne de l'en-tete peut changer de caractere en grandissant, au
+ * lieu de seulement grossir.
+ */
 const fraunces = Fraunces({
   subsets: ['latin'],
   style: ['normal', 'italic'],
+  axes: ['SOFT', 'WONK', 'opsz'],
   display: 'swap',
   variable: '--font-fraunces',
 })

@@ -67,6 +67,12 @@ export const fr: Dict = {
   hero: {
     eyebrow: 'Hôtellerie, restauration et commerce',
     title: 'Améliorez l’expérience de vos clients. *Mesurez-la.*',
+    titleLines: [
+      'Améliorez',
+      'l\u2019expérience',
+      'de vos clients.',
+      '*Mesurez-la.*',
+    ],
     sub: 'Kuiper Studio aide les hôtels, les restaurants et les commerces indépendants à comprendre ce que pensent leurs clients, à corriger ce qui coince et à gagner en rentabilité, avec les bons outils numériques.',
     primary: { label: 'Diagnostic gratuit de vos avis', href: 'diagnostic' },
     secondary: { label: 'Réserver un appel', href: 'booking' },
@@ -146,16 +152,6 @@ export const fr: Dict = {
 
   manifesto:
     'L’expérience client ne se devine pas. Elle se mesure, et elle s’améliore avec les bons outils.',
-
-  /**
-   * Les trois propositions du manifeste, une par acte de l'en-tete. Elles
-   * doivent rester la phrase du cahier, decoupee : c'est le meme texte.
-   */
-  story: [
-    'L\u2019expérience client ne se devine pas.',
-    'Elle se mesure,',
-    'et elle s\u2019améliore avec les bons outils.',
-  ],
 
   founders: {
     title: 'Les fondateurs',

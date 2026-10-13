@@ -130,6 +130,13 @@ export interface Dict {
   hero: {
     eyebrow: string
     title: string
+    /**
+     * Le titre decoupe en lignes, pour l'en-tete typographique. Les retours
+     * sont un choix de composition, pas un hasard de largeur : ils changent
+     * d'une langue a l'autre. La derniere ligne porte les asterisques et
+     * devient la phrase qui reste seule a l'ecran.
+     */
+    titleLines: string[]
     sub: string
     primary: Cta
     secondary: Cta
@@ -146,8 +153,6 @@ export interface Dict {
     cards: SituationCard[]
   }
   manifesto: string
-  /** Le manifeste decoupe en actes, pour le recit de l'en-tete. */
-  story: string[]
   founders: {
     title: string
     people: { name: string; role: string | null; bio: string | null; photo: string | null }[]

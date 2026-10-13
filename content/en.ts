@@ -63,6 +63,12 @@ export const en: Dict = {
   hero: {
     eyebrow: 'Hospitality, restaurants and retail',
     title: 'Improve your guests’ experience. *Measure it.*',
+    titleLines: [
+      'Improve your',
+      'customers\u2019',
+      'experience.',
+      '*Measure it.*',
+    ],
     sub: 'Kuiper Studio helps independent hotels, restaurants and retailers understand what their customers think, fix what goes wrong and improve their margins, with the right digital tools.',
     primary: { label: 'Free review diagnostic', href: 'diagnostic' },
     secondary: { label: 'Book a call', href: 'booking' },
@@ -141,16 +147,6 @@ export const en: Dict = {
   },
 
   manifesto: 'Guest experience isn’t guesswork. It can be measured, and it improves with the right tools.',
-
-  /**
-   * Les trois propositions du manifeste, une par acte de l'en-tete. Elles
-   * doivent rester la phrase du cahier, decoupee : c'est le meme texte.
-   */
-  story: [
-    'Customer experience isn\u2019t guesswork.',
-    'It can be measured,',
-    'and it improves with the right tools.',
-  ],
 
   founders: {
     title: 'The founders',

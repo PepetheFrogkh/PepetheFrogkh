@@ -646,7 +646,7 @@ p:last-child {
   align-self: flex-start;
 }
 
-/* ── l'en-tete de page ─────────────────────────────────────────────────── */
+/* ── l'en-tete des pages secondaires ──────────────────────────────────── */
 
 .hero {
   padding-top: calc(72px + var(--s9));
@@ -681,19 +681,6 @@ p:last-child {
   font-family: var(--font-ui);
   font-size: 15px;
   color: var(--slate);
-}
-
-/* la ceinture de particules occupe la moitie droite */
-.belt {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  max-height: 560px;
-}
-
-.belt canvas {
-  width: 100%;
-  height: 100%;
 }
 
 /* ── chiffres ──────────────────────────────────────────────────────────── */
@@ -1330,39 +1317,6 @@ html.lenis {
   scroll-behavior: auto;
 }
 
-/* ── le champ de particules ────────────────────────────────────────────── */
-
-.field {
-  position: absolute;
-  inset: 0;
-}
-
-.field canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  /* le clic doit atteindre le champ pour declencher l'onde de choc, mais la
-     zone ne doit pas voler le survol des boutons voisins */
-  touch-action: pan-y;
-}
-
-.belt {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  max-height: 600px;
-}
-
-/* ── le titre brouille ─────────────────────────────────────────────────── */
-
-.letter {
-  display: inline-block;
-  /* les glyphes du brouillage n'ont pas la largeur de la lettre finale :
-     sans cette reserve, le titre se reflow a chaque tick */
-  min-width: 0.26em;
-  text-align: center;
-}
-
 /* ── les blocs qui glissent ────────────────────────────────────────────── */
 
 .block {
@@ -1627,155 +1581,6 @@ body.has-view-cursor [data-cursor='voir'] {
   border: 1px dashed var(--terra);
 }
 
-/* ══ L'en-tete en quatre actes ════════════════════════════════════════════ */
-
-.story {
-  position: relative;
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
-  padding-top: 72px;
-  padding-bottom: var(--s9);
-  overflow: clip;
-}
-
-/* le champ occupe tout l'en-tete, derriere le texte */
-.story__field {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.story__field .belt {
-  width: 100%;
-  height: 100%;
-  max-height: none;
-  aspect-ratio: auto;
-}
-
-.story__grid {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: var(--s6);
-}
-
-@media (min-width: 1000px) {
-  .story__grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
-    align-items: center;
-    gap: var(--s8);
-  }
-}
-
-/* Sur un ecran etroit le champ passe sous le texte : un voile garde le
-   contraste de l'encre sur le creme, sans assombrir la page. */
-.story__text {
-  position: relative;
-}
-
-@media (max-width: 999px) {
-  .story__text::before {
-    content: '';
-    position: absolute;
-    inset: -24px -20px;
-    z-index: -1;
-    background: radial-gradient(
-      120% 90% at 20% 40%,
-      rgba(255, 248, 243, 0.96),
-      rgba(255, 248, 243, 0.72) 60%,
-      rgba(255, 248, 243, 0) 100%
-    );
-  }
-}
-
-/* ── les legendes du recit ─────────────────────────────────────────────── */
-
-/* Un bandeau bas : les trois legendes se superposent au meme endroit, donc le
-   passage d'un acte a l'autre ne deplace rien et ne vient jamais sous les
-   particules du haut. */
-.story__captions {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: var(--s6);
-  z-index: 2;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  min-height: 3.2em;
-}
-
-.story__caption {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: translateY(10px);
-  transition:
-    opacity 0.45s var(--ease),
-    transform 0.45s var(--ease);
-  pointer-events: none;
-}
-
-.story__caption[data-shown='true'] {
-  opacity: 1;
-  transform: none;
-}
-
-.story__caption-inner {
-  display: flex;
-  gap: var(--s2);
-  align-items: baseline;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(22px, 2.6vw, 34px);
-  line-height: 1.15;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-  /* pas de max-width ici : elle ecraserait celle de .container et la legende
-     se recentrerait au lieu de s'aligner sur le titre */
-}
-
-.story__act {
-  flex: none;
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 13px;
-  color: var(--terra);
-}
-
-/* Sur un ecran etroit, le bandeau prend sa place dans le flux : en absolu il
-   se posait sur la note « 30 minutes avec Arnaud ». */
-@media (max-width: 999px) {
-  .story__captions {
-    position: relative;
-    margin-top: var(--s6);
-    bottom: auto;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .story {
-    min-height: 0;
-  }
-
-  /* sans animation, les trois propositions se lisent empilees */
-  .story__captions {
-    position: static;
-    margin-top: var(--s6);
-    display: flex;
-    flex-direction: column;
-    gap: var(--s2);
-    min-height: 0;
-  }
-
-  .story__caption {
-    position: static;
-    opacity: 1;
-    transform: none;
-  }
-}
-
 /* ══ La methode, en piste horizontale ════════════════════════════════════ */
 
 .method {
@@ -1926,6 +1731,159 @@ body.has-view-cursor [data-cursor='voir'] {
   }
 
   .track__bar {
+    transform: scaleX(1);
+  }
+}
+
+/* ══ L'en-tete typographique ══════════════════════════════════════════════
+   Pas de visuel : le titre est le visuel. Tout est lisible a l'arrivee, et le
+   defilement recompose au lieu de reveler. Le pied ne bouge jamais, donc le
+   bouton est cliquable du premier au dernier pixel.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.typo {
+  min-height: 100svh;
+  display: flex;
+  align-items: stretch;
+  background: var(--cream);
+  padding-top: calc(72px + var(--s6));
+  padding-bottom: var(--s6);
+  overflow: clip;
+}
+
+.typo__inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(var(--s3), 4vh, var(--s6));
+  width: 100%;
+}
+
+.typo__eyebrow {
+  align-self: flex-start;
+}
+
+/* ── le titre ──────────────────────────────────────────────────────────── */
+
+.typo__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  /* Deux bornes, pas une : la largeur tient la plus longue ligne dans le
+     conteneur de 1 200 px, la hauteur empeche les quatre lignes de pousser le
+     sous-titre hors de l'ecran sur un portable au format large. */
+  font-size: clamp(36px, min(8.4vw, 12vh), 128px);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  text-wrap: nowrap;
+}
+
+.typo__line {
+  display: block;
+  /* le masque de l'entree : c'est le cadre qui s'ouvre, le mot est deja la */
+  overflow: hidden;
+  will-change: transform;
+}
+
+/* le debordement doit rester visible une fois la ligne agrandie */
+.typo__line--last {
+  overflow: visible;
+}
+
+/* La derniere ligne grandit depuis son coin haut gauche, pour aller vers la
+   droite et vers le bas et jamais hors cadre. Le conteneur se resserre sur le
+   texte, donc l'echelle se calcule sur la vraie largeur de la phrase et le
+   trait fait exactement sa longueur. */
+.typo__shrink {
+  display: inline-block;
+  transform-origin: left top;
+  will-change: transform;
+  --wonk: 0;
+  --soft: 0;
+  font-variation-settings:
+    'SOFT' var(--soft),
+    'WONK' var(--wonk);
+}
+
+.typo__line--accent {
+  color: var(--terra);
+  font-style: italic;
+}
+
+.typo__word {
+  display: inline-block;
+  animation: typo-rise 0.75s var(--ease) both;
+}
+
+@keyframes typo-rise {
+  from {
+    transform: translateY(102%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* le trait qui se tire sous la phrase, une fois qu'elle est posee */
+.typo__rule {
+  display: block;
+  height: clamp(4px, 0.5vw, 8px);
+  margin-top: 0.12em;
+  background: var(--orange);
+  border-radius: 999px;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* ── le pied de l'en-tete ──────────────────────────────────────────────── */
+
+.typo__foot {
+  display: grid;
+  gap: var(--s4);
+  align-items: end;
+}
+
+@media (min-width: 900px) {
+  .typo__foot {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--s8);
+  }
+}
+
+.typo__sub {
+  max-width: 46ch;
+  margin: 0;
+}
+
+.typo__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  align-items: flex-start;
+}
+
+@media (min-width: 900px) {
+  .typo__actions {
+    align-items: flex-end;
+  }
+
+  .typo__actions .hero__note {
+    text-align: right;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typo {
+    min-height: 0;
+    padding-bottom: var(--s9);
+  }
+
+  .typo__word {
+    animation: none;
+  }
+
+  /* sans animation le trait est deja tire : il fait partie de la composition */
+  .typo__rule {
     transform: scaleX(1);
   }
 }

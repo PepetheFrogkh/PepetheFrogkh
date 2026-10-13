@@ -1,8 +1,8 @@
 # Kuiper Studio
 
-Le site de Kuiper Studio, en français et en anglais : clair, crème et orange, avec le
-champ de particules WebGL de l'en-tête et des animations au défilement. Next.js 15,
-React 19, TypeScript, Three.js, GSAP ScrollTrigger, Lenis.
+Le site de Kuiper Studio, en français et en anglais : clair, crème et orange, un en-tête
+typographique et des animations au défilement. Next.js 15, React 19, TypeScript, GSAP
+ScrollTrigger, Lenis. Aucun WebGL, aucune image dans l'en-tête.
 
 ```bash
 npm install
@@ -159,39 +159,43 @@ section soit à l'écran, et aucun écran ne reste vide pendant le défilement. 
 sont complets sur ordinateur, allégés sur mobile, et coupés quand le visiteur réduit les
 animations.
 
-### Le champ de particules
+### L'en-tête
 
-`components/webgl/ParticleField.tsx` et `components/webgl/shaders.ts`.
+`components/HeroType.tsx`. Pas de visuel : le titre est le visuel.
 
-20 000 particules sur ordinateur, 5 000 sur mobile, calculées par la carte graphique :
-tout le mouvement est dans le vertex shader, et la boucle de rendu ne pousse que cinq
-uniformes par image. Les valeurs du cahier sont des constantes en haut des deux
-fichiers.
+À l'arrivée tout est déjà là, lisible et cliquable : l'étiquette, les quatre lignes du
+titre, le sous-titre, les deux boutons. Le défilement ne révèle rien, il **recompose** :
+les trois premières lignes montent et s'effacent, chacune à son rythme, tandis que la
+dernière grandit, vient se poser à la place de la première et reste seule, soulignée d'un
+trait orange. Le pied de l'en-tête ne bouge pas du premier au dernier pixel, donc le
+bouton reste cliquable pendant toute la séquence.
 
-| Ce que fait le champ | Comment |
-| --- | --- |
-| La ceinture de Kuiper autour d'un soleil orange, en rotation lente | trois orbites elliptiques inclinées de -18°, vitesses légèrement différentes |
-| La respiration | un bruit simplex 3D lent, de faible amplitude |
-| La souris agit comme une gravité | une composante radiale qui repousse, une tangentielle qui enroule dans le sillage |
-| Au clic, une onde de choc qui se reforme en une seconde | un anneau d'impulsion qui s'éloigne du curseur ; `uBurst` retombe en 1 s |
-| Au défilement, les particules dessinent le cadre des écrans | `uMorph` interpole vers `aTarget`, un point sur le périmètre d'un des trois cadres |
-| L'arrivée | `uIntro` part de 1 : les particules convergent de loin et se posent en 1,4 s |
+Deux points de métier :
 
-Le mélange est **normal et non additif** : sur un fond crème, l'additif blanchirait les
-particules au lieu de les poser. Le champ est chargé après le texte (`components/Belt.tsx`,
-à la première accalmie du navigateur), mis en pause hors de l'écran, et remplacé par une
-seule image fixe quand le visiteur réduit les animations. Sans WebGL, la zone reste vide
-et le texte de l'en-tête ne bouge pas.
+- **Les retours de ligne sont un choix**, pas un hasard de largeur : ils vivent dans
+  `hero.titleLines`, par langue, parce que « Mesurez-la. » et « Measure it. » ne se
+  composent pas pareil.
+- **L'échelle de la dernière ligne est mesurée, pas devinée.** Elle est calculée sur la
+  largeur réelle du texte et la place disponible, donc la phrase remplit le conteneur
+  sans jamais en sortir, dans les deux langues et à toutes les largeurs.
+
+La dernière ligne gagne aussi du `WONK` et du `SOFT`, deux axes de la police variable
+Fraunces : la lettre change de caractère en grandissant. C'est le seul endroit du site où
+la police bouge.
+
+Le cahier v2 demande un champ de particules WebGL dans l'en-tête. Ce choix-là a été
+arbitré autrement, en revue : l'en-tête est typographique et Three.js a été retiré des
+dépendances. À reconfirmer avec Louis.
 
 ### Les effets de section
 
 | Section | Effet | Fichier |
 | --- | --- | --- |
-| Titre principal | les mots du flou au net, quelques lettres se brouillent et se fixent en moins de 300 ms | `ScrambleHeading.tsx` |
+| Titre principal | les lignes entrent par un masque, puis la dernière grandit et reste seule | `HeroType.tsx` |
 | Transitions | chaque section est un grand bloc aux coins très arrondis qui glisse par-dessus la précédente | `SectionBlock.tsx` |
 | Éventail de réalisations | les écrans montent d'une courbe d'horizon crème et se déploient pendant le défilement | `Fan.tsx` |
 | Manifeste | section épinglée, le très grand texte se colore mot après mot en orange terre | `PinnedManifesto.tsx` |
-| Méthode | section épinglée, une étape par cran de défilement, la frise avance | `PinnedMethod.tsx` |
+| Méthode | section épinglée, six cartes qui défilent horizontalement, chaque schéma se trace | `PinnedMethod.tsx`, `StepDiagram.tsx` |
 | Réalisations | images révélées par un masque, curseur personnalisé « Voir » | `MaskReveal.tsx`, `ViewCursor.tsx` |
 | Boutons | aimantés, 8 px au plus pour que la cible reste cliquable | `Magnetic.tsx` |
 | Chiffres | compteurs qui défilent jusqu'à leur valeur | `Counter.tsx` |

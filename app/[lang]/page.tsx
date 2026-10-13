@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import { dict } from '@/content'
 import { isLocale, path } from '@/lib/i18n'
-import Belt from '@/components/Belt'
 import CaseCard from '@/components/CaseCard'
 import ConfiguratorSlot from '@/components/ConfiguratorSlot'
 import Counter from '@/components/Counter'
@@ -11,13 +10,12 @@ import Fan from '@/components/Fan'
 import Faq from '@/components/Faq'
 import FinalCta from '@/components/FinalCta'
 import Heading from '@/components/Heading'
-import HeroStory from '@/components/HeroStory'
+import HeroType from '@/components/HeroType'
 import LogoStrip from '@/components/LogoStrip'
 import MaskReveal from '@/components/MaskReveal'
 import PinnedManifesto from '@/components/PinnedManifesto'
 import PinnedMethod from '@/components/PinnedMethod'
 import Reveal from '@/components/Reveal'
-import ScrambleHeading from '@/components/ScrambleHeading'
 import SectionBlock from '@/components/SectionBlock'
 import SituationList from '@/components/SituationList'
 import TrackVisible from '@/components/TrackVisible'
@@ -41,39 +39,28 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
   return (
     <>
-      {/* 2 · en-tete : quatre actes menes par le defilement, particules */}
-      <HeroStory
-        captions={t.story}
-        field={
-          <Belt
-            label={
-              lang === 'fr'
-                ? 'Un champ de particules qui passe de la ceinture de Kuiper à un nuage d\u2019avis, puis à un histogramme, puis aux cadres de trois écrans'
-                : 'A particle field moving from the Kuiper belt to a cloud of reviews, then a bar chart, then three screen frames'
-            }
-          />
-        }
-      >
-        <span className="eyebrow">{t.hero.eyebrow}</span>
-        <ScrambleHeading className="hero__title" text={t.hero.title} as="h1" />
-        <p className="lead">{t.hero.sub}</p>
-        <div className="row hero__actions">
-          <Cta
-            locale={lang}
-            href={t.hero.primary.href}
-            label={t.hero.primary.label}
-            event="diagnostic_click"
-          />
-          <Cta
-            locale={lang}
-            href={t.hero.secondary.href}
-            label={t.hero.secondary.label}
-            variant="secondary"
-            event="book_call_click"
-          />
+      {/* 2 · en-tete : le titre est le visuel, le defilement le recompose */}
+      <HeroType eyebrow={t.hero.eyebrow} lines={t.hero.titleLines}>
+        <p className="lead typo__sub">{t.hero.sub}</p>
+        <div className="typo__actions">
+          <div className="row">
+            <Cta
+              locale={lang}
+              href={t.hero.primary.href}
+              label={t.hero.primary.label}
+              event="diagnostic_click"
+            />
+            <Cta
+              locale={lang}
+              href={t.hero.secondary.href}
+              label={t.hero.secondary.label}
+              variant="secondary"
+              event="book_call_click"
+            />
+          </div>
+          <p className="hero__note">{t.hero.note}</p>
         </div>
-        <p className="hero__note">{t.hero.note}</p>
-      </HeroStory>
+      </HeroType>
 
       {/* 3 · eventail de realisations : les ecrans montent de l'horizon */}
       <SectionBlock tone="cream">
