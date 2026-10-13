@@ -7,6 +7,8 @@ import { alternates } from '@/lib/routes'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CookieBanner from '@/components/CookieBanner'
+import SmoothScroll from '@/components/SmoothScroll'
+import ViewCursor from '@/components/ViewCursor'
 import '../globals.css'
 
 /**
@@ -127,6 +129,8 @@ export default async function LangLayout({
         <main id="contenu">{children}</main>
         <Footer locale={lang} />
         <CookieBanner locale={lang} />
+        <SmoothScroll />
+        <ViewCursor label={lang === 'fr' ? 'Voir' : 'View'} />
         <script
           type="application/ld+json"
           // les donnees structurees du cahier : Organization et LocalBusiness

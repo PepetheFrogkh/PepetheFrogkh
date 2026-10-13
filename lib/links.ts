@@ -21,7 +21,11 @@ export function resolve(locale: Locale, href: string): string | null {
   if (href === 'booking') return BOOKING_URL || null
   if (href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('http')) return href
 
-  const [head, ...rest] = href.split('/')
-  if ((PAGES as string[]).includes(head)) return path(locale, head as PageKey, ...rest)
+  // une page peut etre suivie d'une ancre : 'home#offres'
+  const [route, hash] = href.split('#')
+  const suffix = hash ? `#${hash}` : ''
+
+  const [head, ...rest] = route.split('/')
+  if ((PAGES as string[]).includes(head)) return path(locale, head as PageKey, ...rest) + suffix
   return href.startsWith('/') ? href : `/${locale}/${href}`
 }

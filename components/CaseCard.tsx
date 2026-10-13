@@ -15,6 +15,7 @@ export default function CaseCard({ locale, study }: { locale: Locale; study: Cas
     <Link
       className="card card--lift"
       href={path(locale, 'work', study.slug)}
+      data-cursor="voir"
       style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
     >
       {study.shot ? (
@@ -36,6 +37,7 @@ export default function CaseCard({ locale, study }: { locale: Locale; study: Cas
       </div>
 
       <h3>{study.name}</h3>
+      {study.site ? <div className="small muted">{study.site}</div> : null}
       <p className="muted" style={{ marginTop: 8 }}>
         {study.summary}
       </p>

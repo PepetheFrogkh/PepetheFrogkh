@@ -31,6 +31,8 @@ export interface Figure {
 
 export interface SituationCard {
   slug: string
+  /** La photo plein cadre de la carte, ou null. */
+  photo: string | null
   /** Le numero affiche dans la carte. */
   index: string
   title: string
@@ -40,6 +42,9 @@ export interface SituationCard {
   /** Le cahier marque Rentabilite et Groupes en V2 : mettre false pour les
    *  retirer du site sans toucher au code. */
   published: boolean
+  /** Ou mene « En savoir plus ». null pour la page situation du meme slug ;
+   *  le cahier renvoie la carte 05 vers l'offre Sites. */
+  link: string | null
 }
 
 export interface SituationPage {
@@ -67,6 +72,8 @@ export interface CaseStudy {
   country: string
   /** Une phrase. */
   summary: string
+  /** Le site du projet, affiche sous sa capture. */
+  site: string | null
   /** Le resultat verifie, ou null : la carte affiche alors [À FOURNIR]. */
   result: string | null
   /** La capture du projet, ou null. */
@@ -141,7 +148,7 @@ export interface Dict {
   manifesto: string
   founders: {
     title: string
-    people: { name: string; role: string | null; photo: string | null }[]
+    people: { name: string; role: string | null; bio: string | null; photo: string | null }[]
   }
   offers: {
     title: string

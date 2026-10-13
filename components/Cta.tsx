@@ -4,6 +4,7 @@ import Link from 'next/link'
 import type { Locale } from '@/lib/i18n'
 import { resolve } from '@/lib/links'
 import { track, type TrackedEvent } from '@/lib/analytics'
+import Magnetic from './Magnetic'
 import { Tbd } from './Tbd'
 
 /**
@@ -42,11 +43,15 @@ export default function Cta({
     )
   }
 
+  // les boutons sont aimantes, pas les liens en texte
+  const wrap = (node: React.ReactNode) =>
+    variant === 'link' ? node : <Magnetic>{node}</Magnetic>
+
   const onClick = event ? () => track(event) : undefined
   const external = target.startsWith('http') || target.startsWith('mailto:')
 
   if (external) {
-    return (
+    return wrap(
       <a
         className={className}
         href={target}
@@ -54,13 +59,13 @@ export default function Cta({
         {...(target.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       >
         {label}
-      </a>
+      </a>,
     )
   }
 
-  return (
+  return wrap(
     <Link className={className} href={target} onClick={onClick}>
       {label}
-    </Link>
+    </Link>,
   )
 }

@@ -790,13 +790,14 @@ p:last-child {
 }
 
 .situations__item {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--s2);
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--r-card);
-  padding: var(--s4);
+  padding: var(--s3);
   overflow: hidden;
 }
 
@@ -1201,108 +1202,6 @@ p:last-child {
   }
 }
 
-/* ── eventail de realisations ──────────────────────────────────────────── */
-
-.fan {
-  display: flex;
-  gap: var(--s2);
-  overflow-x: auto;
-  padding: var(--s3) 0;
-  scroll-snap-type: x proximity;
-}
-
-.fan__card {
-  flex: 0 0 60%;
-  margin: 0;
-  aspect-ratio: 3 / 4;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r-image);
-  overflow: hidden;
-  scroll-snap-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fan__card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.fan__empty {
-  padding: var(--s2);
-  text-align: center;
-}
-
-@media (min-width: 900px) {
-  /* inclinees et legerement chevauchees, comme chez TechFlow */
-  .fan {
-    overflow: visible;
-    justify-content: center;
-    gap: 0;
-    padding: var(--s5) 0;
-  }
-
-  .fan__card {
-    flex: 0 0 22%;
-    margin-inline: -1.5%;
-    box-shadow: var(--lift);
-    transition:
-      transform 0.35s var(--ease),
-      box-shadow 0.35s var(--ease);
-  }
-
-  .fan__card[data-tilt='left'] {
-    transform: rotate(-5deg);
-  }
-
-  .fan__card[data-tilt='right'] {
-    transform: rotate(5deg) translateY(12px);
-  }
-
-  .fan__card:hover {
-    transform: rotate(0deg) translateY(-10px) scale(1.04);
-    z-index: 2;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fan__card,
-  .fan__card:hover {
-    transform: none !important;
-  }
-}
-
-/* ── manifeste ─────────────────────────────────────────────────────────── */
-
-.manifesto {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(28px, 4vw, 44px);
-  line-height: 1.15;
-  letter-spacing: -0.015em;
-  max-width: 24ch;
-  margin: 0;
-}
-
-.manifesto__word {
-  display: inline-block;
-  color: var(--slate-light);
-  transition: color 0.35s var(--ease);
-}
-
-.manifesto__word[data-lit='true'] {
-  color: var(--ink);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .manifesto__word {
-    color: var(--ink);
-  }
-}
-
 /* ── ce que vous mesurez, en grands chiffres ───────────────────────────── */
 
 .measure-card__pair {
@@ -1412,4 +1311,418 @@ p:last-child {
 .step__demo img,
 .step__demo video {
   border-radius: 12px;
+}
+
+/* ══ Mouvement et WebGL ═══════════════════════════════════════════════════
+   Les effets du cahier v2. Une regle les gouverne tous : le contenu est
+   visible par defaut, une animation ne le cache jamais plus de 300 ms, et
+   rien ne laisse d'ecran vide pendant le defilement. Chaque bloc ci-dessous
+   anime donc un cadre, une couleur ou une position, jamais la presence.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+/* le defilement amorti est pris en main par Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis {
+  scroll-behavior: auto;
+}
+
+/* ── le champ de particules ────────────────────────────────────────────── */
+
+.field {
+  position: absolute;
+  inset: 0;
+}
+
+.field canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* le clic doit atteindre le champ pour declencher l'onde de choc, mais la
+     zone ne doit pas voler le survol des boutons voisins */
+  touch-action: pan-y;
+}
+
+.belt {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-height: 600px;
+}
+
+/* ── le titre brouille ─────────────────────────────────────────────────── */
+
+.letter {
+  display: inline-block;
+  /* les glyphes du brouillage n'ont pas la largeur de la lettre finale :
+     sans cette reserve, le titre se reflow a chaque tick */
+  min-width: 0.26em;
+  text-align: center;
+}
+
+/* ── les blocs qui glissent ────────────────────────────────────────────── */
+
+.block {
+  position: relative;
+  z-index: 1;
+  padding: var(--section) 0;
+  border-radius: 40px;
+  /* chaque bloc recouvre le precedent : sans marge negative on verrait la
+     bordure arrondie du dessous */
+  margin-top: -40px;
+  padding-top: calc(var(--section) + 40px);
+  background: var(--white);
+  will-change: transform;
+}
+
+.block--cream {
+  background: var(--cream);
+}
+
+.block--peach {
+  background: var(--peach);
+}
+
+.block:first-of-type {
+  margin-top: 0;
+}
+
+/* ── l'eventail de realisations ────────────────────────────────────────── */
+
+.fan {
+  position: relative;
+  padding: var(--s8) 0 var(--s5);
+}
+
+/* la courbe d'horizon creme et lumineuse d'ou montent les ecrans */
+.fan__horizon {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 160%;
+  height: 70%;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 0 0;
+  background:
+    radial-gradient(60% 80% at 50% 100%, rgba(255, 227, 207, 0.9), rgba(255, 248, 243, 0) 70%),
+    linear-gradient(0deg, var(--cream), rgba(255, 248, 243, 0));
+  pointer-events: none;
+}
+
+.fan__cards {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: var(--s2);
+  overflow-x: auto;
+  padding: 0 var(--s2) var(--s3);
+  scroll-snap-type: x proximity;
+}
+
+.fan__card {
+  flex: 0 0 62%;
+  margin: 0;
+  aspect-ratio: 3 / 4;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-image);
+  box-shadow: var(--lift);
+  overflow: hidden;
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  will-change: transform;
+}
+
+.fan__card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fan__empty {
+  padding: var(--s2);
+  text-align: center;
+}
+
+.fan__name {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--slate);
+}
+
+@media (min-width: 900px) {
+  .fan__cards {
+    overflow: visible;
+    gap: 0;
+  }
+
+  .fan__card {
+    flex: 0 0 23%;
+    margin-inline: -1%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fan__card {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ── le manifeste epingle ──────────────────────────────────────────────── */
+
+.manifesto-pin {
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  background: var(--white);
+}
+
+.manifesto {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(34px, 7vw, 88px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  max-width: 20ch;
+  margin: 0;
+}
+
+.manifesto__word {
+  display: inline-block;
+  /* encre au depart : le texte est lisible avant, pendant et apres */
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .manifesto-pin {
+    min-height: 0;
+  }
+
+  .manifesto__word {
+    color: var(--ink) !important;
+  }
+}
+
+/* ── la frise epinglee de la methode ───────────────────────────────────── */
+
+.method-pin {
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+}
+
+.frieze {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: var(--s6) 0 0;
+  display: grid;
+  gap: var(--s4);
+}
+
+@media (min-width: 720px) {
+  .frieze {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .frieze {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.frieze__rail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: var(--border);
+}
+
+.frieze__progress {
+  display: block;
+  height: 100%;
+  background: var(--orange);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.frieze__step {
+  position: relative;
+  padding-top: var(--s3);
+  opacity: 0.4;
+  transition:
+    opacity 0.35s var(--ease),
+    transform 0.35s var(--ease);
+}
+
+.frieze__step[data-active='true'] {
+  opacity: 1;
+}
+
+.frieze__dot {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background-color 0.35s var(--ease);
+}
+
+.frieze__step[data-active='true'] .frieze__dot {
+  background: var(--orange);
+}
+
+.frieze__index {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--terra);
+}
+
+.frieze__title {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .method-pin {
+    min-height: 0;
+  }
+
+  .frieze__step {
+    opacity: 1;
+  }
+
+  .frieze__dot {
+    background: var(--orange);
+  }
+
+  .frieze__progress {
+    transform: scaleX(1);
+  }
+}
+
+/* ── le masque de revelation ───────────────────────────────────────────── */
+
+.mask-reveal {
+  will-change: clip-path, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mask-reveal {
+    clip-path: none !important;
+    transform: none !important;
+  }
+}
+
+/* ── le curseur « Voir » ───────────────────────────────────────────────── */
+
+.view-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.6;
+  transition:
+    opacity 0.2s var(--ease),
+    scale 0.2s var(--ease);
+}
+
+.view-cursor[data-shown='true'] {
+  opacity: 1;
+  scale: 1;
+}
+
+/* le curseur du systeme s'efface seulement sous la zone concernee */
+body.has-view-cursor [data-cursor='voir'] {
+  cursor: none;
+}
+
+/* ── les boutons aimantes ──────────────────────────────────────────────── */
+
+.magnetic {
+  display: inline-flex;
+  will-change: transform;
+}
+
+/* ── les cartes de situation, avec photo plein cadre ───────────────────── */
+
+.situations__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.situations__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.situations__photo-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--cream);
+}
+
+/* le contenu passe au-dessus de la photo, sur un voile qui garde le
+   contraste du texte encre */
+.situations__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  height: 100%;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.97), rgba(255, 255, 255, 0.82));
+  margin: calc(var(--s3) * -1);
+  padding: var(--s3);
+  border-radius: inherit;
+}
+
+/* ── le portrait d'un fondateur ────────────────────────────────────────── */
+
+.portrait {
+  width: 88px;
+  height: 88px;
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--cream);
+}
+
+.portrait--empty {
+  border: 1px dashed var(--terra);
 }

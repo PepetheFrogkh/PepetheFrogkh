@@ -17,7 +17,7 @@ export const en: Dict = {
     home: {
       title: 'Kuiper Studio · Improve your guests’ experience. Measure it.',
       description:
-        'Kuiper Studio helps independent hotels and restaurants understand what their guests think, fix what goes wrong and improve their margins, with the right digital tools.',
+        'Kuiper Studio helps independent hotels, restaurants and retailers understand what their customers think, fix what goes wrong and improve their margins, with the right digital tools.',
     },
     situations: {
       title: 'Your situation · Kuiper Studio',
@@ -61,9 +61,9 @@ export const en: Dict = {
   },
 
   hero: {
-    eyebrow: 'Hospitality and restaurants',
+    eyebrow: 'Hospitality, restaurants and retail',
     title: 'Improve your guests’ experience. *Measure it.*',
-    sub: 'Kuiper Studio helps independent hotels and restaurants understand what their guests think, fix what goes wrong and improve their margins, with the right digital tools.',
+    sub: 'Kuiper Studio helps independent hotels, restaurants and retailers understand what their customers think, fix what goes wrong and improve their margins, with the right digital tools.',
     primary: { label: 'Free review diagnostic', href: 'diagnostic' },
     secondary: { label: 'Book a call', href: 'booking' },
     note: '30 minutes with Arnaud, free, no commitment',
@@ -90,34 +90,52 @@ export const en: Dict = {
       {
         slug: 'guest-feedback',
         index: '01',
-        title: 'Finally know what your guests think of you.',
-        quote: '[TO PROVIDE]',
+        photo: null,
+        title: 'Finally know what your customers think of you.',
+        quote: 'I don\u2019t know what\u2019s going wrong.',
         tags: ['Reviews', 'Surveys', 'Alerts'],
         published: true,
+        link: null,
       },
       {
         slug: 'opening',
         index: '02',
+        photo: null,
         title: 'Open with everything you need, from day one.',
-        quote: '[TO PROVIDE]',
+        quote: 'I need everything, fast.',
         tags: ['Website', 'Booking', 'Automations'],
         published: true,
+        link: null,
       },
       {
         slug: 'profitability',
         index: '03',
-        title: 'Guests, yes. Margin too.',
-        quote: '[TO PROVIDE]',
+        photo: null,
+        title: 'Customers, yes. Margin too.',
+        quote: 'I have customers, but no margin.',
         tags: ['Inventory', 'Waste', 'Margins'],
         published: true,
+        link: null,
       },
       {
         slug: 'groups',
         index: '04',
-        title: 'Keep your guests loyal across every venue.',
-        quote: '[TO PROVIDE]',
+        photo: null,
+        title: 'Keep your customers loyal across every venue.',
+        quote: 'I want loyalty at scale.',
         tags: ['Loyalty', 'Dashboards', 'Integrations'],
         published: true,
+        link: null,
+      },
+      {
+        slug: 'visibility',
+        index: '05',
+        photo: null,
+        title: 'A good-looking site, right away.',
+        quote: 'I just want to be visible.',
+        tags: ['Website', 'Listed price', 'Fast delivery'],
+        published: true,
+        link: 'home#offres',
       },
     ],
   },
@@ -127,8 +145,18 @@ export const en: Dict = {
   founders: {
     title: 'The founders',
     people: [
-      { name: 'Arnaud', role: null, photo: null },
-      { name: 'Louis', role: null, photo: null },
+      {
+        name: 'Arnaud Sebire',
+        role: 'Co-founder, product and client relations',
+        bio: 'Around ten years on operational products: functional design, business processes, development teams.',
+        photo: '/equipe/arnaud-sebire.webp',
+      },
+      {
+        name: 'Louis Vezia',
+        role: 'Co-founder, technical direction',
+        bio: 'Around ten years on architecture, data, performance and security, including several complex CRM projects.',
+        photo: '/equipe/louis-vezia.webp',
+      },
     ],
   },
 
@@ -136,16 +164,28 @@ export const en: Dict = {
     title: 'Our offers',
     note: 'The configurator gives an estimate in two minutes. Prices exclude VAT.',
     items: [
-      { title: 'Websites', body: null, price: 'From €499 excl. VAT' },
-      { title: 'Automations', body: null, price: '[TO PROVIDE]' },
-      { title: 'Custom', body: null, price: 'On quote' },
+      {
+        title: 'Websites',
+        body: 'An animated, carefully built site, delivered in 72 hours, a week or a month, hosted and maintained by us.',
+        price: 'From €499 excl. VAT',
+      },
+      {
+        title: 'Automations',
+        body: 'Your tools connected to each other: less typing, fewer things forgotten, monitored by us.',
+        price: 'From €390 excl. VAT per flow',
+      },
+      {
+        title: 'Custom',
+        body: 'Apps, client portals and integrations, when nothing off the shelf fits.',
+        price: 'On quote',
+      },
     ],
   },
 
   work: {
     title: 'What we’ve built',
     intro: 'Three delivered projects. Every result published here is verified, or flagged as missing.',
-    filters: ['Hotels', 'Restaurants', 'Wellness'],
+    filters: ['Loyalty', 'Coaching', 'Wellness'],
     all: 'All',
     resultLabel: 'Result',
     otherProjects: 'Other projects',
@@ -154,9 +194,11 @@ export const en: Dict = {
       {
         slug: 'wave',
         name: 'Wave',
-        sector: '[TO PROVIDE]',
-        country: '[TO PROVIDE]',
-        summary: '[TO PROVIDE]',
+        sector: 'Loyalty',
+        country: 'Switzerland',
+        site: 'wavenetwork.ch',
+        summary:
+          'The Wave Pass mobile app, a member benefits programme used at partner venues, and the management tool that runs it.',
         result: null,
         shot: null,
         context: null,
@@ -168,9 +210,10 @@ export const en: Dict = {
       {
         slug: 'anakut',
         name: 'Anakut',
-        sector: '[TO PROVIDE]',
-        country: '[TO PROVIDE]',
-        summary: '[TO PROVIDE]',
+        sector: 'Coaching',
+        country: 'Neuchâtel, Switzerland',
+        site: 'anakut.ch',
+        summary: 'A custom app to run a coaching business, and the WordPress site of a boxing coach.',
         result: null,
         shot: null,
         context: null,
@@ -182,9 +225,10 @@ export const en: Dict = {
       {
         slug: 'mp-massage',
         name: 'MP Massage',
-        sector: '[TO PROVIDE]',
-        country: '[TO PROVIDE]',
-        summary: '[TO PROVIDE]',
+        sector: 'Wellness',
+        country: 'Neuchâtel, Switzerland',
+        site: 'mpmassage.ch',
+        summary: 'An app to run a massage business, and the site of a Thai massage practitioner.',
         result: null,
         shot: null,
         context: null,
@@ -199,9 +243,18 @@ export const en: Dict = {
   convictions: {
     title: 'What we believe',
     items: [
-      { title: '[TO PROVIDE]', body: null },
-      { title: '[TO PROVIDE]', body: null },
-      { title: '[TO PROVIDE]', body: null },
+      {
+        title: 'A price is shown, not hidden.',
+        body: 'You know the price before you talk to us; the quote only confirms it, in writing.',
+      },
+      {
+        title: 'Fast does not mean sloppy.',
+        body: 'A short method and proven foundations let us deliver in days rather than months.',
+      },
+      {
+        title: 'Going live is not the end.',
+        body: 'A site lives, gets updated and monitored; we stay around, every month.',
+      },
     ],
   },
 
@@ -238,7 +291,7 @@ export const en: Dict = {
       venue: 'Venue name',
       city: 'City',
       type: 'Type',
-      types: ['Hotel', 'Restaurant', 'Other'],
+      types: ['Hotel', 'Restaurant', 'Retail', 'Other'],
       maps: 'Google Maps link',
       mapsHint: 'Optional',
       name: 'Your name',
@@ -298,6 +351,7 @@ export const en: Dict = {
           { label: 'Opening', href: 'situations/opening' },
           { label: 'Profitability', href: 'situations/profitability' },
           { label: 'Groups and chains', href: 'situations/groups' },
+          { label: 'A good-looking site, right away', href: 'home#offres' },
         ],
       },
       {

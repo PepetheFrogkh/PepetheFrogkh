@@ -18,7 +18,7 @@ export const fr: Dict = {
     home: {
       title: 'Kuiper Studio · Améliorez l’expérience de vos clients. Mesurez-la.',
       description:
-        'Kuiper Studio aide les hôtels et les restaurants indépendants à comprendre ce que pensent leurs clients, à corriger ce qui coince et à gagner en rentabilité, avec les bons outils numériques.',
+        'Kuiper Studio aide les hôtels, les restaurants et les commerces indépendants à comprendre ce que pensent leurs clients, à corriger ce qui coince et à gagner en rentabilité, avec les bons outils numériques.',
     },
     situations: {
       title: 'Votre situation · Kuiper Studio',
@@ -65,9 +65,9 @@ export const fr: Dict = {
   },
 
   hero: {
-    eyebrow: 'Hôtellerie et restauration',
+    eyebrow: 'Hôtellerie, restauration et commerce',
     title: 'Améliorez l’expérience de vos clients. *Mesurez-la.*',
-    sub: 'Kuiper Studio aide les hôtels et les restaurants indépendants à comprendre ce que pensent leurs clients, à corriger ce qui coince et à gagner en rentabilité, avec les bons outils numériques.',
+    sub: 'Kuiper Studio aide les hôtels, les restaurants et les commerces indépendants à comprendre ce que pensent leurs clients, à corriger ce qui coince et à gagner en rentabilité, avec les bons outils numériques.',
     primary: { label: 'Diagnostic gratuit de vos avis', href: 'diagnostic' },
     secondary: { label: 'Réserver un appel', href: 'booking' },
     note: '30 minutes avec Arnaud, gratuit et sans engagement',
@@ -94,34 +94,52 @@ export const fr: Dict = {
       {
         slug: 'ecoute-client',
         index: '01',
+        photo: null,
         title: 'Sachez enfin ce que vos clients pensent de vous.',
-        quote: '[À FOURNIR]',
+        quote: 'Je ne sais pas ce qui ne va pas.',
         tags: ['Avis', 'Questionnaires', 'Alertes'],
         published: true,
+        link: null,
       },
       {
         slug: 'ouverture',
         index: '02',
+        photo: null,
         title: 'Ouvrez avec tout ce qu\u2019il faut, dès le premier jour.',
-        quote: '[À FOURNIR]',
+        quote: 'Il me faut tout, vite.',
         tags: ['Site', 'Réservation', 'Automatisations'],
         published: true,
+        link: null,
       },
       {
         slug: 'rentabilite',
         index: '03',
+        photo: null,
         title: 'Des clients, oui. De la marge, aussi.',
-        quote: '[À FOURNIR]',
+        quote: 'J\u2019ai des clients, mais pas de marge.',
         tags: ['Inventaire', 'Pertes', 'Marges'],
         published: true,
+        link: null,
       },
       {
         slug: 'groupes',
         index: '04',
+        photo: null,
         title: 'Fidélisez vos clients dans tous vos établissements.',
-        quote: '[À FOURNIR]',
+        quote: 'Je veux fidéliser à grande échelle.',
         tags: ['Fidélité', 'Tableaux de bord', 'Intégrations'],
         published: true,
+        link: null,
+      },
+      {
+        slug: 'visibilite',
+        index: '05',
+        photo: null,
+        title: 'Un beau site, tout de suite.',
+        quote: 'Je veux juste être visible.',
+        tags: ['Site', 'Prix affiché', 'Livraison rapide'],
+        published: true,
+        link: 'home#offres',
       },
     ],
   },
@@ -132,8 +150,18 @@ export const fr: Dict = {
   founders: {
     title: 'Les fondateurs',
     people: [
-      { name: 'Arnaud', role: null, photo: null },
-      { name: 'Louis', role: null, photo: null },
+      {
+        name: 'Arnaud Sebire',
+        role: 'Cofondateur, produit et relation client',
+        bio: 'Une dizaine d\u2019années sur les produits opérationnels : conception fonctionnelle, processus métier, équipes de développement.',
+        photo: '/equipe/arnaud-sebire.webp',
+      },
+      {
+        name: 'Louis Vezia',
+        role: 'Cofondateur, direction technique',
+        bio: 'Une dizaine d\u2019années sur l\u2019architecture, la donnée, la performance et la sécurité, dont plusieurs projets CRM complexes.',
+        photo: '/equipe/louis-vezia.webp',
+      },
     ],
   },
 
@@ -141,16 +169,28 @@ export const fr: Dict = {
     title: 'Nos offres',
     note: 'Le configurateur donne une estimation en deux minutes. Prix hors taxes.',
     items: [
-      { title: 'Sites', body: null, price: 'À partir de 499 € HT' },
-      { title: 'Automatisations', body: null, price: '[À FOURNIR]' },
-      { title: 'Sur mesure', body: null, price: 'Sur devis' },
+      {
+        title: 'Sites',
+        body: 'Un site animé et soigné, livré en 72 heures, une semaine ou un mois, hébergé et entretenu par nous.',
+        price: 'À partir de 499 € HT',
+      },
+      {
+        title: 'Automatisations',
+        body: 'Vos outils connectés entre eux : moins de saisie, moins d\u2019oublis, supervisés par nous.',
+        price: 'À partir de 390 € HT par flux',
+      },
+      {
+        title: 'Sur mesure',
+        body: 'Applications, espaces clients et intégrations, quand rien du marché ne colle.',
+        price: 'Sur devis',
+      },
     ],
   },
 
   work: {
     title: 'Ce que nous avons construit',
     intro: 'Trois projets livrés. Les résultats publiés ici sont vérifiés, ou signalés comme manquants.',
-    filters: ['Hôtellerie', 'Restauration', 'Bien-être'],
+    filters: ['Fidélité', 'Coaching', 'Bien-être'],
     all: 'Tous',
     resultLabel: 'Résultat',
     otherProjects: 'Autres projets',
@@ -159,9 +199,11 @@ export const fr: Dict = {
       {
         slug: 'wave',
         name: 'Wave',
-        sector: '[À FOURNIR]',
-        country: '[À FOURNIR]',
-        summary: '[À FOURNIR]',
+        sector: 'Fidélité',
+        country: 'Suisse',
+        site: 'wavenetwork.ch',
+        summary:
+          'L\u2019application mobile du Wave Pass, un programme d\u2019avantages pour les membres utilisé chez des établissements partenaires, et l\u2019outil de gestion qui la pilote.',
         result: null,
         shot: null,
         context: null,
@@ -173,9 +215,11 @@ export const fr: Dict = {
       {
         slug: 'anakut',
         name: 'Anakut',
-        sector: '[À FOURNIR]',
-        country: '[À FOURNIR]',
-        summary: '[À FOURNIR]',
+        sector: 'Coaching',
+        country: 'Neuchâtel, Suisse',
+        site: 'anakut.ch',
+        summary:
+          'Une application sur mesure pour gérer l\u2019activité de coaching, et le site WordPress d\u2019un coach de boxe.',
         result: null,
         shot: null,
         context: null,
@@ -187,9 +231,11 @@ export const fr: Dict = {
       {
         slug: 'mp-massage',
         name: 'MP Massage',
-        sector: '[À FOURNIR]',
-        country: '[À FOURNIR]',
-        summary: '[À FOURNIR]',
+        sector: 'Bien-être',
+        country: 'Neuchâtel, Suisse',
+        site: 'mpmassage.ch',
+        summary:
+          'Une application pour gérer l\u2019activité de massage, et le site d\u2019une praticienne en massage thaï.',
         result: null,
         shot: null,
         context: null,
@@ -204,9 +250,18 @@ export const fr: Dict = {
   convictions: {
     title: 'Nos convictions',
     items: [
-      { title: '[À FOURNIR]', body: null },
-      { title: '[À FOURNIR]', body: null },
-      { title: '[À FOURNIR]', body: null },
+      {
+        title: 'Un prix se montre, il ne se cache pas.',
+        body: 'Vous connaissez le prix avant de nous parler ; le devis ne fait que le confirmer, par écrit.',
+      },
+      {
+        title: 'Vite ne veut pas dire bâclé.',
+        body: 'Une méthode courte et des bases éprouvées permettent de livrer en jours plutôt qu\u2019en mois.',
+      },
+      {
+        title: 'La mise en ligne n\u2019est pas la fin.',
+        body: 'Un site vit, se met à jour, se surveille ; nous restons là, chaque mois.',
+      },
     ],
   },
 
@@ -243,7 +298,7 @@ export const fr: Dict = {
       venue: 'Nom de l’établissement',
       city: 'Ville',
       type: 'Type',
-      types: ['Hôtel', 'Restaurant', 'Autre'],
+      types: ['Hôtel', 'Restaurant', 'Commerce', 'Autre'],
       maps: 'Lien Google Maps',
       mapsHint: 'Facultatif',
       name: 'Votre nom',
@@ -305,6 +360,7 @@ export const fr: Dict = {
           { label: 'Ouverture', href: 'situations/ouverture' },
           { label: 'Rentabilité', href: 'situations/rentabilite' },
           { label: 'Groupes et chaînes', href: 'situations/groupes' },
+          { label: 'Un beau site, tout de suite', href: 'home#offres' },
         ],
       },
       {

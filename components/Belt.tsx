@@ -2,15 +2,15 @@
 
 import { useEffect, useState, lazy, Suspense } from 'react'
 
-const ParticleBelt = lazy(() => import('./ParticleBelt'))
+const ParticleField = lazy(() => import('./webgl/ParticleField'))
 
 /**
- * La ceinture est chargee apres le texte.
+ * Le champ de particules est charge apres le texte.
  *
  * Le cahier demande que le contenu principal s'affiche en moins de 2,5
- * secondes sur mobile, et que la ceinture arrive ensuite. Elle n'est donc ni
- * rendue sur le serveur ni dans le bundle de la page : elle est importee
- * quand le navigateur n'a plus rien d'urgent a faire.
+ * secondes sur mobile et que le WebGL se charge ensuite. Three.js et le champ
+ * ne sont donc ni rendus sur le serveur ni dans le bundle de la page : ils
+ * sont importes quand le navigateur n'a plus rien d'urgent a faire.
  */
 export default function Belt({ label }: { label: string }) {
   const [ready, setReady] = useState(false)
@@ -18,8 +18,8 @@ export default function Belt({ label }: { label: string }) {
   useEffect(() => {
     const idle =
       typeof window.requestIdleCallback === 'function'
-        ? window.requestIdleCallback(() => setReady(true), { timeout: 2000 })
-        : window.setTimeout(() => setReady(true), 400)
+        ? window.requestIdleCallback(() => setReady(true), { timeout: 2500 })
+        : window.setTimeout(() => setReady(true), 600)
 
     return () => {
       if (typeof window.cancelIdleCallback === 'function' && typeof idle === 'number') {
@@ -31,10 +31,10 @@ export default function Belt({ label }: { label: string }) {
   }, [])
 
   return (
-    <div className="belt" aria-hidden={false}>
+    <div className="belt">
       {ready ? (
         <Suspense fallback={null}>
-          <ParticleBelt label={label} />
+          <ParticleField label={label} />
         </Suspense>
       ) : null}
     </div>
