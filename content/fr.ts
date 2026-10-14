@@ -468,6 +468,84 @@ export const fr: Dict = {
     title: 'Tarifs',
     lead: 'Les prix sont affichés, hors taxes, dans votre devise.',
     disclaimer: 'Estimation indicative, confirmée par écrit après un échange.',
+    packs: {
+      title: 'Les packs',
+      rows: {
+        'essentiel-1': { name: 'Essentiel, 1 page', detail: 'Animations simples, formulaire de contact offert. Livraison express possible.' },
+        'essentiel-3': { name: 'Essentiel, jusqu’à 3 pages', detail: 'Animations simples, formulaire de contact offert. Livraison express possible.' },
+        pro: { name: 'Pro', detail: 'Jusqu’à 6 pages, animations avancées, 2 options incluses.' },
+        complet: { name: 'Complet', detail: 'Jusqu’à 10 pages, parallaxe, 1 langue supplémentaire, 3 options incluses. 3 semaines minimum.' },
+        'sur-mesure': { name: 'Sur mesure', detail: 'Applications web, espaces clients, intégrations.' },
+      },
+    },
+    options: {
+      title: 'Les options',
+      note: 'À ajouter à n’importe quel pack.',
+      rows: {
+        'formulaire-contact': 'Formulaire de contact',
+        page: 'Page supplémentaire',
+        'formulaire-avance': 'Formulaire avancé',
+        langue: 'Langue supplémentaire',
+        'animations-avancees': 'Animations avancées',
+        simulateur: 'Simulateur',
+        reservation: 'Réservation légère',
+        referencement: 'Référencement avancé',
+        'animation-3d': 'Animation 3D',
+      },
+    },
+    delays: {
+      title: 'Les délais',
+      rows: {
+        economie: 'Économie, livré dans le mois',
+        standard: 'Standard, 7 jours',
+        express: 'Express, 72 heures, pack Essentiel uniquement',
+      },
+    },
+    plans: {
+      title: 'Les abonnements',
+      note: 'Engagement de 12 mois.',
+      rows: {
+        'hebergement-wordpress': 'Hébergement seul, WordPress',
+        'hebergement-node': 'Hébergement seul, Node.js sur mesure',
+        serenite: 'Sérénité',
+        croissance: 'Croissance',
+        partenaire: 'Partenaire',
+      },
+    },
+    automation: {
+      title: 'Les automatisations',
+      rows: {
+        flow: 'Flux simple',
+        condition: 'Chaque condition ajoutée',
+        app: 'Chaque application connectée',
+        noApi: 'Outil sans API ouverte',
+      },
+    },
+    supervision: {
+      title: 'La supervision',
+      rows: {
+        'jusqu-3': 'Jusqu’à 3 flux',
+        'jusqu-10': 'Jusqu’à 10 flux',
+        'au-dela': 'Au-delà de 10 flux',
+      },
+    },
+    apps: {
+      title: 'Les applications métier',
+      rows: {
+        base: 'Application de base : caisse, inventaire, MRP, CRM',
+        erp: 'ERP complet, sur devis',
+      },
+    },
+    team: {
+      title: 'Les projets sur mesure',
+      row: 'Un développeur et un chef de projet, au mois',
+    },
+    transfer: 'Transfert du site vers un autre hébergeur',
+    conditions: [
+      'Paiement : 50 % à la commande, 50 % à la livraison.',
+      'Les contenus, textes, photos et logos, sont fournis par le client.',
+      'Les flux d’automatisation sont hébergés sur l’infrastructure n8n de Kuiper Studio et ne sont pas transférables.',
+    ],
   },
 
   blog: {

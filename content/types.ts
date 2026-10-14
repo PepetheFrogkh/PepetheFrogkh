@@ -1,4 +1,13 @@
 import type { ExpertiseKey, ServiceKey } from '@/lib/i18n'
+import type {
+  AppId,
+  AutomationId,
+  DelayId,
+  OptionId,
+  PackId,
+  PlanId,
+  SupervisionId,
+} from '@/lib/prices'
 
 /**
  * La forme du contenu, identique dans les deux langues.
@@ -274,6 +283,22 @@ export interface Dict {
     lead: string
     /** La mention qui accompagne toute estimation. */
     disclaimer: string
+    /**
+     * Les libelles de la grille, indexes par les identifiants de
+     * `lib/prices.ts`. Une ligne de prix sans libelle, ou un libelle sans
+     * ligne de prix, ne compile pas.
+     */
+    packs: { title: string; rows: Record<PackId, { name: string; detail: string }> }
+    options: { title: string; note: string; rows: Record<OptionId, string> }
+    delays: { title: string; rows: Record<DelayId, string> }
+    plans: { title: string; note: string; rows: Record<PlanId, string> }
+    automation: { title: string; rows: Record<AutomationId, string> }
+    supervision: { title: string; rows: Record<SupervisionId, string> }
+    apps: { title: string; rows: Record<AppId, string> }
+    team: { title: string; row: string }
+    transfer: string
+    /** Les conditions generales affichees sous la grille des sites. */
+    conditions: string[]
   }
 
   blog: {

@@ -25,6 +25,7 @@ const WORDS: Record<Locale, Record<string, string>> = {
     condition: 'par condition',
     to: 'à',
     from: 'à partir de',
+    base: 'prix de base',
   },
   en: {
     excl: 'excl. tax',
@@ -37,6 +38,7 @@ const WORDS: Record<Locale, Record<string, string>> = {
     condition: 'per condition',
     to: 'to',
     from: 'from',
+    base: 'base price',
   },
 }
 

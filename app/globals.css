@@ -2315,6 +2315,116 @@ body.has-view-cursor [data-cursor='voir'] {
   }
 }
 
+/* ══ Les tableaux de prix ═════════════════════════════════════════════════
+   De vraies tables : ce sont des lignes de prix, un lecteur d'ecran doit
+   pouvoir les annoncer comme telles. Les deux devises sont dans le HTML et
+   c'est l'attribut de la balise html qui decide laquelle se voit.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.prices {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: var(--s3) var(--s4) var(--s4);
+}
+
+.prices__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.prices__caption {
+  caption-side: top;
+  text-align: left;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+  padding-bottom: var(--s2);
+}
+
+.prices__note {
+  display: block;
+  margin-top: 2px;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--slate);
+}
+
+.prices__table th,
+.prices__table td {
+  text-align: left;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+  vertical-align: baseline;
+  font-weight: 400;
+}
+
+.prices__table td {
+  text-align: right;
+  white-space: nowrap;
+  padding-left: var(--s3);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.prices__name {
+  display: block;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.prices__detail {
+  display: block;
+  margin-top: 2px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--slate);
+}
+
+/* la ligne recommandee : un filet orange a gauche, et rien de plus */
+.prices__table tr[data-featured] th {
+  box-shadow: inset 3px 0 0 var(--orange);
+  padding-left: var(--s2);
+}
+
+/* ── le gabarit d'une page de service ─────────────────────────────────── */
+
+.service__prices {
+  display: grid;
+  gap: var(--s4);
+}
+
+@media (min-width: 900px) {
+  .service__prices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.service__h {
+  font-size: 22px;
+  margin: 0 0 var(--s2);
+}
+
+.service__pair .stack {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.service__pair .stack li {
+  margin-bottom: var(--s2);
+  color: var(--slate);
+}
+
+.service__conditions {
+  margin-top: var(--s5);
+  padding-left: 1.1rem;
+}
+
 /* ══ Les titres qui glissent ligne par ligne ══════════════════════════════
    Le serveur rend les mots en texte simple ; le composant les regroupe par
    ligne au montage et pose un masque par ligne. Sans JavaScript, il ne reste

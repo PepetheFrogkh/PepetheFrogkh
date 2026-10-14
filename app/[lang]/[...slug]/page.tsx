@@ -27,6 +27,7 @@ import FinalCta from '@/components/FinalCta'
 import Heading from '@/components/Heading'
 import Reveal from '@/components/Reveal'
 import CaseView from '@/components/pages/CaseView'
+import ServiceView from '@/components/pages/ServiceView'
 import { Tbd, TbdBlock } from '@/components/Tbd'
 
 /**
@@ -185,6 +186,10 @@ export default async function Page({
     return <CaseView locale={lang} study={study} />
   }
 
+  if (route.kind === 'service') {
+    return <ServiceView locale={lang} service={route.key} page={t.services[route.key]} />
+  }
+
   if (route.kind === 'work') {
     return (
       <>
@@ -272,13 +277,11 @@ export default async function Page({
   const title =
     route.kind === 'services'
       ? t.map.services.title
-      : route.kind === 'service'
-        ? t.map.services.children[route.key]
-        : route.kind === 'expertises'
-          ? t.map.expertises.title
-          : route.kind === 'expertise'
-            ? t.map.expertises.children[route.key]
-            : t.map[route.page as 'pricing' | 'blog' | 'contact']
+      : route.kind === 'expertises'
+        ? t.map.expertises.title
+        : route.kind === 'expertise'
+          ? t.map.expertises.children[route.key]
+          : t.map[route.page as 'pricing' | 'blog' | 'contact']
 
   return (
     <>

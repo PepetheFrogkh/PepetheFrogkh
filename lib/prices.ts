@@ -43,8 +43,17 @@ const fixed = (amount: Amount, per?: Per): Price => ({ kind: 'fixed', amount, pe
 
 // ── Sites web ───────────────────────────────────────────────────────────────
 
+/**
+ * Les identifiants de chaque ligne, enumeres.
+ *
+ * Les libelles vivent dans `content/`, et ils sont indexes par ces memes
+ * identifiants : une ligne de prix sans libelle, ou un libelle sans ligne de
+ * prix, ne compile pas.
+ */
+export type PackId = 'essentiel-1' | 'essentiel-3' | 'pro' | 'complet' | 'sur-mesure'
+
 export interface Pack {
-  id: string
+  id: PackId
   price: Price
   /** Le pack mis en avant dans la grille. */
   featured?: boolean
@@ -58,8 +67,19 @@ export const PACKS: Pack[] = [
   { id: 'sur-mesure', price: { kind: 'quote' } },
 ]
 
+export type OptionId =
+  | 'formulaire-contact'
+  | 'page'
+  | 'formulaire-avance'
+  | 'langue'
+  | 'animations-avancees'
+  | 'simulateur'
+  | 'reservation'
+  | 'referencement'
+  | 'animation-3d'
+
 export interface Option {
-  id: string
+  id: OptionId
   price: Price
 }
 
@@ -75,11 +95,13 @@ export const OPTIONS: Option[] = [
   { id: 'animation-3d', price: fixed(eur(490)) },
 ]
 
+export type DelayId = 'economie' | 'standard' | 'express'
+
 export interface Delay {
-  id: string
+  id: DelayId
   price: Price
   /** Le delai express ne vaut que pour le pack Essentiel. */
-  only?: string[]
+  only?: PackId[]
 }
 
 export const DELAYS: Delay[] = [
@@ -88,8 +110,15 @@ export const DELAYS: Delay[] = [
   { id: 'express', price: { kind: 'percent', value: 50 }, only: ['essentiel-1', 'essentiel-3'] },
 ]
 
+export type PlanId =
+  | 'hebergement-wordpress'
+  | 'hebergement-node'
+  | 'serenite'
+  | 'croissance'
+  | 'partenaire'
+
 export interface Plan {
-  id: string
+  id: PlanId
   price: Price
   featured?: boolean
 }
@@ -123,8 +152,12 @@ export const AUTOMATION = {
     { id: 'jusqu-3', flows: 3, price: fixed(eur(39), 'month') },
     { id: 'jusqu-10', flows: 10, price: fixed(eur(99), 'month') },
     { id: 'au-dela', flows: Infinity, price: { kind: 'quote' } as Price },
-  ],
+  ] as { id: SupervisionId; flows: number; price: Price }[],
 }
+
+export type AutomationId = 'flow' | 'condition' | 'app' | 'noApi'
+export type SupervisionId = 'jusqu-3' | 'jusqu-10' | 'au-dela'
+export type AppId = 'base' | 'erp'
 
 // ── Projets sur mesure, applications metier, ecoute client ──────────────────
 

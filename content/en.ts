@@ -456,6 +456,84 @@ export const en: Dict = {
     title: 'Pricing',
     lead: 'Prices are listed, excluding tax, in your currency.',
     disclaimer: 'An indicative estimate, confirmed in writing after a conversation.',
+    packs: {
+      title: 'The packs',
+      rows: {
+        'essentiel-1': { name: 'Essentiel, 1 page', detail: 'Simple animations, free contact form. Express delivery available.' },
+        'essentiel-3': { name: 'Essentiel, up to 3 pages', detail: 'Simple animations, free contact form. Express delivery available.' },
+        pro: { name: 'Pro', detail: 'Up to 6 pages, advanced animations, 2 options included.' },
+        complet: { name: 'Complet', detail: 'Up to 10 pages, parallax, 1 extra language, 3 options included. 3 weeks minimum.' },
+        'sur-mesure': { name: 'Custom', detail: 'Web apps, client areas, integrations.' },
+      },
+    },
+    options: {
+      title: 'The options',
+      note: 'Add any of them to any pack.',
+      rows: {
+        'formulaire-contact': 'Contact form',
+        page: 'Extra page',
+        'formulaire-avance': 'Advanced form',
+        langue: 'Extra language',
+        'animations-avancees': 'Advanced animations',
+        simulateur: 'Simulator',
+        reservation: 'Light booking',
+        referencement: 'Advanced SEO',
+        'animation-3d': '3D animation',
+      },
+    },
+    delays: {
+      title: 'Lead times',
+      rows: {
+        economie: 'Economy, delivered within the month',
+        standard: 'Standard, 7 days',
+        express: 'Express, 72 hours, Essentiel pack only',
+      },
+    },
+    plans: {
+      title: 'The subscriptions',
+      note: '12-month commitment.',
+      rows: {
+        'hebergement-wordpress': 'Hosting only, WordPress',
+        'hebergement-node': 'Hosting only, custom Node.js',
+        serenite: 'Sérénité',
+        croissance: 'Croissance',
+        partenaire: 'Partenaire',
+      },
+    },
+    automation: {
+      title: 'Automations',
+      rows: {
+        flow: 'Simple flow',
+        condition: 'Each added condition',
+        app: 'Each connected app',
+        noApi: 'Tool without an open API',
+      },
+    },
+    supervision: {
+      title: 'Supervision',
+      rows: {
+        'jusqu-3': 'Up to 3 flows',
+        'jusqu-10': 'Up to 10 flows',
+        'au-dela': 'More than 10 flows',
+      },
+    },
+    apps: {
+      title: 'Business apps',
+      rows: {
+        base: 'Base app: point of sale, inventory, MRP, CRM',
+        erp: 'Full ERP, on quote',
+      },
+    },
+    team: {
+      title: 'Custom projects',
+      row: 'One developer and one project manager, per month',
+    },
+    transfer: 'Moving the site to another host',
+    conditions: [
+      'Payment: 50% on order, 50% on delivery.',
+      'Content, copy, photos and logos, is provided by the client.',
+      'Automation flows run on Kuiper Studio’s own n8n infrastructure and cannot be moved.',
+    ],
   },
 
   blog: {
