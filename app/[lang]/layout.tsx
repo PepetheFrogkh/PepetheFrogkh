@@ -7,6 +7,7 @@ import { alternates } from '@/lib/routes'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CookieBanner from '@/components/CookieBanner'
+import Preloader from '@/components/Preloader'
 import SmoothScroll from '@/components/SmoothScroll'
 import ViewCursor from '@/components/ViewCursor'
 import '../globals.css'
@@ -140,6 +141,7 @@ export default async function LangLayout({
       className={`${fraunces.variable} ${nunitoSans.variable} ${nunito.variable}`}
     >
       <body>
+        <Preloader />
         <a className="skip" href="#contenu">
           {t.nav.skip}
         </a>

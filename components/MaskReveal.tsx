@@ -14,6 +14,10 @@ import { TRIGGER, reduced, useGsap } from '@/lib/motion'
  * L'ouverture et son decalage tiennent ensemble dans les 300 ms du cahier, et
  * elle part des que 15 % du bloc est a l'ecran. Une carte deja visible au
  * chargement n'est pas masquee pour etre revelee ensuite.
+ *
+ * Au survol, une onde part du point touche par le curseur et se dissipe. Elle
+ * ne cache rien : c'est un halo orange tres clair, par-dessus l'image, qui
+ * dure 600 ms et ne se declenche que sur un appareil a souris.
  */
 export default function MaskReveal({
   children,
@@ -53,6 +57,31 @@ export default function MaskReveal({
 
     return () => ctx.revert()
   }, [delay])
+
+  // ── l'onde au survol ──────────────────────────────────────────────────
+  useEffect(() => {
+    const node = ref.current
+    if (!node || reduced()) return
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
+
+    const onEnter = (event: PointerEvent) => {
+      const box = node.getBoundingClientRect()
+      node.style.setProperty('--rx', `${event.clientX - box.left}px`)
+      node.style.setProperty('--ry', `${event.clientY - box.top}px`)
+      // relancer l'animation : on la coupe, on force un calcul, on la remet
+      node.removeAttribute('data-ripple')
+      void node.offsetWidth
+      node.setAttribute('data-ripple', 'on')
+    }
+    const onEnd = () => node.removeAttribute('data-ripple')
+
+    node.addEventListener('pointerenter', onEnter)
+    node.addEventListener('animationend', onEnd)
+    return () => {
+      node.removeEventListener('pointerenter', onEnter)
+      node.removeEventListener('animationend', onEnd)
+    }
+  }, [])
 
   return (
     <div className={['mask-reveal', className].filter(Boolean).join(' ')} ref={ref}>
