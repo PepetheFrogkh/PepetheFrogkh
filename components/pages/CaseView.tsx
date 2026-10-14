@@ -7,6 +7,7 @@ import FinalCta from '@/components/FinalCta'
 import Heading from '@/components/Heading'
 import Reveal from '@/components/Reveal'
 import { Tbd, TbdBlock } from '@/components/Tbd'
+import { visibleCases } from '@/lib/flags'
 
 /**
  * Le gabarit d'une etude de cas : onze blocs, du besoin au resultat verifie.
@@ -18,7 +19,7 @@ import { Tbd, TbdBlock } from '@/components/Tbd'
 export default function CaseView({ locale, study }: { locale: Locale; study: CaseStudy }) {
   const t = dict(locale)
   const labels = t.caseLabels
-  const others = t.work.cases.filter((c) => c.slug !== study.slug)
+  const others = visibleCases(t.work.cases).filter((c) => c.slug !== study.slug)
 
   return (
     <>

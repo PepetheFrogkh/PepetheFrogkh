@@ -7,6 +7,7 @@ import Measures from '@/components/Measures'
 import Reveal from '@/components/Reveal'
 import FinalCta from '@/components/FinalCta'
 import { Tbd, TbdBlock } from '@/components/Tbd'
+import { visibleCases } from '@/lib/flags'
 
 /**
  * Le gabarit des pages situation : neuf blocs, du probleme du client au
@@ -22,7 +23,7 @@ export default function SituationView({
 }) {
   const t = dict(locale)
   const labels = t.situationLabels
-  const proof = page.proof ? t.work.cases.find((c) => c.slug === page.proof) : undefined
+  const proof = page.proof ? visibleCases(t.work.cases).find((c) => c.slug === page.proof) : undefined
 
   return (
     <>

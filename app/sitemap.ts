@@ -1,35 +1,42 @@
 import type { MetadataRoute } from 'next'
 import { dict } from '@/content'
-import { LOCALES, SITE_URL, path, type PageKey } from '@/lib/i18n'
+import {
+  EXPERTISES,
+  LOCALES,
+  PAGES,
+  SERVICES,
+  SITE_URL,
+  expertisePath,
+  path,
+  servicePath,
+} from '@/lib/i18n'
+import { visibleCases } from '@/lib/flags'
 
 /** Le sitemap.xml, les deux langues comprises. */
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
   const urls: MetadataRoute.Sitemap = []
-  const simple: PageKey[] = [
-    'home',
-    'situations',
-    'work',
-    'method',
-    'about',
-    'diagnostic',
-    'legal',
-    'privacy',
-  ]
 
   for (const locale of LOCALES) {
     const t = dict(locale)
-    for (const page of simple) {
+
+    for (const page of PAGES) {
       urls.push({
         url: SITE_URL + path(locale, page),
         lastModified: now,
         priority: page === 'home' ? 1 : 0.7,
       })
     }
-    for (const page of t.situationPages) {
-      urls.push({ url: SITE_URL + path(locale, 'situations', page.slug), lastModified: now })
+
+    for (const key of SERVICES) {
+      urls.push({ url: SITE_URL + servicePath(locale, key), lastModified: now, priority: 0.8 })
     }
-    for (const study of t.work.cases) {
+
+    for (const key of EXPERTISES) {
+      urls.push({ url: SITE_URL + expertisePath(locale, key), lastModified: now, priority: 0.8 })
+    }
+
+    for (const study of visibleCases(t.work.cases)) {
       urls.push({ url: SITE_URL + path(locale, 'work', study.slug), lastModified: now })
     }
   }

@@ -94,7 +94,7 @@ export default function Header({ locale }: { locale: Locale }) {
             {switcher}
             <Link
               className="btn btn--primary btn--small header__cta"
-              href={path(locale, 'diagnostic')}
+              href={path(locale, 'contact')}
               onClick={() => track('diagnostic_click')}
             >
               <span className="header__cta-long">{t.nav.cta}</span>
@@ -144,7 +144,7 @@ export default function Header({ locale }: { locale: Locale }) {
             })}
             <Link
               className="btn btn--primary drawer__cta"
-              href={path(locale, 'diagnostic')}
+              href={path(locale, 'contact')}
               onClick={() => {
                 setOpen(false)
                 track('diagnostic_click')

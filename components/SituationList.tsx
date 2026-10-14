@@ -26,7 +26,7 @@ export default function SituationList({ locale }: { locale: Locale }) {
   return (
     <div className="situations__list">
       {cards.map((card) => {
-        const href = card.link ? resolve(locale, card.link) : path(locale, 'situations', card.slug)
+        const href = card.link ? resolve(locale, card.link) : path(locale, 'expertises', card.slug)
         return (
           <article className="situations__item" key={card.slug}>
             <div className="situations__photo" aria-hidden={card.photo ? undefined : true}>

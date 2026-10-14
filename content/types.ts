@@ -1,3 +1,5 @@
+import type { ExpertiseKey, ServiceKey } from '@/lib/i18n'
+
 /**
  * La forme du contenu, identique dans les deux langues.
  *
@@ -116,13 +118,29 @@ export interface Dict {
   meta: {
     siteName: string
     home: { title: string; description: string }
-    situations: { title: string; description: string }
     work: { title: string; description: string }
-    method: { title: string; description: string }
+    services: { title: string; description: string }
+    expertises: { title: string; description: string }
+    pricing: { title: string; description: string }
+    blog: { title: string; description: string }
     about: { title: string; description: string }
-    diagnostic: { title: string; description: string }
+    contact: { title: string; description: string }
     legal: { title: string; description: string }
     privacy: { title: string; description: string }
+  }
+
+  /**
+   * Le nom de chaque page du plan du site.
+   *
+   * Rien que des noms : ce que chaque page raconte vient de son propre bloc.
+   * Les adresses, elles, sont dans la table de `lib/i18n`.
+   */
+  map: {
+    services: { title: string; children: Record<ServiceKey, string> }
+    expertises: { title: string; children: Record<ExpertiseKey, string> }
+    pricing: string
+    blog: string
+    contact: string
   }
   nav: {
     items: Cta[]

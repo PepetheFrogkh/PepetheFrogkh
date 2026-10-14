@@ -20,30 +20,99 @@ export function isLocale(value: string): value is Locale {
 /** Les pages du site, hors pages generees a partir d'une liste. */
 export type PageKey =
   | 'home'
-  | 'situations'
+  | 'services'
+  | 'expertises'
   | 'work'
-  | 'method'
+  | 'pricing'
+  | 'blog'
   | 'about'
-  | 'diagnostic'
+  | 'contact'
   | 'legal'
   | 'privacy'
 
 /**
  * Le segment d'adresse de chaque page, par langue.
  *
- * Le plan du site vit dans l'onglet principal, que ce depot n'a pas : ces
- * segments sont a relire avec Arnaud avant la mise en ligne. Les changer ici
- * suffit, rien d'autre ne code une adresse en dur.
+ * Changer un segment ici suffit : rien d'autre ne code une adresse en dur, ni
+ * la navigation, ni le selecteur de langue, ni les balises hreflang, ni le
+ * sitemap.
  */
 const SEGMENTS: Record<PageKey, Record<Locale, string>> = {
   home: { fr: '', en: '' },
-  situations: { fr: 'situations', en: 'situations' },
+  services: { fr: 'services', en: 'services' },
+  expertises: { fr: 'expertises', en: 'expertise' },
   work: { fr: 'realisations', en: 'work' },
-  method: { fr: 'methode', en: 'method' },
+  pricing: { fr: 'tarifs', en: 'pricing' },
+  blog: { fr: 'blog', en: 'blog' },
   about: { fr: 'a-propos', en: 'about' },
-  diagnostic: { fr: 'diagnostic', en: 'diagnostic' },
+  contact: { fr: 'contact', en: 'contact' },
   legal: { fr: 'mentions-legales', en: 'legal-notice' },
   privacy: { fr: 'confidentialite', en: 'privacy' },
+}
+
+/**
+ * Les cinq services, et les six expertises.
+ *
+ * Leurs adresses enfants sont declarees ici, langue par langue, et non
+ * deduites d'une position dans une liste de contenu : une page de service
+ * doit pouvoir changer de place dans un menu sans changer d'adresse.
+ */
+export const SERVICES = ['sites', 'automations', 'custom', 'apps', 'feedback'] as const
+export type ServiceKey = (typeof SERVICES)[number]
+
+const SERVICE_SLUGS: Record<ServiceKey, Record<Locale, string>> = {
+  sites: { fr: 'sites-web', en: 'websites' },
+  automations: { fr: 'automatisations', en: 'automations' },
+  custom: { fr: 'projets-sur-mesure', en: 'custom-projects' },
+  apps: { fr: 'applications-metier', en: 'business-apps' },
+  feedback: { fr: 'ecoute-client', en: 'guest-feedback' },
+}
+
+export const EXPERTISES = [
+  'restaurants',
+  'hotels',
+  'manufacturing',
+  'teams',
+  'crm',
+  'insurance',
+] as const
+export type ExpertiseKey = (typeof EXPERTISES)[number]
+
+const EXPERTISE_SLUGS: Record<ExpertiseKey, Record<Locale, string>> = {
+  restaurants: { fr: 'restauration', en: 'restaurants' },
+  hotels: { fr: 'hotellerie', en: 'hotels' },
+  manufacturing: { fr: 'production-et-manufacturing', en: 'manufacturing' },
+  teams: { fr: 'gestion-des-equipes', en: 'team-management' },
+  crm: { fr: 'crm', en: 'crm' },
+  insurance: { fr: 'assurance-et-courtage', en: 'insurance-and-brokerage' },
+}
+
+/** L'adresse d'une page de service. */
+export function servicePath(locale: Locale, key: ServiceKey): string {
+  return path(locale, 'services', SERVICE_SLUGS[key][locale])
+}
+
+/** L'adresse d'une page d'expertise. */
+export function expertisePath(locale: Locale, key: ExpertiseKey): string {
+  return path(locale, 'expertises', EXPERTISE_SLUGS[key][locale])
+}
+
+export function serviceSlug(locale: Locale, key: ServiceKey): string {
+  return SERVICE_SLUGS[key][locale]
+}
+
+export function expertiseSlug(locale: Locale, key: ExpertiseKey): string {
+  return EXPERTISE_SLUGS[key][locale]
+}
+
+/** Le service que porte ce segment, dans cette langue. */
+export function serviceOf(locale: Locale, slug: string): ServiceKey | null {
+  return SERVICES.find((key) => SERVICE_SLUGS[key][locale] === slug) ?? null
+}
+
+/** L'expertise que porte ce segment, dans cette langue. */
+export function expertiseOf(locale: Locale, slug: string): ExpertiseKey | null {
+  return EXPERTISES.find((key) => EXPERTISE_SLUGS[key][locale] === slug) ?? null
 }
 
 /** L'adresse d'une page, avec son prefixe de langue. */
@@ -67,11 +136,13 @@ export const SITE_URL =
 /** Toutes les pages, pour les boucles de generation et de resolution. */
 export const PAGES: PageKey[] = [
   'home',
-  'situations',
+  'services',
+  'expertises',
   'work',
-  'method',
+  'pricing',
+  'blog',
   'about',
-  'diagnostic',
+  'contact',
   'legal',
   'privacy',
 ]

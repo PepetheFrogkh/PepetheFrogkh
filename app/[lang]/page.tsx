@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { dict } from '@/content'
 import { isLocale, path } from '@/lib/i18n'
+import { visibleCases } from '@/lib/flags'
 import CaseCard from '@/components/CaseCard'
 import ConfiguratorSlot from '@/components/ConfiguratorSlot'
 import Counter from '@/components/Counter'
@@ -70,7 +71,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <p className="lead">{t.showcase.note}</p>
           </div>
         </Reveal>
-        <Fan locale={lang} shots={t.work.cases} />
+        <Fan locale={lang} shots={visibleCases(t.work.cases)} />
       </SectionBlock>
 
       {/* 4 et 5 · logos clients, puis les chiffres verifies */}
@@ -189,7 +190,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           </div>
         </Reveal>
         <div className="grid grid--3">
-          {t.work.cases.map((study, i) => (
+          {visibleCases(t.work.cases).map((study, i) => (
             <MaskReveal key={study.slug} delay={i * 90}>
               <CaseCard locale={lang} study={study} />
             </MaskReveal>
@@ -275,7 +276,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             </div>
             <Faq items={t.faq.items} />
             <p className="small muted" style={{ marginTop: 'var(--s4)' }}>
-              <a href={path(lang, 'diagnostic')}>{t.nav.cta}</a>
+              <a href={path(lang, 'contact')}>{t.nav.cta}</a>
             </p>
           </Reveal>
         </div>

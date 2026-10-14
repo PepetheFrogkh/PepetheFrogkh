@@ -20,27 +20,35 @@ export const fr: Dict = {
       description:
         'Kuiper Studio aide les hôtels, les restaurants et les commerces indépendants à comprendre ce que pensent leurs clients, à corriger ce qui coince et à gagner en rentabilité, avec les bons outils numériques.',
     },
-    situations: {
-      title: 'Votre situation · Kuiper Studio',
+    services: {
+      title: 'Services · Kuiper Studio',
       description:
-        'Écoute client, ouverture, rentabilité, groupes : la porte d’entrée qui correspond à votre établissement.',
+        'Sites web, automatisations, projets sur mesure, applications métier, écoute client.',
+    },
+    expertises: {
+      title: 'Expertises · Kuiper Studio',
+      description:
+        'Les domaines où l’équipe est la plus forte, et les offres adaptées à chacun.',
+    },
+    pricing: {
+      title: 'Tarifs · Kuiper Studio',
+      description: 'Les prix affichés, et le simulateur d’automatisation.',
+    },
+    blog: {
+      title: 'Blog · Kuiper Studio',
+      description: 'Ce que nous apprenons en construisant des outils métier.',
+    },
+    contact: {
+      title: 'Contact · Kuiper Studio',
+      description: 'Parlons de votre projet.',
     },
     work: {
       title: 'Réalisations · Kuiper Studio',
       description: 'Ce que nous avons construit pour des hôtels, des restaurants et des indépendants.',
     },
-    method: {
-      title: 'Méthode · Kuiper Studio',
-      description: 'Six étapes, sans surprise : comprendre, cadrer, dessiner, construire, lancer, faire grandir.',
-    },
     about: {
       title: 'À propos · Kuiper Studio',
       description: 'Deux fondateurs, un seul interlocuteur. Kuiper Studio est basé à Phnom Penh.',
-    },
-    diagnostic: {
-      title: 'Diagnostic gratuit de vos avis · Kuiper Studio',
-      description:
-        'Indiquez votre établissement : sous 48 heures ouvrées, vous recevez le résumé de vos avis publics. Gratuit, sans engagement.',
     },
     legal: { title: 'Mentions légales · Kuiper Studio', description: 'Mentions légales de Kuiper Studio.' },
     privacy: {
@@ -51,18 +59,47 @@ export const fr: Dict = {
 
   nav: {
     items: [
-      { label: 'Votre situation', href: '#situations' },
-      { label: 'Nos offres', href: '#offres' },
+      { label: 'Services', href: 'services' },
+      { label: 'Expertises', href: 'expertises' },
       { label: 'Réalisations', href: 'work' },
-      { label: 'Méthode', href: 'method' },
+      { label: 'Tarifs', href: 'pricing' },
+      { label: 'Blog', href: 'blog' },
       { label: 'À propos', href: 'about' },
+      { label: 'Contact', href: 'contact' },
     ],
-    cta: 'Diagnostic gratuit',
-    ctaShort: 'Diagnostic',
+    cta: 'Estimer mon projet',
+    ctaShort: 'Estimer',
     currency: 'Devise',
     skip: 'Aller au contenu',
     menu: 'Ouvrir le menu',
     close: 'Fermer le menu',
+  },
+
+  map: {
+    services: {
+      title: 'Services',
+      children: {
+        sites: 'Sites web',
+        automations: 'Automatisations',
+        custom: 'Projets sur mesure',
+        apps: 'Applications métier',
+        feedback: 'Écoute client',
+      },
+    },
+    expertises: {
+      title: 'Expertises',
+      children: {
+        restaurants: 'Restauration',
+        hotels: 'Hôtellerie',
+        manufacturing: 'Production et manufacturing',
+        teams: 'Gestion des équipes',
+        crm: 'CRM',
+        insurance: 'Assurance et courtage',
+      },
+    },
+    pricing: 'Tarifs',
+    blog: 'Blog',
+    contact: 'Contact',
   },
 
   hero: {

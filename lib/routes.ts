@@ -1,17 +1,29 @@
 import { dict } from '@/content'
-import { DEFAULT_LOCALE, SITE_URL, isLocale, other, pageOf, path, type Locale } from './i18n'
+import {
+  DEFAULT_LOCALE,
+  SITE_URL,
+  expertiseOf,
+  expertisePath,
+  isLocale,
+  pageOf,
+  path,
+  serviceOf,
+  servicePath,
+  type Locale,
+} from './i18n'
 
 /**
  * La traduction d'une adresse, slug compris.
  *
  * Les slugs enfants ne sont pas les memes dans les deux langues :
- * /fr/situations/ecoute-client est /en/situations/guest-feedback. Le selecteur
- * de langue et les balises hreflang passent tous les deux par ici, sinon l'un
- * des deux finit par pointer vers une page qui n'existe pas.
+ * /fr/services/sites-web est /en/services/websites. Le selecteur de langue et
+ * les balises hreflang passent tous les deux par ici, sinon l'un des deux
+ * finit par pointer vers une page qui n'existe pas.
  *
- * La correspondance se fait par position dans la liste : les deux langues
- * decrivent les memes situations et les memes etudes de cas, dans le meme
- * ordre, et `content/types.ts` impose cette forme.
+ * Les services et les expertises ont leurs slugs declares dans la table de
+ * `lib/i18n` : la traduction est exacte. Les realisations et les articles sont
+ * du contenu, et leur correspondance se fait par position dans la liste, les
+ * deux langues decrivant les memes elements dans le meme ordre.
  */
 export function translatePath(from: Locale, pathname: string): string {
   const to = other(from)
@@ -25,10 +37,14 @@ export function translatePath(from: Locale, pathname: string): string {
   if (!key) return path(to, 'home')
   if (!child) return path(to, key)
 
-  if (key === 'situations') {
-    const i = dict(from).situationPages.findIndex((p) => p.slug === child)
-    const target = i >= 0 ? dict(to).situationPages[i] : undefined
-    return target ? path(to, key, target.slug) : path(to, key)
+  if (key === 'services') {
+    const service = serviceOf(from, child)
+    return service ? servicePath(to, service) : path(to, key)
+  }
+
+  if (key === 'expertises') {
+    const expertise = expertiseOf(from, child)
+    return expertise ? expertisePath(to, expertise) : path(to, key)
   }
 
   if (key === 'work') {
@@ -57,4 +73,8 @@ export function alternates(pathname: string) {
       'x-default': SITE_URL + (DEFAULT_LOCALE === 'en' ? en : fr),
     },
   }
+}
+
+function other(locale: Locale): Locale {
+  return locale === 'fr' ? 'en' : 'fr'
 }

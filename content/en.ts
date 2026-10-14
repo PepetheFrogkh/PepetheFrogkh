@@ -19,27 +19,33 @@ export const en: Dict = {
       description:
         'Kuiper Studio helps independent hotels, restaurants and retailers understand what their customers think, fix what goes wrong and improve their margins, with the right digital tools.',
     },
-    situations: {
-      title: 'Your situation · Kuiper Studio',
-      description:
-        'Guest feedback, opening, profitability, groups: the entry point that matches your venue.',
+    services: {
+      title: 'Services · Kuiper Studio',
+      description: 'Websites, automations, custom projects, business apps, guest feedback.',
+    },
+    expertises: {
+      title: 'Expertise · Kuiper Studio',
+      description: 'The fields the team knows best, and the offers that fit each one.',
+    },
+    pricing: {
+      title: 'Pricing · Kuiper Studio',
+      description: 'Listed prices, and the automation simulator.',
+    },
+    blog: {
+      title: 'Blog · Kuiper Studio',
+      description: 'What we learn building tools for other people’s work.',
+    },
+    contact: {
+      title: 'Contact · Kuiper Studio',
+      description: 'Let’s talk about your project.',
     },
     work: {
       title: 'Work · Kuiper Studio',
       description: 'What we have built for hotels, restaurants and independent owners.',
     },
-    method: {
-      title: 'Method · Kuiper Studio',
-      description: 'Six steps, no surprises: understand, scope, design, build, launch, grow.',
-    },
     about: {
       title: 'About · Kuiper Studio',
       description: 'Two founders, one point of contact. Kuiper Studio is based in Phnom Penh.',
-    },
-    diagnostic: {
-      title: 'Free review diagnostic · Kuiper Studio',
-      description:
-        'Tell us your venue: within two business days, you receive a summary of your public reviews. Free, no commitment.',
     },
     legal: { title: 'Legal notice · Kuiper Studio', description: 'Legal notice for Kuiper Studio.' },
     privacy: { title: 'Privacy · Kuiper Studio', description: 'How Kuiper Studio handles your data.' },
@@ -47,18 +53,47 @@ export const en: Dict = {
 
   nav: {
     items: [
-      { label: 'Your situation', href: '#situations' },
-      { label: 'Our offers', href: '#offres' },
+      { label: 'Services', href: 'services' },
+      { label: 'Expertise', href: 'expertises' },
       { label: 'Work', href: 'work' },
-      { label: 'Method', href: 'method' },
+      { label: 'Pricing', href: 'pricing' },
+      { label: 'Blog', href: 'blog' },
       { label: 'About', href: 'about' },
+      { label: 'Contact', href: 'contact' },
     ],
-    cta: 'Free diagnostic',
-    ctaShort: 'Diagnostic',
+    cta: 'Estimate my project',
+    ctaShort: 'Estimate',
     currency: 'Currency',
     skip: 'Skip to content',
     menu: 'Open the menu',
     close: 'Close the menu',
+  },
+
+  map: {
+    services: {
+      title: 'Services',
+      children: {
+        sites: 'Websites',
+        automations: 'Automations',
+        custom: 'Custom projects',
+        apps: 'Business apps',
+        feedback: 'Guest feedback',
+      },
+    },
+    expertises: {
+      title: 'Expertise',
+      children: {
+        restaurants: 'Restaurants',
+        hotels: 'Hotels',
+        manufacturing: 'Manufacturing',
+        teams: 'Team management',
+        crm: 'CRM',
+        insurance: 'Insurance and brokerage',
+      },
+    },
+    pricing: 'Pricing',
+    blog: 'Blog',
+    contact: 'Contact',
   },
 
   hero: {
