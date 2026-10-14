@@ -1737,8 +1737,10 @@ body.has-view-cursor [data-cursor='voir'] {
 
 /* ══ L'en-tete typographique ══════════════════════════════════════════════
    Pas de visuel : le titre est le visuel. Tout est lisible a l'arrivee, et le
-   defilement recompose au lieu de reveler. Le pied ne bouge jamais, donc le
-   bouton est cliquable du premier au dernier pixel.
+   defilement n'y touche plus : la seule animation est l'apparition au
+   chargement, ligne par ligne dans un masque. Rien ne bouge ensuite, donc
+   deux lignes ne peuvent pas se chevaucher et le bouton est cliquable du
+   premier au dernier pixel.
    ═════════════════════════════════════════════════════════════════════════ */
 
 .typo {
@@ -1773,36 +1775,23 @@ body.has-view-cursor [data-cursor='voir'] {
      conteneur de 1 200 px, la hauteur empeche les quatre lignes de pousser le
      sous-titre hors de l'ecran sur un portable au format large. */
   font-size: clamp(36px, min(8.4vw, 12vh), 128px);
-  line-height: 0.94;
-  letter-spacing: -0.04em;
+  line-height: 0.98;
+  /* desserree : a cette taille une approche trop serree fait se toucher les
+     lettres, et le mot se lit moins vite qu'il ne se devine */
+  letter-spacing: -0.015em;
   text-wrap: nowrap;
 }
 
 .typo__line {
   display: block;
-  /* le masque de l'entree : c'est le cadre qui s'ouvre, le mot est deja la */
+  /* le masque de l'entree : c'est le cadre qui s'ouvre, le mot est deja la.
+     La hauteur de ligne etant plus courte que le dessin de la lettre, le
+     masque recoit de quoi laisser passer jambages et accents, et le reprend
+     en marge pour ne pas ecarter les lignes. */
   overflow: hidden;
+  padding: 0.1em 0 0.16em;
+  margin: -0.1em 0 -0.16em;
   will-change: transform;
-}
-
-/* le debordement doit rester visible une fois la ligne agrandie */
-.typo__line--last {
-  overflow: visible;
-}
-
-/* La derniere ligne grandit depuis son coin haut gauche, pour aller vers la
-   droite et vers le bas et jamais hors cadre. Le conteneur se resserre sur le
-   texte, donc l'echelle se calcule sur la vraie largeur de la phrase et le
-   trait fait exactement sa longueur. */
-.typo__shrink {
-  display: inline-block;
-  transform-origin: left top;
-  will-change: transform;
-  --wonk: 0;
-  --soft: 0;
-  font-variation-settings:
-    'SOFT' var(--soft),
-    'WONK' var(--wonk);
 }
 
 .typo__line--accent {
@@ -1822,17 +1811,6 @@ body.has-view-cursor [data-cursor='voir'] {
   to {
     transform: none;
   }
-}
-
-/* le trait qui se tire sous la phrase, une fois qu'elle est posee */
-.typo__rule {
-  display: block;
-  height: clamp(4px, 0.5vw, 8px);
-  margin-top: 0.12em;
-  background: var(--orange);
-  border-radius: 999px;
-  transform: scaleX(0);
-  transform-origin: left center;
 }
 
 /* ── le pied de l'en-tete ──────────────────────────────────────────────── */
@@ -1880,11 +1858,6 @@ body.has-view-cursor [data-cursor='voir'] {
 
   .typo__word {
     animation: none;
-  }
-
-  /* sans animation le trait est deja tire : il fait partie de la composition */
-  .typo__rule {
-    transform: scaleX(1);
   }
 }
 
