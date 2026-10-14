@@ -51,8 +51,10 @@
 }
 
 @media (min-width: 900px) {
+  /* 96 px et non 128 : le rythme etait si large qu'un ecran entier pouvait
+     tomber entre deux sections, sans rien a lire. */
   :root {
-    --section: var(--s16);
+    --section: 96px;
   }
 }
 
@@ -743,7 +745,11 @@ p:last-child {
   .situations__list {
     flex-direction: row;
     align-items: stretch;
-    height: 440px;
+    /* 560 px et non 440 : maintenant que le corps des cartes reste visible,
+       la plus chargee doit tenir en entier, lien compris. Entre 1 000 et
+       1 200 px les colonnes sont plus etroites, donc les titres passent a la
+       ligne et il faut plus de hauteur. */
+    height: 560px;
     gap: var(--s2);
   }
 
@@ -764,15 +770,27 @@ p:last-child {
     padding: var(--s4);
   }
 
-  /* replie : seuls le numero et le titre restent */
-  .situations__item .situations__body {
-    opacity: 0;
-    transition: opacity 0.3s var(--ease);
+  /* Replie, le corps reste lisible : la citation est seulement ramenee a
+     trois lignes. Le cacher faisait d'une section entiere une rangee de
+     cartes vides. */
+  .situations__item .situations__quote {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
   }
 
-  .situations__item:hover .situations__body,
-  .situations__item:focus-within .situations__body {
-    opacity: 1;
+  .situations__item:hover .situations__quote,
+  .situations__item:focus-within .situations__quote {
+    -webkit-line-clamp: 12;
+    line-clamp: 12;
+  }
+}
+
+@media (min-width: 1200px) {
+  .situations__list {
+    height: 520px;
   }
 }
 
@@ -1124,18 +1142,20 @@ p:last-child {
 
 /* ── animations ────────────────────────────────────────────────────────── */
 
-/* apparition en fondu avec une montee de 16 px, 500 ms */
+/* Apparition en fondu avec une montee de 12 px.
+   Le contenu est visible par defaut : seul `data-shown="false"`, pose par le
+   composant une fois monte, cache quoi que ce soit. Sans JavaScript l'attribut
+   n'existe pas et la page se lit entierement. La duree vient du composant, qui
+   tient le decalage et la transition dans les 300 ms du cahier. */
 .reveal {
-  opacity: 0;
-  transform: translateY(16px);
   transition:
-    opacity 0.5s var(--ease),
-    transform 0.5s var(--ease);
+    opacity 0.3s var(--ease),
+    transform 0.3s var(--ease);
 }
 
-.reveal[data-shown='true'] {
-  opacity: 1;
-  transform: none;
+.reveal[data-shown='false'] {
+  opacity: 0;
+  transform: translateY(12px);
 }
 
 /* le titre principal, mot a mot, du flou au net */
@@ -1175,7 +1195,8 @@ p:last-child {
     transform: none;
   }
 
-  .reveal {
+  .reveal,
+  .reveal[data-shown='false'] {
     opacity: 1;
     transform: none;
   }
@@ -1184,8 +1205,9 @@ p:last-child {
     animation: none;
   }
 
-  .situations__item .situations__body {
-    opacity: 1 !important;
+  .situations__item .situations__quote {
+    -webkit-line-clamp: 12;
+    line-clamp: 12;
   }
 }
 
@@ -1348,7 +1370,7 @@ html.lenis {
 
 .fan {
   position: relative;
-  padding: var(--s8) 0 var(--s5);
+  padding: var(--s5) 0 var(--s4);
   /* La courbe d'horizon fait 160 % de large : sans decoupe elle depasse de
      chaque cote et le document devient plus large que l'ecran. `clip` sur le
      seul axe horizontal laisse passer les ombres des cartes. */
@@ -1361,7 +1383,7 @@ html.lenis {
   left: 50%;
   bottom: 0;
   width: 160%;
-  height: 70%;
+  height: 56%;
   transform: translateX(-50%);
   border-radius: 50% 50% 0 0;
   background:
@@ -1386,7 +1408,9 @@ html.lenis {
 .fan__card {
   flex: 0 0 62%;
   margin: 0;
-  aspect-ratio: 3 / 4;
+  /* un site se photographie en paysage : le format portrait laissait une
+     colonne de vide sous chaque capture */
+  aspect-ratio: 4 / 3;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--r-image);
@@ -1427,8 +1451,8 @@ html.lenis {
   }
 
   .fan__card {
-    flex: 0 0 23%;
-    margin-inline: -1%;
+    flex: 0 0 30%;
+    margin-inline: -1.5%;
   }
 }
 

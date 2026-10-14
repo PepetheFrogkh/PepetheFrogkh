@@ -14,8 +14,9 @@ import { Tbd } from './Tbd'
  * donc il avance et recule avec le geste du visiteur au lieu de jouer une
  * fois.
  *
- * Au repos les cartes sont empilees au centre et sous l'horizon. A la fin du
- * deploiement elles sont en eventail, inclinees, comme chez TechFlow.
+ * Au repos les cartes sont deja la, entieres et opaques : seul l'eventail est
+ * pilote au defilement. Elles partaient auparavant a 35 % d'opacite et 38 %
+ * plus bas, ce qui faisait de la section un ecran vide pour qui defile vite.
  */
 export default function Fan({
   locale,
@@ -36,8 +37,8 @@ export default function Fan({
     const narrow = small()
 
     const ctx = gsap.context(() => {
-      // l'etat ferme : empilees au centre, sous la ligne d'horizon
-      gsap.set(cards, { yPercent: 38, rotate: 0, x: 0, scale: 0.88, opacity: 0.35 })
+      // l'etat ferme : rassemblees au centre, mais lisibles des le depart
+      gsap.set(cards, { yPercent: 8, rotate: 0, x: 0, scale: 0.97, opacity: 1 })
 
       gsap.timeline({
         scrollTrigger: {
@@ -48,7 +49,6 @@ export default function Fan({
         },
       }).to(cards, {
         yPercent: 0,
-        opacity: 1,
         scale: 1,
         // chaque carte s'ecarte du centre et s'incline : l'eventail
         x: (i: number) => (i - middle) * (narrow ? 0 : 18),

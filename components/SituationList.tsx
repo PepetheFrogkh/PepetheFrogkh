@@ -12,6 +12,10 @@ import { Tbd } from './Tbd'
  * donc il repond aussi au focus clavier et disparait quand le visiteur reduit
  * les animations.
  *
+ * Repliee, la carte reste lisible : la citation est ramenee a trois lignes,
+ * jamais cachee. Les etiquettes et le lien restent la, parce qu'une section
+ * entiere de cartes vides ne dit rien au visiteur qui passe.
+ *
  * La carte 05 ne mene pas a une page situation : le cahier la renvoie vers
  * l'offre Sites, et son champ `link` le dit.
  */
@@ -38,7 +42,7 @@ export default function SituationList({ locale }: { locale: Locale }) {
               <div className="card__num">{card.index}</div>
               <h3>{card.title}</h3>
               <div className="situations__body">
-                <p className="card__quote">
+                <p className="card__quote situations__quote">
                   {card.quote.startsWith('[') ? <Tbd locale={locale} /> : `« ${card.quote} »`}
                 </p>
                 <div className="row" style={{ gap: 8 }}>
