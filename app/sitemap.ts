@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next'
 import { dict } from '@/content'
 import {
   EXPERTISES,
-  LOCALES,
   PAGES,
+  PUBLISHED_LOCALES,
   SERVICES,
   SITE_URL,
   expertisePath,
@@ -13,12 +13,18 @@ import {
 import { visibleCases } from '@/lib/flags'
 import { articles } from '@/lib/blog'
 
-/** Le sitemap.xml, les deux langues comprises. */
+/**
+ * Le sitemap.xml, une entree par langue publiee.
+ *
+ * Le khmer n'y entre qu'une fois sa traduction livree : annoncer aux moteurs
+ * une page khmere qui sert du texte anglais la ferait traiter en doublon de la
+ * page anglaise, au detriment des deux.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
   const urls: MetadataRoute.Sitemap = []
 
-  for (const locale of LOCALES) {
+  for (const locale of PUBLISHED_LOCALES) {
     const t = dict(locale)
 
     for (const page of PAGES) {

@@ -114,9 +114,18 @@ export const en: Dict = {
     ctaShort: 'Estimate',
     seeAll: 'See all',
     currency: 'Currency',
+    language: 'Language',
     skip: 'Skip to content',
     menu: 'Open menu',
     close: 'Close menu',
+    view: 'View',
+  },
+
+  words: {
+    testimonial: 'testimonial',
+    desktopShot: 'desktop screenshot',
+    phoneShot: 'phone screenshot',
+    figures: 'verified figures',
   },
 
   hero: {

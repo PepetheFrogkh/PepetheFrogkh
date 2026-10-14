@@ -10,9 +10,9 @@ import {
 /**
  * La langue d'arrivee et la devise d'arrivee.
  *
- * La langue : francais si le navigateur est en francais, anglais sinon. Le
- * choix n'est qu'une redirection de la racine ; les deux langues gardent leurs
- * propres adresses, et le selecteur de l'en-tete reste maitre ensuite.
+ * La langue : celle que le navigateur demande, si le site la parle, anglais
+ * sinon. Le choix n'est qu'une redirection de la racine ; chaque langue garde
+ * ses propres adresses, et le selecteur de l'en-tete reste maitre ensuite.
  *
  * La devise : euros pour l'Europe, dollars ailleurs, d'apres l'en-tete de pays
  * pose par le proxy. Le resultat part dans un cookie, que les pages lisent
@@ -44,19 +44,32 @@ function withCurrency(response: NextResponse, request: NextRequest): NextRespons
   return response
 }
 
+/**
+ * La langue demandee par le navigateur, parmi celles du site.
+ *
+ * `accept-language` arrive trie par preference, du plus voulu au moins voulu,
+ * avec des etiquettes comme `km-KH` ou `fr-CH` : on compare sur les deux
+ * premieres lettres et on prend la premiere qui tombe juste, pour respecter
+ * l'ordre du visiteur plutot que le notre.
+ */
+function preferred(request: NextRequest): string {
+  const header = request.headers.get('accept-language') ?? ''
+  for (const part of header.split(',')) {
+    const tag = part.trim().toLowerCase().split(';')[0].slice(0, 2)
+    const hit = LOCALES.find((l) => l === tag)
+    if (hit) return hit
+  }
+  return DEFAULT_LOCALE
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   if (LOCALES.some((l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`))) {
     return withCurrency(NextResponse.next(), request)
   }
 
-  const header = request.headers.get('accept-language') ?? ''
-  const french = header
-    .split(',')
-    .some((part) => part.trim().toLowerCase().startsWith('fr'))
-
   const url = request.nextUrl.clone()
-  url.pathname = `/${french ? 'fr' : DEFAULT_LOCALE}${pathname === '/' ? '' : pathname}`
+  url.pathname = `/${preferred(request)}${pathname === '/' ? '' : pathname}`
   return withCurrency(NextResponse.redirect(url), request)
 }
 

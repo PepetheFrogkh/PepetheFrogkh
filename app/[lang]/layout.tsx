@@ -1,8 +1,16 @@
 import type { Metadata, Viewport } from 'next'
-import { Fraunces, Nunito, Nunito_Sans } from 'next/font/google'
+import { Fraunces, Noto_Sans_Khmer, Nunito, Nunito_Sans } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { dict } from '@/content'
-import { LOCALES, SITE_URL, isLocale, path, type Locale } from '@/lib/i18n'
+import {
+  KM_TRANSLATED,
+  LOCALES,
+  OG_LOCALE,
+  SITE_URL,
+  isLocale,
+  path,
+  type Locale,
+} from '@/lib/i18n'
 import { alternates } from '@/lib/routes'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -46,6 +54,17 @@ const nunito = Nunito({
 })
 
 /**
+ * Le khmer ne s'ecrit pas avec l'alphabet latin : aucune des trois polices
+ * ci-dessus n'a ses caracteres, et le navigateur retomberait sur une police
+ * systeme differente a chaque appareil. Noto Sans Khmer les couvre.
+ */
+const khmer = Noto_Sans_Khmer({
+  subsets: ['khmer'],
+  display: 'swap',
+  variable: '--font-khmer',
+})
+
+/**
  * Sans cette balise, un telephone rend la page en largeur bureau puis la
  * dezoome : le texte devient minuscule et la mise en page mobile ne s'applique
  * jamais. `viewportFit` laisse le fond couvrir les encoches.
@@ -79,11 +98,14 @@ export async function generateMetadata({
       siteName: t.meta.siteName,
       title: t.meta.home.title,
       description: t.meta.home.description,
-      locale: lang === 'fr' ? 'fr_FR' : 'en_GB',
+      locale: OG_LOCALE[lang],
       type: 'website',
       url: SITE_URL + path(lang, 'home'),
     },
-    robots: { index: true, follow: true },
+    // Une page khmere qui sert du texte anglais est un doublon de la page
+    // anglaise : tant que la traduction n'est pas livree, elle reste hors de
+    // l'index, et le passage de `KM_TRANSLATED` a `true` l'y fait entrer.
+    robots: { index: lang !== 'km' || KM_TRANSLATED, follow: true },
   }
 }
 
@@ -139,7 +161,7 @@ export default async function LangLayout({
   return (
     <html
       lang={lang}
-      className={`${fraunces.variable} ${nunitoSans.variable} ${nunito.variable}`}
+      className={`${fraunces.variable} ${nunitoSans.variable} ${nunito.variable} ${khmer.variable}`}
       // le script de devise pose data-currency avant l'hydratation : sans cela
       // React signale un ecart entre le HTML du serveur et celui du client
       suppressHydrationWarning
@@ -159,12 +181,19 @@ export default async function LangLayout({
         <a className="skip" href="#contenu">
           {t.nav.skip}
         </a>
+        {lang === 'km' && !KM_TRANSLATED ? (
+          /* La traduction khmere n'est pas fournie : la page sert le texte
+             anglais, et le dit, plutot que de le laisser croire traduit. */
+          <p className="untranslated" lang="en">
+            This site is not translated into Khmer yet. The pages are in English.
+          </p>
+        ) : null}
         <Header locale={lang} />
         <main id="contenu">{children}</main>
         <Footer locale={lang} />
         <CookieBanner locale={lang} />
         <SmoothScroll />
-        <ViewCursor label={lang === 'fr' ? 'Voir' : 'View'} />
+        <ViewCursor label={t.nav.view} />
         <script
           type="application/ld+json"
           // les donnees structurees du cahier : Organization et LocalBusiness

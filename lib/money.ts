@@ -27,6 +27,22 @@ const WORDS: Record<Locale, Record<string, string>> = {
     from: 'à partir de',
     base: 'prix de base',
   },
+  // Le khmer n'est pas traduit : les mots autour du nombre restent ceux de
+  // l'anglais, comme tout le texte des pages khmeres, et le bandeau de la page
+  // le dit. Inventer une tournure khmere serait pire qu'un mot anglais lisible.
+  km: {
+    excl: 'excl. tax',
+    quote: 'on quote',
+    free: 'free',
+    month: 'per month',
+    flow: 'per flow',
+    page: 'per page',
+    app: 'per app',
+    condition: 'per condition',
+    to: 'to',
+    from: 'from',
+    base: 'base price',
+  },
   en: {
     excl: 'excl. tax',
     quote: 'on quote',
@@ -42,7 +58,17 @@ const WORDS: Record<Locale, Record<string, string>> = {
   },
 }
 
-const TAG: Record<Locale, string> = { fr: 'fr-FR', en: 'en-GB' }
+/**
+ * L'etiquette passee a `Intl`, par langue.
+ *
+ * Le khmer prend celle de l'anglais, et ce n'est pas un raccourci : Node et
+ * Chrome n'embarquent pas la meme version d'ICU, et pour `km-KH` elles ne
+ * placent pas le symbole du meme cote. Le serveur ecrivait « 799 € » et le
+ * navigateur « €799 », ce qui cassait l'hydratation de toute la page. Les
+ * pages khmeres servent deja le texte anglais ; leurs nombres le suivent,
+ * jusqu'a ce qu'une regle d'ecriture khmere soit fournie avec la traduction.
+ */
+const TAG: Record<Locale, string> = { fr: 'fr-FR', en: 'en-GB', km: 'en-GB' }
 
 /** Un montant seul, sans la mention hors taxes. */
 export function formatAmount(

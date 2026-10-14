@@ -9,17 +9,16 @@ import {
   EXPERTISES,
   SERVICES,
   expertisePath,
-  other,
   path,
   type ExpertiseKey,
   type Locale,
   type ServiceKey,
   servicePath,
 } from '@/lib/i18n'
-import { translatePath } from '@/lib/routes'
 import { resolve } from '@/lib/links'
 import { track } from '@/lib/analytics'
 import CurrencySwitch from './CurrencySwitch'
+import LangSwitch from './LangSwitch'
 
 /**
  * L'en-tete, fixe.
@@ -109,17 +108,7 @@ export default function Header({ locale }: { locale: Locale }) {
     }
   }, [])
 
-  const switcher = (
-    <div className="lang">
-      <span aria-current={locale === 'fr'} {...(locale === 'fr' ? {} : { hidden: true })}>
-        FR
-      </span>
-      {locale === 'fr' ? null : <span aria-current={true}>EN</span>}
-      <Link href={translatePath(locale, pathname)} hrefLang={other(locale)} lang={other(locale)}>
-        {other(locale).toUpperCase()}
-      </Link>
-    </div>
-  )
+  const switcher = <LangSwitch locale={locale} pathname={pathname} label={t.nav.language} />
 
   /** Les entrees qui ne sont que des liens. */
   const plain = t.nav.items.filter((item) => !GROUPS.includes(item.href as Group))

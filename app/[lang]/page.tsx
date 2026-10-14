@@ -183,7 +183,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                     </p>
                   </>
                 ) : (
-                  <Tbd locale={lang} what={lang === 'fr' ? 'témoignage' : 'testimonial'} />
+                  <Tbd locale={lang} what={t.words.testimonial} />
                 )}
               </div>
             </Reveal>

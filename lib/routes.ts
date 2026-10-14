@@ -1,6 +1,8 @@
 import { dict } from '@/content'
 import {
   DEFAULT_LOCALE,
+  LOCALES,
+  PUBLISHED_LOCALES,
   SITE_URL,
   expertiseOf,
   expertisePath,
@@ -25,8 +27,7 @@ import {
  * du contenu, et leur correspondance se fait par position dans la liste, les
  * deux langues decrivant les memes elements dans le meme ordre.
  */
-export function translatePath(from: Locale, pathname: string): string {
-  const to = other(from)
+export function translatePath(from: Locale, to: Locale, pathname: string): string {
   const parts = pathname.split('/').filter(Boolean)
   if (parts.length === 0 || !isLocale(parts[0])) return path(to, 'home')
 
@@ -56,25 +57,35 @@ export function translatePath(from: Locale, pathname: string): string {
   return path(to, key)
 }
 
-/** Les balises hreflang d'une page : fr, en, et x-default vers l'anglais. */
+/**
+ * Les balises hreflang d'une page : une par langue publiee, plus x-default.
+ *
+ * Une langue dont la traduction n'est pas fournie n'y figure pas : annoncer
+ * une page khmere qui sert du texte anglais serait annoncer une traduction qui
+ * n'existe pas, et les moteurs la traitent alors comme un doublon de la page
+ * anglaise. `PUBLISHED_LOCALES` decide, et il suffit de livrer la traduction
+ * pour que la balise apparaisse.
+ */
 export function alternates(pathname: string) {
   const parts = pathname.split('/').filter(Boolean)
   const from: Locale = parts.length && isLocale(parts[0]) ? parts[0] : DEFAULT_LOCALE
   const here = '/' + parts.join('/')
-  const there = translatePath(from, here)
-  const fr = from === 'fr' ? here : there
-  const en = from === 'en' ? here : there
 
-  return {
-    canonical: SITE_URL + here,
-    languages: {
-      fr: SITE_URL + fr,
-      en: SITE_URL + en,
-      'x-default': SITE_URL + (DEFAULT_LOCALE === 'en' ? en : fr),
-    },
+  const languages: Record<string, string> = {}
+  for (const to of PUBLISHED_LOCALES) {
+    languages[to] = SITE_URL + (to === from ? here : translatePath(from, to, here))
   }
+  languages['x-default'] =
+    languages[DEFAULT_LOCALE] ?? SITE_URL + translatePath(from, DEFAULT_LOCALE, here)
+
+  return { canonical: SITE_URL + here, languages }
 }
 
-function other(locale: Locale): Locale {
-  return locale === 'fr' ? 'en' : 'fr'
+/** Cette page, dans chacune des autres langues : le menu du selecteur. */
+export function allPaths(from: Locale, pathname: string): Record<Locale, string> {
+  const out = {} as Record<Locale, string>
+  for (const to of LOCALES) {
+    out[to] = to === from ? pathname : translatePath(from, to, pathname)
+  }
+  return out
 }

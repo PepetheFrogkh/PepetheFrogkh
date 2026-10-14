@@ -1,13 +1,13 @@
 /**
- * Les deux langues du site, et la table des adresses.
+ * Les trois langues du site, et la table des adresses.
  *
- * Le cahier impose : francais si le navigateur est en francais, anglais sinon,
- * un selecteur FR / EN toujours visible, et des balises hreflang fr, en et
- * x-default vers l'anglais. Une seule table decrit les adresses des deux
- * langues, pour que le selecteur et les hreflang ne puissent pas divergher.
+ * Francais si le navigateur est en francais, khmer s'il est en khmer, anglais
+ * sinon. Le selecteur les donne toutes les trois, et les balises hreflang
+ * suivent, avec x-default vers l'anglais. Une seule table decrit les adresses,
+ * pour que le selecteur et les hreflang ne puissent pas diverger.
  */
 
-export const LOCALES = ['fr', 'en'] as const
+export const LOCALES = ['fr', 'en', 'km'] as const
 export type Locale = (typeof LOCALES)[number]
 
 /** x-default pointe vers l'anglais, comme demande dans le cahier. */
@@ -16,6 +16,42 @@ export const DEFAULT_LOCALE: Locale = 'en'
 export function isLocale(value: string): value is Locale {
   return (LOCALES as readonly string[]).includes(value)
 }
+
+/**
+ * Le nom de chaque langue, ecrit dans cette langue.
+ *
+ * Un selecteur qui dit « Khmer » a un lecteur khmer lui parle dans une langue
+ * qu'il ne cherche pas. Le code court sert a l'affichage compact de l'en-tete.
+ */
+export const LOCALE_NAMES: Record<Locale, { name: string; short: string }> = {
+  fr: { name: 'Français', short: 'FR' },
+  en: { name: 'English', short: 'EN' },
+  km: { name: 'ភាសាខ្មែរ', short: 'KH' },
+}
+
+/** L'etiquette Open Graph de chaque langue. */
+export const OG_LOCALE: Record<Locale, string> = {
+  fr: 'fr_FR',
+  en: 'en_GB',
+  km: 'km_KH',
+}
+
+/**
+ * La traduction khmere, fournie ou non.
+ *
+ * Tant qu'elle vaut `false`, les pages en khmer servent le texte anglais avec
+ * un bandeau qui le dit, et elles sortent du sitemap, des balises hreflang et
+ * de l'index des moteurs. Servir de l'anglais sous une etiquette khmere sans
+ * le dire serait du contenu duplique annonce comme une traduction.
+ *
+ * Quand `content/km.ts` sera rempli, passer a `true` suffit.
+ */
+export const KM_TRANSLATED = false
+
+/** Les langues reellement publiees : le khmer n'y entre qu'une fois traduit. */
+export const PUBLISHED_LOCALES: Locale[] = LOCALES.filter(
+  (l) => l !== 'km' || KM_TRANSLATED,
+)
 
 /** Les pages du site, hors pages generees a partir d'une liste. */
 export type PageKey =
@@ -37,17 +73,23 @@ export type PageKey =
  * la navigation, ni le selecteur de langue, ni les balises hreflang, ni le
  * sitemap.
  */
+/**
+ * Les segments khmers reprennent les segments anglais, en caracteres latins.
+ *
+ * Un segment ecrit en khmer sort de la barre d'adresse en pourcentages, et un
+ * lien partage devient illisible. Le prefixe `/km` suffit a dire la langue.
+ */
 const SEGMENTS: Record<PageKey, Record<Locale, string>> = {
-  home: { fr: '', en: '' },
-  services: { fr: 'services', en: 'services' },
-  expertises: { fr: 'expertises', en: 'expertise' },
-  work: { fr: 'realisations', en: 'work' },
-  pricing: { fr: 'tarifs', en: 'pricing' },
-  blog: { fr: 'blog', en: 'blog' },
-  about: { fr: 'a-propos', en: 'about' },
-  contact: { fr: 'contact', en: 'contact' },
-  legal: { fr: 'mentions-legales', en: 'legal-notice' },
-  privacy: { fr: 'confidentialite', en: 'privacy' },
+  home: { fr: '', en: '', km: '' },
+  services: { fr: 'services', en: 'services', km: 'services' },
+  expertises: { fr: 'expertises', en: 'expertise', km: 'expertise' },
+  work: { fr: 'realisations', en: 'work', km: 'work' },
+  pricing: { fr: 'tarifs', en: 'pricing', km: 'pricing' },
+  blog: { fr: 'blog', en: 'blog', km: 'blog' },
+  about: { fr: 'a-propos', en: 'about', km: 'about' },
+  contact: { fr: 'contact', en: 'contact', km: 'contact' },
+  legal: { fr: 'mentions-legales', en: 'legal-notice', km: 'legal-notice' },
+  privacy: { fr: 'confidentialite', en: 'privacy', km: 'privacy' },
 }
 
 /**
@@ -61,11 +103,11 @@ export const SERVICES = ['sites', 'automations', 'custom', 'apps', 'feedback'] a
 export type ServiceKey = (typeof SERVICES)[number]
 
 const SERVICE_SLUGS: Record<ServiceKey, Record<Locale, string>> = {
-  sites: { fr: 'sites-web', en: 'websites' },
-  automations: { fr: 'automatisations', en: 'automations' },
-  custom: { fr: 'projets-sur-mesure', en: 'custom-projects' },
-  apps: { fr: 'applications-metier', en: 'business-apps' },
-  feedback: { fr: 'ecoute-client', en: 'guest-feedback' },
+  sites: { fr: 'sites-web', en: 'websites', km: 'websites' },
+  automations: { fr: 'automatisations', en: 'automations', km: 'automations' },
+  custom: { fr: 'projets-sur-mesure', en: 'custom-projects', km: 'custom-projects' },
+  apps: { fr: 'applications-metier', en: 'business-apps', km: 'business-apps' },
+  feedback: { fr: 'ecoute-client', en: 'guest-feedback', km: 'guest-feedback' },
 }
 
 export const EXPERTISES = [
@@ -79,12 +121,16 @@ export const EXPERTISES = [
 export type ExpertiseKey = (typeof EXPERTISES)[number]
 
 const EXPERTISE_SLUGS: Record<ExpertiseKey, Record<Locale, string>> = {
-  restaurants: { fr: 'restauration', en: 'restaurants' },
-  hotels: { fr: 'hotellerie', en: 'hotels' },
-  manufacturing: { fr: 'production-et-manufacturing', en: 'manufacturing' },
-  teams: { fr: 'gestion-des-equipes', en: 'team-management' },
-  crm: { fr: 'crm', en: 'crm' },
-  insurance: { fr: 'assurance-et-courtage', en: 'insurance-and-brokerage' },
+  restaurants: { fr: 'restauration', en: 'restaurants', km: 'restaurants' },
+  hotels: { fr: 'hotellerie', en: 'hotels', km: 'hotels' },
+  manufacturing: { fr: 'production-et-manufacturing', en: 'manufacturing', km: 'manufacturing' },
+  teams: { fr: 'gestion-des-equipes', en: 'team-management', km: 'team-management' },
+  crm: { fr: 'crm', en: 'crm', km: 'crm' },
+  insurance: {
+    fr: 'assurance-et-courtage',
+    en: 'insurance-and-brokerage',
+    km: 'insurance-and-brokerage',
+  },
 }
 
 /** L'adresse d'une page de service. */
@@ -125,9 +171,9 @@ export function segment(locale: Locale, page: PageKey): string {
   return SEGMENTS[page][locale]
 }
 
-/** L'autre langue, pour le selecteur. */
-export function other(locale: Locale): Locale {
-  return locale === 'fr' ? 'en' : 'fr'
+/** Les autres langues, dans l'ordre du selecteur. */
+export function others(locale: Locale): Locale[] {
+  return LOCALES.filter((l) => l !== locale)
 }
 
 export const SITE_URL =

@@ -5,6 +5,7 @@ import { dict } from '@/content'
 import {
   EXPERTISES,
   LOCALES,
+  OG_LOCALE,
   SERVICES,
   SITE_URL,
   expertiseOf,
@@ -196,7 +197,7 @@ export async function generateMetadata({
       siteName: t.meta.siteName,
       title,
       description,
-      locale: lang === 'fr' ? 'fr_FR' : 'en_GB',
+      locale: OG_LOCALE[lang],
       type: 'website',
       url: SITE_URL + here,
     },
@@ -279,7 +280,7 @@ export default async function Page({
                       </p>
                     </>
                   ) : (
-                    <Tbd locale={lang} what={lang === 'fr' ? 'témoignage' : 'testimonial'} />
+                    <Tbd locale={lang} what={t.words.testimonial} />
                   )}
                 </div>
               </Reveal>

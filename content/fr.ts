@@ -115,9 +115,18 @@ export const fr: Dict = {
     ctaShort: 'Estimer',
     seeAll: 'Tout voir',
     currency: 'Devise',
+    language: 'Langue',
     skip: 'Aller au contenu',
     menu: 'Ouvrir le menu',
     close: 'Fermer le menu',
+    view: 'Voir',
+  },
+
+  words: {
+    testimonial: 'témoignage',
+    desktopShot: 'capture ordinateur',
+    phoneShot: 'capture téléphone',
+    figures: 'chiffres vérifiés',
   },
 
   hero: {

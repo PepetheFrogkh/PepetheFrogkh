@@ -27,12 +27,15 @@ import type {
 export const TBD = {
   fr: '[À FOURNIR]',
   en: '[TO PROVIDE]',
+  // la page khmere sert encore le texte anglais, son emplacement aussi
+  km: '[TO PROVIDE]',
 } as const
 
 /** Un prix qui n'a pas encore ete fixe. Jamais une conversion inventee. */
 export const TBF = {
   fr: '[À FIXER]',
   en: '[TO SET]',
+  km: '[TO SET]',
 } as const
 
 export interface Cta {
@@ -198,9 +201,27 @@ export interface Dict {
     seeAll: string
     /** Le nom du groupe de boutons du selecteur de devise. */
     currency: string
+    /** Ce que choisit le menu deroulant du selecteur de langue. */
+    language: string
     skip: string
     menu: string
     close: string
+    /** Le mot du curseur de survol sur une carte cliquable. */
+    view: string
+  }
+
+  /**
+   * Les mots qui nomment un emplacement manquant.
+   *
+   * Ils etaient ecrits en dur dans les composants, avec un ternaire sur la
+   * langue : a deux langues cela passait, a trois cela se casse. Ils vivent
+   * donc ici, comme tout le reste du texte.
+   */
+  words: {
+    testimonial: string
+    desktopShot: string
+    phoneShot: string
+    figures: string
   }
 
   hero: {

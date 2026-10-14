@@ -52,14 +52,14 @@ export default function CaseView({ locale, study }: { locale: Locale; study: Cas
                 ) : (
                   <Tbd
                     locale={locale}
-                    what={locale === 'fr' ? 'capture ordinateur' : 'desktop screenshot'}
+                    what={t.words.desktopShot}
                   />
                 )}
               </div>
               <div className="shot__phone">
                 <Tbd
                   locale={locale}
-                  what={locale === 'fr' ? 'capture téléphone' : 'phone screenshot'}
+                  what={t.words.phoneShot}
                 />
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function CaseView({ locale, study }: { locale: Locale; study: Cas
             ) : (
               <TbdBlock
                 locale={locale}
-                what={locale === 'fr' ? 'chiffres vérifiés' : 'verified figures'}
+                what={t.words.figures}
               />
             )}
           </Reveal>

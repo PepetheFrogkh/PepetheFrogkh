@@ -33,6 +33,11 @@
   --s16: 128px;
 
   --container: 1200px;
+  /* La hauteur de l'en-tete fixe, et celle du bandeau pose au-dessus de lui.
+     Les deux servent a degager le haut des pages : elles etaient ecrites en
+     dur a deux endroits, et le bandeau de la version khmere passait dessous. */
+  --header-h: 72px;
+  --banner-h: 0px;
   --gutter: clamp(20px, 5vw, 40px);
   --section: var(--s9);
 
@@ -486,7 +491,7 @@ p:last-child {
 
 .header {
   position: fixed;
-  top: 0;
+  top: var(--banner-h);
   left: 0;
   right: 0;
   z-index: 50;
@@ -756,27 +761,134 @@ p:last-child {
   }
 }
 
+/* Le bandeau de la version khmere occupe une bande au-dessus de l'en-tete, et
+   la pousse vers le bas : sans cette hauteur, l'en-tete fixe le recouvrirait.
+   Les valeurs sont mesurees, une ligne au large, deux au telephone. */
+html[lang='km'] {
+  --banner-h: 46px;
+}
+
+/* Sous 480 px la phrase passe a deux lignes : la bande double de hauteur,
+   plutot que de laisser le texte deborder sous l'en-tete. */
+@media (max-width: 480px) {
+  html[lang='km'] {
+    --banner-h: 70px;
+  }
+}
+
+/* ── le selecteur de langue, en menu deroulant ────────────────────────────
+   A trois langues il faut choisir, donc un menu. Le bouton ne montre que le
+   code court, faute de place dans l'en-tete ; le menu donne chaque langue
+   ecrite dans sa propre langue.
+   ───────────────────────────────────────────────────────────────────────── */
+
 .lang {
+  position: relative;
   display: inline-flex;
-  align-items: center;
   font-family: var(--font-ui);
   font-weight: 700;
   font-size: 15px;
+}
+
+.lang__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  color: var(--ink);
+  background: transparent;
   border: 1px solid var(--border);
   border-radius: var(--r-pill);
-  overflow: hidden;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
 }
 
-.lang a,
-.lang span {
-  padding: 7px 12px;
+.lang__trigger:hover,
+.lang__trigger[aria-expanded='true'] {
+  background: var(--peach);
+  border-color: var(--terra);
+}
+
+.lang__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 60;
+  min-width: 11rem;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  box-shadow: 0 18px 40px -22px rgba(26, 29, 36, 0.4);
+}
+
+.lang__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: calc(var(--r-card) - 6px);
   text-decoration: none;
   color: var(--slate);
+  white-space: nowrap;
 }
 
-.lang [aria-current='true'] {
+.lang__item:hover {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.lang__item[aria-current='true'] {
   background: var(--peach);
   color: var(--ink);
+}
+
+.lang__code {
+  flex: none;
+  width: 2.1em;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--terra);
+}
+
+/* ── le bandeau de la version khmere ──────────────────────────────────────
+   Tant que la traduction n'est pas fournie, les pages khmeres servent le
+   texte anglais. Le dire est la condition pour que ce ne soit pas trompeur,
+   donc le bandeau est en haut, lisible, et non une mention en pied de page.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.untranslated {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* juste au-dessus de l'en-tete, qui est a 50 */
+  z-index: 51;
+  height: var(--banner-h);
+  display: grid;
+  place-items: center;
+  padding: 0 var(--gutter);
+  margin: 0;
+  background: var(--peach);
+  border-bottom: 1px solid var(--terra);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink);
+  text-align: center;
+}
+
+/* Le khmer n'a pas de capitales et ses signes montent et descendent plus que
+   l'alphabet latin : sans interligne et taille propres, les diacritiques se
+   touchent d'une ligne a l'autre. */
+:lang(km) {
+  font-family: var(--font-khmer), var(--font-ui), sans-serif;
+  line-height: 1.75;
 }
 
 /* menu plein ecran sur mobile */
@@ -860,7 +972,7 @@ p:last-child {
 /* ── l'en-tete des pages secondaires ──────────────────────────────────── */
 
 .hero {
-  padding-top: calc(72px + var(--s9));
+  padding-top: calc(var(--header-h) + var(--banner-h) + var(--s9));
   padding-bottom: var(--section);
   background: var(--cream);
   overflow: clip;
@@ -2067,10 +2179,10 @@ body.has-view-cursor [data-cursor='voir'] {
   display: flex;
   align-items: stretch;
   background: var(--cream);
-  /* l'en-tete fixe fait 72 px : le reste est le seul respir au-dessus de
-     l'etiquette, serre pour que les deux boutons tiennent dans le premier
-     ecran d'un portable de 768 px de haut */
-  padding-top: calc(72px + var(--s3));
+  /* l'en-tete fixe fait 72 px, plus le bandeau quand il y en a un : le reste
+     est le seul respir au-dessus de l'etiquette, serre pour que les deux
+     boutons tiennent dans le premier ecran d'un portable de 768 px de haut */
+  padding-top: calc(var(--header-h) + var(--banner-h) + var(--s3));
   padding-bottom: var(--s3);
   overflow: clip;
 }
