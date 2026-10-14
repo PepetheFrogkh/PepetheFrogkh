@@ -30,10 +30,10 @@ import {
  * n'arrive pas a suivre.
  *
  * Le lecteur de mise au point (progression, images par seconde, nombre de
- * cellules) ne s'affiche qu'avec `?debug=1`. Avec `?debug=1&fps=0` le
- * garde-fou des 30 i/s est desarme : c'est ce qu'il faut pour regarder la
- * scene sur une machine sans carte graphique, ou elle cederait la place a
- * l'image fixe en deux secondes.
+ * cellules) ne s'affiche qu'avec `?debug=1`. Avec `?fps=0` le garde-fou des
+ * 30 i/s est desarme : c'est ce qu'il faut pour regarder la scene sur une
+ * machine sans carte graphique, ou elle cederait la place a l'image fixe en
+ * deux secondes.
  */
 
 const Scene = dynamic(() => import('./SpreadsheetScene'), { ssr: false })
@@ -73,10 +73,10 @@ export default function HeroLab() {
     setMobile(window.matchMedia('(max-width: 720px)').matches)
     setStill(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
     const params = new URLSearchParams(window.location.search)
-    const inspect = params.get('debug') === '1'
-    setDebug(inspect)
-    // le seuil, abaissable seulement en mise au point
-    const floor = inspect && params.get('fps') !== null ? Number(params.get('fps')) : FPS_FLOOR
+    setDebug(params.get('debug') === '1')
+    // le seuil, abaissable pour regarder la scene sur une machine sans carte
+    // graphique, ou elle cederait la place a l'image fixe en deux secondes
+    const floor = params.get('fps') !== null ? Number(params.get('fps')) : FPS_FLOOR
 
     if (!hasWebGL()) {
       setFallback('webgl')
