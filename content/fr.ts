@@ -64,6 +64,7 @@ export const fr: Dict = {
         automations: 'Automatisations',
         custom: 'Projets sur mesure',
         apps: 'Applications métier',
+        consulting: 'Accompagnement',
         feedback: 'Écoute client',
       },
     },
@@ -90,6 +91,7 @@ export const fr: Dict = {
       automations: 'Vos outils se parlent, et les tâches répétitives disparaissent.',
       custom: 'Vous avez une idée, on la construit, facturée au mois.',
       apps: 'Caisse, inventaire, MRP, CRM : vos outils, sans dépendre d’un éditeur.',
+      consulting: 'Six mois pour trouver ce qui cloche, chiffres à l’appui.',
       feedback: 'Tous les avis de votre établissement au même endroit.',
     },
     expertises: {
@@ -177,7 +179,12 @@ export const fr: Dict = {
     sites: {
       title: 'Sites web',
       lead: 'Des packs à prix affichés, de la page unique au site complet, avec les options et les délais en clair.',
-      problem: null,
+      problem: [
+        'Vous avez demandé un devis pour un site, et vous avez reçu une fourchette sans rien qui l’explique.',
+        'Le site actuel a été fait par un prestataire qui n’est plus joignable, et personne ne sait sur quoi il tourne.',
+        'Chaque modification demande un échange de courriels et une facture.',
+        'Le site ne parle à aucun de vos outils : les demandes arrivent par email et se ressaisissent à la main.',
+      ],
       delivers: [
         'Un pack Essentiel, d’une à trois pages, animations simples et formulaire de contact offert.',
         'Un pack Pro jusqu’à six pages, animations avancées, deux options incluses.',
@@ -207,7 +214,12 @@ export const fr: Dict = {
     automations: {
       title: 'Automatisations',
       lead: 'Vos outils se parlent, et les tâches répétitives disparaissent. Un flux simple a un prix affiché ; le simulateur chiffre le reste.',
-      problem: null,
+      problem: [
+        'La même information se saisit trois fois, dans trois outils, par trois personnes.',
+        'Quelqu’un passe deux heures par semaine à recopier des lignes d’un export vers un autre.',
+        'Les relances se font quand on y pense, donc pas toujours.',
+        'Vos logiciels ont chacun leur export, et aucun ne lit celui du voisin.',
+      ],
       delivers: [
         'Un flux part d’un déclencheur, formulaire, email ou horaire, et aboutit à une action : facturation, relance, inventaire, rapport.',
         'Chaque condition ajoutée et chaque application connectée ont leur prix.',
@@ -231,20 +243,43 @@ export const fr: Dict = {
     },
     custom: {
       title: 'Projets sur mesure',
-      lead: 'Vous avez une idée, on la construit.',
-      problem: null,
+      lead: 'Vous avez une idée, on la construit. Votre budget n’est pas une honte : dites-le nous, et nous disons ce qui tient dedans.',
+      problem: [
+        'Vous avez un projet d’application, et tous les devis reçus coûtent plusieurs fois ce que vous pouviez y mettre.',
+        'On vous a proposé un prix très bas, puis livré la moitié de ce qui était promis.',
+        'Personne n’accepte de regarder le projet tant qu’il n’atteint pas un certain budget.',
+        'Vous ne savez pas si votre idée est chère parce qu’elle est compliquée, ou parce que personne n’a pris le temps de la regarder.',
+      ],
       delivers: [
         'Un développeur et un chef de projet, facturés au mois.',
         'Vous gardez la main sur les priorités, mois après mois.',
+        'Un premier échange où nous challengeons l’idée avant de la chiffrer : souvent, les deux tiers du périmètre peuvent attendre.',
+        'Une proposition calée sur votre budget, qui dit ce qui rentre dedans et ce qui n’y rentre pas.',
       ],
       delays: null,
       proof: null,
-      faq: null,
+      faq: [
+        {
+          question: 'Et si mon budget est petit ?',
+          answer:
+            'Dites-le nous. Nous préférons construire la moitié utile d’un projet que refuser de le regarder. Si rien d’utile ne tient dans le budget, nous le disons aussi.',
+        },
+        {
+          question: 'Au forfait ou au mois ?',
+          answer:
+            'Les deux existent. Au forfait quand le périmètre est clair et la date ferme, au mois quand il va bouger. Nous proposons celui qui correspond, et vous tranchez.',
+        },
+      ],
     },
     apps: {
       title: 'Applications métier',
       lead: 'Caisse, inventaire, MRP, CRM : pour les entreprises qui veulent le contrôle total sans dépendre d’un éditeur.',
-      problem: null,
+      problem: [
+        'Votre parc informatique s’est construit par couches, et plus personne ne sait ce qui dépend de quoi.',
+        'Un prestataire est parti avant la fin, et il reste un outil à moitié installé que personne n’ose toucher.',
+        'L’éditeur de votre logiciel facture chaque évolution, et refuse l’accès à votre propre donnée.',
+        'Vos outils sont trop anciens pour être connectés, et trop installés pour être remplacés d’un coup.',
+      ],
       delivers: [
         'Une application de base, caisse, inventaire, MRP ou CRM, en paiement unique.',
         'Un ERP complet, seulement à partir d’un certain périmètre, et sur devis.',
@@ -253,10 +288,54 @@ export const fr: Dict = {
       proof: null,
       faq: null,
     },
+    consulting: {
+      title: 'Accompagnement',
+      lead: 'Six mois pour comprendre pourquoi ça ne marche pas, avec vos chiffres et non avec une opinion. Nous récupérons votre donnée, nous la lisons, et nous vous disons où est le problème.',
+      problem: [
+        'Vos ventes baissent et vous ne savez pas si c’est la carte, les prix, le service ou l’emplacement.',
+        'La donnée existe, dans la caisse, l’ERP, le CRM et le site, mais chacun la garde pour lui.',
+        'Les cabinets qui font ce travail facturent plus cher que ce que l’analyse peut rapporter.',
+        'Les questionnaires que vous avez essayés ne disent rien d’exploitable : « avez-vous passé un bon repas » n’est pas une question.',
+      ],
+      delivers: [
+        'La récupération de votre donnée depuis vos outils existants : caisse, ERP, CRM, site web, et ce que le web dit de vous.',
+        'Un tableau de bord des tendances : les heures, les jours, les produits, les écarts.',
+        'Un dispositif de recueil d’avis au moment de la commande, par QR code, par carte ou par email, proposé à tous les clients.',
+        'Des questions qui servent : ce qui a été commandé, quand, à quelle table, par qui servi, et la note mise à la fin.',
+        'Le croisement de tout cela sur la période : ce qui relie les notes basses entre elles, et ce qui ne les relie pas.',
+        'Le suivi de vos avis publics et du délai de réponse, parce qu’un avis laissé sans réponse coûte plus cher que l’avis lui-même.',
+        'À la fin, une réponse écrite : voilà ce qui ne va pas, et voilà sur quoi s’appuie cette conclusion.',
+      ],
+      delays:
+        'Six mois. C’est la durée minimale pour qu’une tendance se distingue d’un mauvais mois.',
+      proof: null,
+      faq: [
+        {
+          question: 'Pourquoi six mois ?',
+          answer:
+            'Parce qu’en dessous, on ne lit pas une tendance : on lit la météo, les vacances scolaires et un week-end prolongé. Six mois permettent de comparer des périodes comparables.',
+        },
+        {
+          question: 'Qui est propriétaire de la donnée collectée ?',
+          answer:
+            'Vous. Elle est à vous au début, pendant et à la fin, et elle vous reste si nous nous arrêtons là.',
+        },
+        {
+          question: 'Et si la conclusion ne vous plaît pas ?',
+          answer:
+            'Nous la donnons quand même. Nous sommes payés pour trouver ce qui cloche, pas pour confirmer ce qui arrange.',
+        },
+      ],
+    },
     feedback: {
       title: 'Écoute client',
       lead: 'Une page qui rassemble tous les avis de votre établissement et fait ressortir les points forts et les points bloquants.',
-      problem: null,
+      problem: [
+        'Les avis arrivent sur quatre plateformes, et personne n’a le temps de les suivre toutes.',
+        'Un mauvais avis reste des semaines sans réponse, et c’est la réponse manquante qui se voit.',
+        'Vous savez que le service se dégrade certains soirs, sans pouvoir dire lesquels ni pourquoi.',
+        'Les questionnaires existants ne sont remplis que par les clients déjà contents.',
+      ],
       delivers: [
         'Les avis Google, avec votre autorisation.',
         'Les questionnaires de votre établissement.',

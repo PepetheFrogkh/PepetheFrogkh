@@ -234,3 +234,12 @@ export const BUSINESS_APPS = {
 }
 
 export const FEEDBACK: Price = { kind: 'quote' }
+
+/**
+ * L'accompagnement, sur six mois.
+ *
+ * Aucun montant n'a ete fixe : la mission depend du nombre d'outils a
+ * brancher et du volume de donnee a reprendre, et elle se chiffre apres un
+ * premier echange. Le jour ou un forfait sera decide, il remplace cette ligne.
+ */
+export const CONSULTING: Price = { kind: 'quote' }

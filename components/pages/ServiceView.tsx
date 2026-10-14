@@ -4,6 +4,7 @@ import type { ServicePage } from '@/content'
 import {
   AUTOMATION,
   BUSINESS_APPS,
+  CONSULTING,
   CUSTOM_TEAM,
   DELAYS,
   FEEDBACK,
@@ -300,6 +301,17 @@ function tables(locale: Locale, service: ServiceKey) {
           { id: 'base', name: money.apps.rows.base, price: BUSINESS_APPS.base },
           { id: 'erp', name: money.apps.rows.erp, price: BUSINESS_APPS.erp },
         ]}
+      />
+    )
+  }
+
+  if (service === 'consulting') {
+    const name = dict(locale).map.services.children.consulting
+    return (
+      <PriceTable
+        locale={locale}
+        caption={name}
+        rows={[{ id: 'consulting', name, price: CONSULTING }]}
       />
     )
   }

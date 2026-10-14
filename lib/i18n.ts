@@ -93,13 +93,20 @@ const SEGMENTS: Record<PageKey, Record<Locale, string>> = {
 }
 
 /**
- * Les cinq services, et les sept expertises.
+ * Les six services, et les sept expertises.
  *
  * Leurs adresses enfants sont declarees ici, langue par langue, et non
  * deduites d'une position dans une liste de contenu : une page de service
  * doit pouvoir changer de place dans un menu sans changer d'adresse.
  */
-export const SERVICES = ['sites', 'automations', 'custom', 'apps', 'feedback'] as const
+export const SERVICES = [
+  'sites',
+  'automations',
+  'custom',
+  'apps',
+  'consulting',
+  'feedback',
+] as const
 export type ServiceKey = (typeof SERVICES)[number]
 
 const SERVICE_SLUGS: Record<ServiceKey, Record<Locale, string>> = {
@@ -107,6 +114,7 @@ const SERVICE_SLUGS: Record<ServiceKey, Record<Locale, string>> = {
   automations: { fr: 'automatisations', en: 'automations', km: 'automations' },
   custom: { fr: 'projets-sur-mesure', en: 'custom-projects', km: 'custom-projects' },
   apps: { fr: 'applications-metier', en: 'business-apps', km: 'business-apps' },
+  consulting: { fr: 'accompagnement', en: 'consulting', km: 'consulting' },
   feedback: { fr: 'ecoute-client', en: 'guest-feedback', km: 'guest-feedback' },
 }
 

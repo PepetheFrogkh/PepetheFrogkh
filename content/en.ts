@@ -63,6 +63,7 @@ export const en: Dict = {
         automations: 'Automations',
         custom: 'Custom projects',
         apps: 'Business apps',
+        consulting: 'Consulting',
         feedback: 'Guest feedback',
       },
     },
@@ -89,6 +90,7 @@ export const en: Dict = {
       automations: 'Your tools talk to each other, and repetitive tasks disappear.',
       custom: 'You have an idea, we build it, billed monthly.',
       apps: 'Point of sale, inventory, MRP, CRM: your tools, no vendor lock-in.',
+      consulting: 'Six months to find what is wrong, with figures to back it.',
       feedback: 'Every review of your venue in one place.',
     },
     expertises: {
@@ -176,7 +178,12 @@ export const en: Dict = {
     sites: {
       title: 'Websites',
       lead: 'Packs at listed prices, from a single page to a full site, with options and lead times in plain sight.',
-      problem: null,
+      problem: [
+        'You asked for a quote for a website, and got a range with nothing to explain it.',
+        'The current site was built by a provider who no longer answers, and nobody knows what it runs on.',
+        'Every change means an exchange of emails and an invoice.',
+        'The site talks to none of your tools: enquiries arrive by email and get retyped by hand.',
+      ],
       delivers: [
         'An Essentiel pack, one to three pages, simple animations and a free contact form.',
         'A Pro pack up to six pages, advanced animations, two options included.',
@@ -205,7 +212,12 @@ export const en: Dict = {
     automations: {
       title: 'Automations',
       lead: 'Your tools talk to each other, and repetitive tasks disappear. A simple flow has a listed price; the simulator prices the rest.',
-      problem: null,
+      problem: [
+        'The same information is entered three times, in three tools, by three people.',
+        'Someone spends two hours a week copying rows from one export into another.',
+        'Follow-ups happen when someone remembers, so not always.',
+        'Your software each has its own export, and none reads the next one’s.',
+      ],
       delivers: [
         'A flow starts from a trigger, a form, an email or a schedule, and ends in an action: invoicing, follow-up, inventory, a report.',
         'Every added condition and every connected app has its own price.',
@@ -229,20 +241,43 @@ export const en: Dict = {
     },
     custom: {
       title: 'Custom projects',
-      lead: 'You have an idea, we build it.',
-      problem: null,
+      lead: 'You have an idea, we build it. Your budget is nothing to be ashamed of: tell us what it is, and we will tell you what fits inside it.',
+      problem: [
+        'You have an app project, and every quote you received costs several times what you could put in.',
+        'Someone offered you a very low price, then delivered half of what was promised.',
+        'Nobody will even look at the project until it reaches a certain budget.',
+        'You cannot tell whether your idea is expensive because it is complicated, or because nobody took the time to look at it.',
+      ],
       delivers: [
         'One developer and one project manager, billed monthly.',
         'You keep control of the priorities, month after month.',
+        'A first conversation where we challenge the idea before pricing it: two thirds of the scope can usually wait.',
+        'A proposal built around your budget, saying what fits inside it and what does not.',
       ],
       delays: null,
       proof: null,
-      faq: null,
+      faq: [
+        {
+          question: 'What if my budget is small?',
+          answer:
+            'Tell us. We would rather build the useful half of a project than refuse to look at it. If nothing useful fits the budget, we say that too.',
+        },
+        {
+          question: 'Fixed price or monthly?',
+          answer:
+            'Both exist. Fixed price when the scope is clear and the date is firm, monthly when it will move. We propose the one that fits, and you decide.',
+        },
+      ],
     },
     apps: {
       title: 'Business apps',
       lead: 'Point of sale, inventory, MRP, CRM: for companies that want full control without depending on a vendor.',
-      problem: null,
+      problem: [
+        'Your IT estate was built in layers, and nobody knows any more what depends on what.',
+        'A provider left before finishing, and a half installed tool remains that nobody dares touch.',
+        'Your software vendor bills every change, and refuses access to your own data.',
+        'Your tools are too old to be connected, and too embedded to be replaced all at once.',
+      ],
       delivers: [
         'A base app, point of sale, inventory, MRP or CRM, as a one-off payment.',
         'A full ERP, only above a certain scope, and on quote.',
@@ -251,10 +286,54 @@ export const en: Dict = {
       proof: null,
       faq: null,
     },
+    consulting: {
+      title: 'Consulting',
+      lead: 'Six months to understand why it is not working, with your figures rather than an opinion. We pull in your data, we read it, and we tell you where the problem is.',
+      problem: [
+        'Your sales are falling and you cannot tell whether it is the menu, the prices, the service or the location.',
+        'The data exists, in the till, the ERP, the CRM and the website, but each one keeps it to itself.',
+        'The firms that do this work charge more than the analysis can return.',
+        'The surveys you have tried say nothing usable: “did you enjoy your meal” is not a question.',
+      ],
+      delivers: [
+        'Pulling your data out of the tools you already run: till, ERP, CRM, website, and what the web says about you.',
+        'A trends dashboard: the hours, the days, the products, the gaps.',
+        'A feedback mechanism at the moment of ordering, by QR code, by card or by email, offered to every customer.',
+        'Questions that earn their place: what was ordered, when, at which table, served by whom, and the rating given at the end.',
+        'Crossing all of it over the period: what links the low ratings to each other, and what does not.',
+        'Tracking your public reviews and your response time, because a review left unanswered costs more than the review itself.',
+        'At the end, an answer in writing: here is what is wrong, and here is what that conclusion rests on.',
+      ],
+      delays:
+        'Six months. That is the shortest span in which a trend can be told apart from a bad month.',
+      proof: null,
+      faq: [
+        {
+          question: 'Why six months?',
+          answer:
+            'Because below that you are not reading a trend: you are reading the weather, the school holidays and a long weekend. Six months let you compare comparable periods.',
+        },
+        {
+          question: 'Who owns the data collected?',
+          answer:
+            'You do. It is yours at the start, during and at the end, and it stays with you if we stop there.',
+        },
+        {
+          question: 'What if you do not like the conclusion?',
+          answer:
+            'We give it anyway. We are paid to find what is wrong, not to confirm what is convenient.',
+        },
+      ],
+    },
     feedback: {
       title: 'Guest feedback',
       lead: 'One page that gathers every review of your venue and brings out what works and what blocks.',
-      problem: null,
+      problem: [
+        'Reviews arrive on four platforms, and nobody has time to follow all of them.',
+        'A bad review sits for weeks without an answer, and it is the missing answer that shows.',
+        'You know service slips on certain evenings, without being able to say which or why.',
+        'The surveys you have are only filled in by customers who were already happy.',
+      ],
       delivers: [
         'Google reviews, with your authorisation.',
         'Your venue’s own questionnaires.',
