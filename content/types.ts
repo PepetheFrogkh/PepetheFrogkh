@@ -344,6 +344,11 @@ export interface Dict {
     action: string
     add: string
     remove: string
+    yes: string
+    no: string
+    includedInFlow: string
+    addHere: string
+    pickSlot: string
     apiQuestion: string
     apiYes: string
     apiNo: string

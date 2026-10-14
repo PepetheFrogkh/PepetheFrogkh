@@ -2395,10 +2395,11 @@ body.has-view-cursor [data-cursor='voir'] {
 }
 
 /* ══ Le simulateur d'automatisation ═══════════════════════════════════════
-   Un editeur de flux : des blocs qui s'enchainent de gauche a droite sur grand
-   ecran, et une liste d'etapes sous 760 px, parce que relier des blocs au
-   pouce ne marche pas. Tout s'ajoute et se retire au bouton : il n'y a rien a
-   glisser, donc le clavier suffit.
+   Un canevas : chaque noeud est une etape, les noeuds sont relies par des
+   cables, et une condition se separe en deux branches. Les positions sont
+   calculees et non glissees a la souris : un canevas qu'on deplace au curseur
+   ne se manipule ni au clavier ni au doigt. Sous 900 px, le meme arbre devient
+   une liste indentee.
    ═════════════════════════════════════════════════════════════════════════ */
 
 .sim {
@@ -2448,60 +2449,237 @@ body.has-view-cursor [data-cursor='voir'] {
   text-decoration: underline;
 }
 
-.sim__chain {
-  list-style: none;
-  margin: var(--s3) 0 0;
-  padding: 0;
-  display: grid;
-  gap: var(--s3);
+/* ── le canevas ───────────────────────────────────────────────────────── */
+
+.fcanvas {
+  display: none;
+  margin-top: var(--s3);
+  overflow-x: auto;
+  padding-bottom: var(--s2);
+  /* la trame de fond, comme un papier millimetre tres discret */
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1.2px);
+  background-size: 18px 18px;
+  border-radius: var(--r-image);
 }
 
-@media (min-width: 760px) {
-  .sim__chain {
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(10rem, 1fr);
-    align-items: start;
-    overflow-x: auto;
-    padding-bottom: var(--s2);
-  }
-
-  /* le trait qui relie un bloc au suivant */
-  .sim__block + .sim__block::before {
-    content: '';
-    position: absolute;
-    left: calc(var(--s3) * -1);
-    top: 26px;
-    width: var(--s3);
-    height: 2px;
-    background: var(--peach);
+@media (min-width: 900px) {
+  .fcanvas {
+    display: block;
   }
 }
 
-.sim__block {
+.fcanvas__inner {
   position: relative;
+  margin: var(--s3);
+}
+
+.fcanvas__wires {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.fcanvas__wire {
+  fill: none;
+  stroke: var(--terra);
+  stroke-width: 2;
+  opacity: 0.45;
+}
+
+.fcanvas__branch {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--terra);
+}
+
+.fcanvas__node {
+  position: absolute;
+}
+
+/* ── un noeud ─────────────────────────────────────────────────────────── */
+
+.fnode {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   background: var(--white);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: var(--s2);
-  min-width: 0;
+  border-left: 3px solid var(--slate-light);
+  border-radius: 14px;
+  padding: 10px 12px;
 }
 
-.sim__block[data-family='trigger'] {
-  border-color: var(--orange);
+.fnode[data-family='trigger'] {
+  border-left-color: var(--orange);
 }
 
-.sim__block[data-family='condition'] {
+.fnode[data-family='tool'] {
+  border-left-color: var(--terra);
+}
+
+.fnode[data-family='condition'] {
+  border-left-color: var(--ink);
   border-style: dashed;
+  border-left-style: solid;
 }
 
-.sim__block-head {
+.fnode[data-family='action'] {
+  border-left-color: var(--peach);
+}
+
+.fnode__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--s1);
 }
 
-.sim__family {
+.fnode__family {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.fnode__x {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--slate);
+  font-size: 16px;
+  line-height: 1;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.fnode__x:hover {
+  background: var(--peach);
+  color: var(--terra);
+}
+
+.fnode__name {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+/* ce que le noeud ajoute au prix : la somme en bas n'est que leur total */
+.fnode__price {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--terra);
+}
+
+.fnode__price--none {
+  font-weight: 400;
+  color: var(--slate-light);
+}
+
+.fnode__api {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.fnode__api-q {
+  display: block;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--slate);
+}
+
+.fnode__api-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+/* les sorties : le « + » qui choisit ou se greffe l'etape suivante */
+.fnode__outs {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.fnode__plus {
+  appearance: none;
+  background: var(--cream);
+  border: 1px dashed var(--terra);
+  border-radius: var(--r-pill);
+  padding: 3px 10px;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--terra);
+  cursor: pointer;
+}
+
+.fnode__plus[aria-pressed='true'] {
+  background: var(--orange);
+  border-style: solid;
+  border-color: var(--orange);
+  color: var(--ink);
+}
+
+/* ── la liste, sous 900 px ────────────────────────────────────────────── */
+
+.fsteps {
+  list-style: none;
+  margin: var(--s3) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s2);
+}
+
+@media (min-width: 900px) {
+  .fsteps {
+    display: none;
+  }
+}
+
+/* ── le catalogue ─────────────────────────────────────────────────────── */
+
+.sim__add {
+  margin-top: var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--border);
+}
+
+.sim__hint {
+  margin: 0 0 var(--s2);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--slate);
+}
+
+.sim__add[data-armed] .sim__hint {
+  color: var(--terra);
+  font-weight: 700;
+}
+
+.sim__groups {
+  display: grid;
+  gap: var(--s2);
+}
+
+@media (min-width: 900px) {
+  .sim__groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s3);
+  }
+}
+
+.sim__group-title {
   font-family: var(--font-ui);
   font-size: 11px;
   letter-spacing: 0.06em;
@@ -2509,63 +2687,11 @@ body.has-view-cursor [data-cursor='voir'] {
   color: var(--slate);
 }
 
-.sim__remove {
-  appearance: none;
-  border: 0;
-  background: transparent;
-  color: var(--slate);
-  font-size: 18px;
-  line-height: 1;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.sim__remove:hover {
-  background: var(--peach);
-  color: var(--terra);
-}
-
-.sim__name {
-  display: block;
-  margin-top: 2px;
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--ink);
-}
-
-.sim__empty {
-  color: var(--slate);
-  font-size: 15px;
-}
-
-.sim__api {
-  margin-top: var(--s2);
-  padding-top: var(--s2);
-  border-top: 1px solid var(--border);
-}
-
-.sim__api-q {
-  display: block;
-  font-size: 13px;
-  color: var(--slate);
-}
-
-.sim__api-row,
 .sim__chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin-top: 6px;
-}
-
-.sim__warn {
-  margin: var(--s2) 0 0;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--terra);
 }
 
 .sim__chip {
@@ -2581,11 +2707,22 @@ body.has-view-cursor [data-cursor='voir'] {
   cursor: pointer;
   transition:
     background-color 0.2s var(--ease),
-    border-color 0.2s var(--ease);
+    border-color 0.2s var(--ease),
+    opacity 0.2s var(--ease);
 }
 
-.sim__chip:hover {
+.sim__chip--mini {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+
+.sim__chip:hover:not(:disabled) {
   border-color: var(--orange);
+}
+
+.sim__chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .sim__chip[aria-pressed='true'] {
@@ -2593,28 +2730,7 @@ body.has-view-cursor [data-cursor='voir'] {
   border-color: var(--orange);
 }
 
-.sim__add {
-  display: grid;
-  gap: var(--s2);
-  margin-top: var(--s3);
-  padding-top: var(--s3);
-  border-top: 1px solid var(--border);
-}
-
-@media (min-width: 900px) {
-  .sim__add {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--s3);
-  }
-}
-
-.sim__group-title {
-  font-family: var(--font-ui);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--slate);
-}
+/* ── le recapitulatif ─────────────────────────────────────────────────── */
 
 .sim__summary {
   display: grid;
