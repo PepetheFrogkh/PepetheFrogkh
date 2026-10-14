@@ -2315,6 +2315,265 @@ body.has-view-cursor [data-cursor='voir'] {
   }
 }
 
+/* ══ Le simulateur d'automatisation ═══════════════════════════════════════
+   Un editeur de flux : des blocs qui s'enchainent de gauche a droite sur grand
+   ecran, et une liste d'etapes sous 760 px, parce que relier des blocs au
+   pouce ne marche pas. Tout s'ajoute et se retire au bouton : il n'y a rien a
+   glisser, donc le clavier suffit.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.sim {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: var(--s4);
+}
+
+.sim__flows {
+  display: grid;
+  gap: var(--s4);
+  margin-top: var(--s4);
+  justify-items: start;
+}
+
+.sim__flow {
+  width: 100%;
+  background: var(--cream);
+  border-radius: var(--r-card);
+  padding: var(--s3);
+}
+
+.sim__flow-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s2);
+}
+
+.sim__flow-title {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  margin: 0;
+}
+
+.sim__text-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--terra);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.sim__chain {
+  list-style: none;
+  margin: var(--s3) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s3);
+}
+
+@media (min-width: 760px) {
+  .sim__chain {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(10rem, 1fr);
+    align-items: start;
+    overflow-x: auto;
+    padding-bottom: var(--s2);
+  }
+
+  /* le trait qui relie un bloc au suivant */
+  .sim__block + .sim__block::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--s3) * -1);
+    top: 26px;
+    width: var(--s3);
+    height: 2px;
+    background: var(--peach);
+  }
+}
+
+.sim__block {
+  position: relative;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: var(--s2);
+  min-width: 0;
+}
+
+.sim__block[data-family='trigger'] {
+  border-color: var(--orange);
+}
+
+.sim__block[data-family='condition'] {
+  border-style: dashed;
+}
+
+.sim__block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s1);
+}
+
+.sim__family {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.sim__remove {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--slate);
+  font-size: 18px;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.sim__remove:hover {
+  background: var(--peach);
+  color: var(--terra);
+}
+
+.sim__name {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.sim__empty {
+  color: var(--slate);
+  font-size: 15px;
+}
+
+.sim__api {
+  margin-top: var(--s2);
+  padding-top: var(--s2);
+  border-top: 1px solid var(--border);
+}
+
+.sim__api-q {
+  display: block;
+  font-size: 13px;
+  color: var(--slate);
+}
+
+.sim__api-row,
+.sim__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.sim__warn {
+  margin: var(--s2) 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--terra);
+}
+
+.sim__chip {
+  appearance: none;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  padding: 6px 12px;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+
+.sim__chip:hover {
+  border-color: var(--orange);
+}
+
+.sim__chip[aria-pressed='true'] {
+  background: var(--orange);
+  border-color: var(--orange);
+}
+
+.sim__add {
+  display: grid;
+  gap: var(--s2);
+  margin-top: var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--border);
+}
+
+@media (min-width: 900px) {
+  .sim__add {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s3);
+  }
+}
+
+.sim__group-title {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.sim__summary {
+  display: grid;
+  gap: var(--s3);
+  margin-top: var(--s4);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--border);
+}
+
+@media (min-width: 900px) {
+  .sim__summary {
+    grid-template-columns: auto auto auto 1fr;
+    align-items: end;
+    gap: var(--s5);
+  }
+}
+
+/* ce qui n'a pas de prix fixe dans cette devise, nomme sous le total */
+.sim__missing {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--terra);
+  white-space: normal;
+}
+
+.sim__missing:empty {
+  display: none;
+}
+
+.sim__time {
+  display: block;
+  font-size: 15px;
+  color: var(--ink);
+}
+
 /* ══ La carte video plein ecran ═══════════════════════════════════════════
    Section epinglee : la carte s'ouvre jusqu'au cadre entier au milieu du
    defilement, puis se referme. La video est muette et n'est chargee que quand

@@ -21,6 +21,15 @@ import {
 } from '@/lib/i18n'
 import { alternates } from '@/lib/routes'
 import { visibleCases } from '@/lib/flags'
+import {
+  AUTOMATION,
+  BUSINESS_APPS,
+  CUSTOM_TEAM,
+  DELAYS,
+  OPTIONS,
+  PACKS,
+  PLANS,
+} from '@/lib/prices'
 import CaseCard from '@/components/CaseCard'
 import ContactForm from '@/components/ContactForm'
 import FinalCta from '@/components/FinalCta'
@@ -33,6 +42,8 @@ import MaskReveal from '@/components/MaskReveal'
 import CaseView from '@/components/pages/CaseView'
 import ExpertiseView from '@/components/pages/ExpertiseView'
 import ServiceView from '@/components/pages/ServiceView'
+import Simulator from '@/components/Simulator'
+import PriceTable, { type Row } from '@/components/PriceTable'
 import { Tbd, TbdBlock } from '@/components/Tbd'
 
 /**
@@ -290,6 +301,38 @@ export default async function Page({
     )
   }
 
+  if (route.kind === 'page' && route.page === 'pricing') {
+    return (
+      <>
+        <Head locale={lang} title={t.pricing.title} lead={t.pricing.lead} />
+
+        {/* le simulateur : il n'estime, rien d'autre */}
+        <SectionBlock tone="cream" id="simulateur">
+          <Reveal>
+            <Simulator locale={lang} />
+          </Reveal>
+        </SectionBlock>
+
+        {/* la grille entiere, pour qui veut lire les prix sans rien configurer */}
+        <SectionBlock id="grille">
+          <Reveal>
+            <div className="section__head">
+              <SplitHeading text={t.pricing.packs.title} />
+            </div>
+          </Reveal>
+          <Reveal>
+            <div className="service__prices">{priceTables(lang)}</div>
+            <p className="small muted" style={{ marginTop: 'var(--s4)' }}>
+              {t.pricing.disclaimer}
+            </p>
+          </Reveal>
+        </SectionBlock>
+
+        <FinalCta locale={lang} />
+      </>
+    )
+  }
+
   if (route.kind === 'page' && route.page === 'contact') {
     return (
       <>
@@ -381,6 +424,85 @@ function Index({ locale, kind }: { locale: Locale; kind: 'services' | 'expertise
         </Link>
       ))}
     </div>
+  )
+}
+
+/** Toute la grille, pour la page Tarifs. */
+function priceTables(locale: Locale) {
+  const money = dict(locale).pricing
+  const rows = (
+    list: { id: string; price: Parameters<typeof PriceTable>[0]['rows'][number]['price'] }[],
+    name: (id: string) => string,
+  ): Row[] => list.map((item) => ({ id: item.id, name: name(item.id), price: item.price }))
+
+  return (
+    <>
+      <PriceTable
+        locale={locale}
+        caption={money.packs.title}
+        rows={PACKS.map((pack) => ({
+          id: pack.id,
+          name: money.packs.rows[pack.id].name,
+          detail: money.packs.rows[pack.id].detail,
+          price: pack.price,
+          featured: pack.featured,
+        }))}
+      />
+      <PriceTable
+        locale={locale}
+        caption={money.options.title}
+        note={money.options.note}
+        rows={rows(OPTIONS, (id) => money.options.rows[id as keyof typeof money.options.rows])}
+      />
+      <PriceTable
+        locale={locale}
+        caption={money.delays.title}
+        rows={rows(DELAYS, (id) => money.delays.rows[id as keyof typeof money.delays.rows])}
+      />
+      <PriceTable
+        locale={locale}
+        caption={money.plans.title}
+        note={money.plans.note}
+        rows={PLANS.map((plan) => ({
+          id: plan.id,
+          name: money.plans.rows[plan.id],
+          price: plan.price,
+          featured: plan.featured,
+        }))}
+      />
+      <PriceTable
+        locale={locale}
+        caption={money.automation.title}
+        rows={[
+          { id: 'flow', name: money.automation.rows.flow, price: AUTOMATION.flow },
+          { id: 'condition', name: money.automation.rows.condition, price: AUTOMATION.condition },
+          { id: 'app', name: money.automation.rows.app, price: AUTOMATION.app },
+          { id: 'noApi', name: money.automation.rows.noApi, price: AUTOMATION.noApi },
+        ]}
+      />
+      <PriceTable
+        locale={locale}
+        caption={money.supervision.title}
+        rows={AUTOMATION.supervision.map((line) => ({
+          id: line.id,
+          name: money.supervision.rows[line.id],
+          price: line.price,
+        }))}
+      />
+      <PriceTable
+        locale={locale}
+        caption={money.apps.title}
+        rows={[
+          { id: 'base', name: money.apps.rows.base, price: BUSINESS_APPS.base },
+          { id: 'erp', name: money.apps.rows.erp, price: BUSINESS_APPS.erp },
+        ]}
+      />
+      <PriceTable
+        locale={locale}
+        caption={money.team.title}
+        rows={[{ id: 'team', name: money.team.row, price: CUSTOM_TEAM }]}
+      />
+    </>
   )
 }
 

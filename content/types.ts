@@ -1,4 +1,5 @@
 import type { ExpertiseKey, ServiceKey } from '@/lib/i18n'
+import type { ActionId, ToolId, TriggerId } from '@/lib/simulator'
 import type {
   AppId,
   AutomationId,
@@ -328,6 +329,35 @@ export interface Dict {
     email: string
     emailNote: string
     consent: string
+  }
+
+  /** Les libelles du simulateur d'automatisation. */
+  simulator: {
+    title: string
+    lead: string
+    addFlow: string
+    removeFlow: string
+    flow: string
+    trigger: string
+    tool: string
+    condition: string
+    action: string
+    add: string
+    remove: string
+    apiQuestion: string
+    apiYes: string
+    apiNo: string
+    apiUnknown: string
+    apiWarning: string
+    setup: string
+    monthly: string
+    time: string
+    timeValue: string
+    empty: string
+    steps: string
+    triggers: Record<TriggerId, string>
+    tools: Record<ToolId, string>
+    actions: Record<ActionId, string>
   }
 
   blog: {
