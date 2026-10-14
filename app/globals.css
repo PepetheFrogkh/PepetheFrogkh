@@ -1748,21 +1748,66 @@ body.has-view-cursor [data-cursor='voir'] {
   display: flex;
   align-items: stretch;
   background: var(--cream);
-  padding-top: calc(72px + var(--s6));
-  padding-bottom: var(--s6);
+  /* l'en-tete fixe fait 72 px : le reste est le seul respir au-dessus de
+     l'etiquette, serre pour que les deux boutons tiennent dans le premier
+     ecran d'un portable de 768 px de haut */
+  padding-top: calc(72px + var(--s3));
+  padding-bottom: var(--s3);
   overflow: clip;
 }
 
 .typo__inner {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(var(--s3), 4vh, var(--s6));
   width: 100%;
+}
+
+.typo__text {
+  display: flex;
+  flex-direction: column;
+  /* centre, et non reparti : l'espace restant va au-dessus et en dessous du
+     bloc, jamais entre le titre et le sous-titre */
+  justify-content: center;
+  /* l'ecart titre / sous-titre : deux fois plus serre qu'avant, c'est lui qui
+     poussait les boutons hors de l'ecran */
+  gap: clamp(var(--s2), 2vh, var(--s4));
+  flex: 1;
+  min-width: 0;
 }
 
 .typo__eyebrow {
   align-self: flex-start;
+}
+
+/* ── deux colonnes : le texte, puis le visuel ──────────────────────────── */
+
+@media (min-width: 1200px) {
+  .typo__inner {
+    display: grid;
+    /* la colonne de texte prend un peu plus que la moitie : c'est ce qu'il
+       faut pour que les deux boutons tiennent cote a cote sur une ligne */
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    gap: var(--s6);
+    align-items: stretch;
+  }
+}
+
+/* La colonne de texte ne fait plus que la moitie de la page : le pied
+   repasse sur une seule colonne, sinon la colonne des boutons prend toute la
+   largeur et ecrase le sous-titre a zero. */
+@media (min-width: 1200px) {
+  .typo .typo__foot {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s3);
+  }
+
+  .typo .typo__actions {
+    align-items: flex-start;
+  }
+
+  .typo .typo__actions .hero__note {
+    text-align: left;
+  }
 }
 
 /* ── le titre ──────────────────────────────────────────────────────────── */
@@ -1774,7 +1819,10 @@ body.has-view-cursor [data-cursor='voir'] {
   /* Deux bornes, pas une : la largeur tient la plus longue ligne dans le
      conteneur de 1 200 px, la hauteur empeche les quatre lignes de pousser le
      sous-titre hors de l'ecran sur un portable au format large. */
-  font-size: clamp(36px, min(8.4vw, 12vh), 128px);
+  /* Deux bornes toujours, mais resserrees : la colonne de texte ne fait plus
+     que la moitie de la largeur, et la hauteur doit laisser la place au
+     sous-titre et aux deux boutons sur un ecran de 768 px. */
+  font-size: clamp(34px, min(7.6vw, 9.6vh), 112px);
   line-height: 0.98;
   /* desserree : a cette taille une approche trop serree fait se toucher les
      lettres, et le mot se lit moins vite qu'il ne se devine */
@@ -1848,6 +1896,104 @@ body.has-view-cursor [data-cursor='voir'] {
   .typo__actions .hero__note {
     text-align: right;
   }
+}
+
+/* ── le visuel de droite ───────────────────────────────────────────────────
+   Trois cartes posees en escalier, et rien d'autre : aucune etiquette, aucun
+   chiffre, aucun nom. La composition est decorative, donc elle n'a rien a
+   dire ; elle occupe la moitie droite et donne du poids a la page.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.typo__visual {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .typo__visual {
+    display: block;
+    position: relative;
+    min-height: 0;
+  }
+}
+
+.panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* la tache claire derriere les cartes : elle arrondit le bloc et evite que la
+   moitie droite ne soit qu'un aplat de creme */
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 6% -8% 10% 2%;
+  background: radial-gradient(
+    120% 90% at 65% 35%,
+    var(--peach) 0%,
+    rgba(255, 227, 207, 0.45) 46%,
+    rgba(255, 227, 207, 0) 72%
+  );
+  border-radius: 50%;
+}
+
+.panel__card {
+  position: absolute;
+  width: 56%;
+  min-width: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.1vh, 16px);
+  padding: clamp(14px, 1.6vh, 22px);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  box-shadow: var(--lift);
+}
+
+.panel__card--1 {
+  left: 2%;
+  top: 6%;
+  transform: rotate(-4deg);
+}
+
+.panel__card--2 {
+  left: 22%;
+  top: 33%;
+  transform: rotate(1.5deg);
+  z-index: 1;
+}
+
+.panel__card--3 {
+  left: 8%;
+  top: 61%;
+  transform: rotate(-1.5deg);
+  z-index: 2;
+}
+
+.panel__head {
+  height: clamp(8px, 1vh, 12px);
+  width: 46%;
+  border-radius: var(--r-pill);
+  background: var(--orange);
+}
+
+.panel__bars {
+  display: grid;
+  gap: clamp(7px, 0.8vh, 11px);
+}
+
+.panel__bar {
+  height: clamp(6px, 0.7vh, 9px);
+  border-radius: var(--r-pill);
+  background: var(--peach);
+}
+
+/* une ligne sur deux reste a peine marquee : la carte se lit comme un corps de
+   texte, pas comme une suite de bandes */
+.panel__bar--faint {
+  background: var(--border);
 }
 
 @media (prefers-reduced-motion: reduce) {
