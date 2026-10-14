@@ -633,13 +633,30 @@ export const fr: Dict = {
         coords: null,
         summary: 'Application mobile de fidélité, et son outil de gestion.',
         site: null,
-        result: null,
+        result: 'Une application chiffrée 200 000 dollars ailleurs, livrée pour 25 000.',
         shot: null,
         video: null,
-        context: null,
-        need: null,
-        built: ['Une application mobile de fidélité', 'Son outil de gestion'],
-        results: null,
+        context:
+          'Wave voulait une application mobile de fidélité pour ses clients, et l’outil de gestion qui va avec. Le projet avait été chiffré ailleurs, et le devis reçu était de 200 000 dollars : un montant qui ferme le sujet pour la plupart des entreprises de cette taille.',
+        need:
+          'Obtenir la même chose pour ce qu’ils pouvaient réellement y mettre. Cela voulait dire reprendre le périmètre point par point, séparer ce dont l’application avait besoin pour exister de ce qui pouvait venir plus tard, et construire la première version sur ce tri.',
+        built: [
+          'Une application mobile de fidélité pour les clients.',
+          'L’outil de gestion qui va avec, côté Wave.',
+          'Un périmètre taillé pour un premier lancement, le reste en attente plutôt qu’en option payée d’avance.',
+        ],
+        results: [
+          {
+            value: '200',
+            unit: ' 000 $',
+            caption: 'le devis reçu ailleurs pour ce projet',
+          },
+          {
+            value: '25',
+            unit: ' 000 $',
+            caption: 'ce que Kuiper Studio a facturé pour le livrer',
+          },
+        ],
         quote: null,
       },
     ],

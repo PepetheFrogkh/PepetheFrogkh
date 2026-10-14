@@ -630,13 +630,30 @@ export const en: Dict = {
         coords: null,
         summary: 'A mobile loyalty app, and the tool that runs it.',
         site: null,
-        result: null,
+        result: 'An app quoted at 200,000 dollars elsewhere, delivered for 25,000.',
         shot: null,
         video: null,
-        context: null,
-        need: null,
-        built: ['A mobile loyalty app', 'Its management tool'],
-        results: null,
+        context:
+          'Wave wanted a mobile loyalty app for their clients, and the management tool to go with it. The project had been quoted elsewhere, and the quote came back at 200,000 dollars: a figure that closes the subject for most companies of that size.',
+        need:
+          'To get the same thing for what they could actually put in. That meant going through the scope point by point, separating what the app needed in order to exist from what could come later, and building the first version on that sort.',
+        built: [
+          'A mobile loyalty app for their clients.',
+          'The management tool that goes with it, on Wave’s side.',
+          'A scope cut for a first launch, with the rest held back rather than sold as options paid for upfront.',
+        ],
+        results: [
+          {
+            value: '200',
+            unit: ',000 $',
+            caption: 'the quote received elsewhere for this project',
+          },
+          {
+            value: '25',
+            unit: ',000 $',
+            caption: 'what Kuiper Studio charged to deliver it',
+          },
+        ],
         quote: null,
       },
     ],
