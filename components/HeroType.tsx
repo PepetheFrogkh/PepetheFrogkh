@@ -1,11 +1,5 @@
 import type { ReactNode } from 'react'
-
-/** Les barres d'une carte du visuel : une entete, puis des lignes de corps. */
-const CARD_BARS = [
-  [62, 100, 74, 100, 48],
-  [54, 100, 86, 100],
-  [70, 100, 60, 100, 82],
-]
+import HeroPanel from './HeroPanel'
 
 /**
  * L'en-tete, typographique.
@@ -63,23 +57,8 @@ export default function HeroType({
           <div className="typo__foot">{children}</div>
         </div>
 
-        <div className="typo__visual" aria-hidden="true">
-          <div className="panel">
-            {CARD_BARS.map((bars, i) => (
-              <div className={`panel__card panel__card--${i + 1}`} key={i}>
-                <span className="panel__head" />
-                <span className="panel__bars">
-                  {bars.map((w, j) => (
-                    <span
-                      className={`panel__bar${j % 2 ? ' panel__bar--faint' : ''}`}
-                      style={{ width: `${w}%` }}
-                      key={j}
-                    />
-                  ))}
-                </span>
-              </div>
-            ))}
-          </div>
+        <div className="typo__visual">
+          <HeroPanel />
         </div>
       </div>
     </section>

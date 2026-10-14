@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import {
   Color,
   Euler,
@@ -11,6 +11,7 @@ import {
   type Mesh,
   NoToneMapping,
   type MeshBasicMaterial,
+  type PerspectiveCamera,
   Quaternion,
   Vector3,
 } from 'three'
@@ -18,21 +19,21 @@ import {
   CAMERA,
   CARD_H,
   CARD_W,
-  CARD_X,
-  CELL,
+  CARD_Y,
   DESKTOP_COUNT,
   MOBILE_COUNT,
   buildLayout,
+  cellSize,
+  fitDistance,
 } from './layout'
 
 /**
  * « Le tableur qui se range. »
  *
- * Un seul InstancedMesh de cellules en boites arrondies. Au depart elles
- * forment une feuille de calcul en desordre ; a l'arrivee, les memes cellules
- * composent trois cartes d'application. Rien n'apparait et rien ne disparait :
- * c'est la meme matiere qui se range, ce qui est exactement le propos du
- * studio.
+ * Un seul InstancedMesh de cellules. Au depart elles forment une feuille de
+ * calcul en desordre ; a l'arrivee, les memes cellules composent trois cartes
+ * d'application empilees. Rien n'apparait et rien ne disparait : c'est la meme
+ * matiere qui se range, ce qui est exactement le propos du studio.
  *
  * Le rangement est ressort, pas lineaire : chaque cellule a sa propre vitesse
  * et son propre rebond, et la vague part du centre vers les bords. La souris
@@ -57,9 +58,37 @@ const quaternion = new Quaternion()
 const euler = new Euler()
 const colour = new Color()
 
+/**
+ * La camera recule juste assez pour que la pile de cartes et la feuille
+ * tiennent dans le cadre, quel que soit son rapport.
+ */
+function FitCamera() {
+  const camera = useThree((s) => s.camera) as PerspectiveCamera
+  const size = useThree((s) => s.size)
+
+  useEffect(() => {
+    camera.position.set(0, 0, fitDistance(size.width / Math.max(1, size.height)))
+    camera.updateProjectionMatrix()
+  }, [camera, size.width, size.height])
+
+  return null
+}
+
+/** Previent la page des que la premiere image est dessinee. */
+function FirstFrame({ onPainted }: { onPainted: () => void }) {
+  const done = useRef(false)
+  useFrame(() => {
+    if (done.current) return
+    done.current = true
+    onPainted()
+  })
+  return null
+}
+
 function Cells({ progress, count, still, magnet: magnetOn }: SceneProps) {
   const meshRef = useRef<InstancedMesh>(null)
   const cells = useMemo(() => buildLayout(count), [count])
+  const cell = useMemo(() => cellSize(count), [count])
 
   /**
    * L'etat du ressort de chaque cellule : sa position dans le rangement et sa
@@ -71,8 +100,29 @@ function Cells({ progress, count, still, magnet: magnetOn }: SceneProps) {
     [count],
   )
 
-  const pointer = useRef({ x: 0, y: 0, inside: 0 })
-  const { viewport } = useThree()
+  const pointer = useRef({ x: 0, y: 0 })
+  const ndc = useRef({ x: 0, y: 0 })
+  const gl = useThree((s) => s.gl)
+
+  /**
+   * Le curseur est suivi sur la fenetre, pas sur le canvas.
+   *
+   * Le canvas est decoratif et ne recoit aucun evenement de pointeur, sinon il
+   * volerait les clics au texte pose par-dessus. Sans cette ecoute, l'aimant
+   * resterait collé au centre de la scene.
+   */
+  useEffect(() => {
+    if (!magnetOn) return
+    const el = gl.domElement
+    const onMove = (event: PointerEvent) => {
+      const box = el.getBoundingClientRect()
+      if (box.width === 0 || box.height === 0) return
+      ndc.current.x = ((event.clientX - box.left) / box.width) * 2 - 1
+      ndc.current.y = -(((event.clientY - box.top) / box.height) * 2 - 1)
+    }
+    window.addEventListener('pointermove', onMove, { passive: true })
+    return () => window.removeEventListener('pointermove', onMove)
+  }, [gl, magnetOn])
 
   useFrame((state, rawDelta) => {
     const mesh = meshRef.current
@@ -81,27 +131,32 @@ function Cells({ progress, count, still, magnet: magnetOn }: SceneProps) {
     const delta = Math.min(0.05, rawDelta)
     const target = progress()
 
-    // le curseur en unites de scene, pour l'aimant
-    const px = (state.pointer.x * viewport.width) / 2
-    const py = (state.pointer.y * viewport.height) / 2
+    // le curseur en unites de scene, mesure sur la camera du moment : elle
+    // recule selon le rapport du cadre, donc une valeur figee decalerait
+    // l'aimant de plusieurs cellules
+    const camera = state.camera as PerspectiveCamera
+    const halfH = Math.tan(((camera.fov / 2) * Math.PI) / 180) * camera.position.z
+    const halfW = halfH * camera.aspect
+    const px = ndc.current.x * halfW
+    const py = ndc.current.y * halfH
     pointer.current.x += (px - pointer.current.x) * 0.12
     pointer.current.y += (py - pointer.current.y) * 0.12
 
     for (let i = 0; i < count; i++) {
-      const cell = cells[i]
+      const item = cells[i]
 
       // ── la cible de cette cellule ───────────────────────────────────────
       // la vague : une cellule proche du centre se range avant les autres
-      let local = (target - cell.order * 0.42) / 0.58
+      let local = (target - item.order * 0.42) / 0.58
       local = local < 0 ? 0 : local > 1 ? 1 : local
 
       // l'aimant : une cellule proche du curseur se range en avance
-      const dx = cell.from.x + (cell.to.x - cell.from.x) * local - pointer.current.x
-      const dy = cell.from.y + (cell.to.y - cell.from.y) * local - pointer.current.y
-      const reach = 1.25
+      const dx = item.from.x + (item.to.x - item.from.x) * local - pointer.current.x
+      const dy = item.from.y + (item.to.y - item.from.y) * local - pointer.current.y
+      const reach = 1.3
       const near = Math.max(0, 1 - Math.hypot(dx, dy) / reach)
       const magnet = magnetOn ? near * near : 0
-      local = Math.min(1, local + magnet * 0.55)
+      local = Math.min(1, local + magnet * 0.62)
 
       // ── le ressort ──────────────────────────────────────────────────────
       let t: number
@@ -118,30 +173,29 @@ function Cells({ progress, count, still, magnet: magnetOn }: SceneProps) {
       }
 
       // ── la pose ─────────────────────────────────────────────────────────
-      // un depassement doux : la cellule arrive, revient un peu, se pose
       const ease = t
       position.set(
-        cell.from.x + (cell.to.x - cell.from.x) * ease,
-        cell.from.y + (cell.to.y - cell.from.y) * ease,
-        cell.from.z + (cell.to.z - cell.from.z) * ease + magnet * 0.22 * (1 - ease * 0.5),
+        item.from.x + (item.to.x - item.from.x) * ease,
+        item.from.y + (item.to.y - item.from.y) * ease,
+        item.from.z + (item.to.z - item.from.z) * ease + magnet * 0.3 * (1 - ease * 0.5),
       )
 
       euler.set(
-        cell.from.rx * (1 - ease),
-        cell.from.ry * (1 - ease),
-        cell.from.rz * (1 - ease),
+        item.from.rx * (1 - ease),
+        item.from.ry * (1 - ease),
+        item.from.rz * (1 - ease),
       )
       quaternion.setFromEuler(euler)
 
       // l'echelle d'arrivee : plein pour l'en-tete et les barres, fin pour la
       // trame du fond
-      const s = 1 + (cell.toScale - 1) * ease
+      const s = 1 + (item.toScale - 1) * ease
       scale.set(s, s, 1)
 
       matrix.compose(position, quaternion, scale)
       mesh.setMatrixAt(i, matrix)
 
-      colour.copy(cell.fromColor).lerp(cell.toColor, Math.min(1, Math.max(0, ease)))
+      colour.copy(item.fromColor).lerp(item.toColor, Math.min(1, Math.max(0, ease)))
       mesh.setColorAt(i, colour)
     }
 
@@ -157,8 +211,8 @@ function Cells({ progress, count, still, magnet: magnetOn }: SceneProps) {
       receiveShadow
       frustumCulled={false}
     >
-      {/* une cellule de tableur : une boite arrondie, plus large que haute */}
-      <boxGeometry args={[CELL.w, CELL.h, CELL.d]} />
+      {/* une cellule de tableur : une boite, plus large que haute */}
+      <boxGeometry args={[cell.w, cell.h, cell.d]} />
       <meshStandardMaterial roughness={0.55} metalness={0} toneMapped={false} />
     </instancedMesh>
   )
@@ -191,9 +245,9 @@ function CardPlates({ progress, still }: { progress: () => number; still: boolea
 
   return (
     <group ref={group} visible={false}>
-      {CARD_X.map((x) => (
-        <mesh key={x} position={[x, 0, -0.06]} receiveShadow>
-          <planeGeometry args={[CARD_W + 0.2, CARD_H + 0.24]} />
+      {CARD_Y.map((y) => (
+        <mesh key={y} position={[0, y, -0.06]} receiveShadow>
+          <planeGeometry args={[CARD_W + 0.24, CARD_H + 0.2]} />
           <meshBasicMaterial
             color="#FFFFFF"
             transparent
@@ -214,10 +268,12 @@ export default function SpreadsheetScene({
   progress,
   mobile = false,
   still = false,
+  onPainted,
 }: {
   progress: () => number
   mobile?: boolean
   still?: boolean
+  onPainted?: () => void
 }) {
   const count = mobile ? MOBILE_COUNT : DESKTOP_COUNT
 
@@ -225,8 +281,7 @@ export default function SpreadsheetScene({
     <Canvas
       // densite d'affichage plafonnee a 2, comme demande
       dpr={[1, 2]}
-      // la camera est legerement inclinee, pas de face
-      camera={{ position: [0, 1.05, CAMERA.z], fov: CAMERA.fov, near: 0.1, far: 30 }}
+      camera={{ position: [0, 0, fitDistance(1)], fov: CAMERA.fov, near: 0.1, far: 40 }}
       // Sans cette ligne, le tone mapping par defaut grise les blancs et delave
       // le peche : la charte ne serait plus respectee a l'ecran.
       gl={{ antialias: true, alpha: true, toneMapping: NoToneMapping }}
@@ -234,6 +289,9 @@ export default function SpreadsheetScene({
       frameloop={still ? 'demand' : 'always'}
       style={{ pointerEvents: 'none' }}
     >
+      <FitCamera />
+      {onPainted ? <FirstFrame onPainted={onPainted} /> : null}
+
       {/*
         Un eclairage doux, et calibre au pixel.
 
@@ -242,9 +300,6 @@ export default function SpreadsheetScene({
         intensites sont donc calees pour que la face avant, celle qu'on lit,
         rende exactement #FF6B00 et #FFE3CF. Le calage se fait en espace
         lineaire, pas en sRGB, d'ou ces valeurs.
-
-        Les biseaux et les faces laterales saturent, et c'est voulu : ce sont
-        eux qui donnent le peu de relief, la lecture des cartes prime.
       */}
       <ambientLight intensity={2.47} />
       <directionalLight position={[2.5, 4, 3.5]} intensity={0.75} castShadow={!mobile} />
