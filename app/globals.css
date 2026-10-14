@@ -2315,6 +2315,57 @@ body.has-view-cursor [data-cursor='voir'] {
   }
 }
 
+/* ══ La carte video plein ecran ═══════════════════════════════════════════
+   Section epinglee : la carte s'ouvre jusqu'au cadre entier au milieu du
+   defilement, puis se referme. La video est muette et n'est chargee que quand
+   la section approche de l'ecran.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.vcard {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  background: var(--cream);
+  overflow: clip;
+}
+
+.vcard__frame {
+  position: relative;
+  width: 62%;
+  height: 58%;
+  min-height: 260px;
+  overflow: hidden;
+  border-radius: var(--r-card);
+  background: var(--peach);
+  box-shadow: var(--lift);
+}
+
+.vcard__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vcard__empty {
+  display: grid;
+  place-items: center;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vcard {
+    min-height: 0;
+    padding-block: var(--section);
+  }
+
+  .vcard__frame {
+    width: 100%;
+    height: auto;
+  }
+}
+
 /* ══ Le configurateur de sites ════════════════════════════════════════════
    Le prix se met a jour a chaque choix, et l'email n'est demande qu'au moment
    d'envoyer l'estimation. Les deux devises sont dans le HTML, comme partout.

@@ -26,6 +26,10 @@ import ContactForm from '@/components/ContactForm'
 import FinalCta from '@/components/FinalCta'
 import Heading from '@/components/Heading'
 import Reveal from '@/components/Reveal'
+import SectionBlock from '@/components/SectionBlock'
+import SplitHeading from '@/components/SplitHeading'
+import VideoCard from '@/components/VideoCard'
+import MaskReveal from '@/components/MaskReveal'
 import CaseView from '@/components/pages/CaseView'
 import ExpertiseView from '@/components/pages/ExpertiseView'
 import ServiceView from '@/components/pages/ServiceView'
@@ -196,18 +200,65 @@ export default async function Page({
   }
 
   if (route.kind === 'work') {
+    const cases = visibleCases(t.work.cases)
+    // Pas plus de trois videos, comme le demande le cahier, et seulement celles
+    // qui ont ete fournies : une carte video sans video ne s'epingle pas.
+    const films = cases.filter((study) => study.video).slice(0, 3)
+
     return (
       <>
         <Head locale={lang} title={t.work.title} lead={t.work.intro} />
         <section className="section">
           <div className="container">
             <div className="grid grid--3">
-              {visibleCases(t.work.cases).map((study) => (
-                <CaseCard key={study.slug} locale={lang} study={study} />
+              {cases.map((study, i) => (
+                <MaskReveal key={study.slug} delay={i * 90}>
+                  <CaseCard locale={lang} study={study} />
+                </MaskReveal>
               ))}
             </div>
           </div>
         </section>
+
+        {films.map((study) => (
+          <VideoCard
+            key={study.slug}
+            locale={lang}
+            src={study.video}
+            poster={study.shot}
+            label={study.name}
+          />
+        ))}
+
+        {/* les temoignages, fournis par le client ou rien */}
+        <SectionBlock tone="peach">
+          <Reveal>
+            <div className="section__head">
+              <SplitHeading text={t.testimonials.title} />
+              <p className="lead">{t.testimonials.note}</p>
+            </div>
+          </Reveal>
+          <div className="grid grid--3">
+            {t.testimonials.items.map((item, i) => (
+              <Reveal key={i}>
+                <div className="card">
+                  {item.text ? (
+                    <>
+                      <p className="card__quote">« {item.text} »</p>
+                      <p className="muted small" style={{ marginBottom: 0 }}>
+                        {item.author}
+                        {item.company ? `, ${item.company}` : ''}
+                      </p>
+                    </>
+                  ) : (
+                    <Tbd locale={lang} what={lang === 'fr' ? 'témoignage' : 'testimonial'} />
+                  )}
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </SectionBlock>
+
         <FinalCta locale={lang} />
       </>
     )
