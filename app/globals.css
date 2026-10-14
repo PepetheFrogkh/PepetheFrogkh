@@ -4058,13 +4058,55 @@ body.has-view-cursor [data-cursor='voir'] {
   pointer-events: none;
 }
 
-/* le texte garde sa colonne, a gauche : la sequence occupe tout le cadre */
+/* Le texte garde sa colonne, a gauche, et la sequence occupe tout le cadre.
+   Un voile creme part de sous le texte et se dissipe vers la droite : sans
+   lui, une plaque blanche passe derriere « applications metier » et la ligne
+   devient illisible. Le voile est sous le texte et au-dessus du canvas, donc
+   il n'anime rien et ne masque rien : il garantit le contraste a chaque
+   image de la sequence, pas seulement a celles que l'on a regardees. */
 .seq__text {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--s3);
   max-width: min(34rem, 100%);
+}
+
+.seq__text::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  /* le voile deborde largement la colonne : une bordure nette se verrait */
+  inset: calc(var(--s6) * -1) calc(var(--s16) * -1) calc(var(--s6) * -1)
+    calc(var(--gutter) * -2);
+  background: radial-gradient(
+    120% 100% at 18% 50%,
+    var(--cream) 0 42%,
+    rgba(255, 248, 243, 0.92) 58%,
+    rgba(255, 248, 243, 0) 100%
+  );
+  pointer-events: none;
+}
+
+/* Sur un ecran etroit il n'y a pas de colonne de libre a cote du texte : le
+   texte monte en haut, le voile ne couvre que sa bande, et la sequence garde
+   le bas de l'ecran pour elle. Un voile radial y recouvrait presque toute la
+   vue, et il ne restait plus rien a regarder. */
+@media (max-width: 760px) {
+  .seq {
+    align-items: flex-start;
+    padding-top: calc(var(--header-h) + var(--banner-h) + var(--s5));
+  }
+
+  .seq__text::before {
+    inset: calc(var(--s5) * -1) calc(var(--gutter) * -1) calc(var(--s4) * -1);
+    background: linear-gradient(
+      to bottom,
+      var(--cream) 0 70%,
+      rgba(255, 248, 243, 0) 100%
+    );
+  }
 }
 
 .seq__title {

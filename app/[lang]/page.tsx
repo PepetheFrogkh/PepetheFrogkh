@@ -19,6 +19,8 @@ import HeroType from '@/components/HeroType'
 import MaskReveal from '@/components/MaskReveal'
 import Price from '@/components/Price'
 import Reveal from '@/components/Reveal'
+import ScrollSequence from '@/components/sequence/ScrollSequence'
+import { accent } from '@/components/accent'
 import SectionBlock from '@/components/SectionBlock'
 import SplitHeading from '@/components/SplitHeading'
 import Typewriter from '@/components/Typewriter'
@@ -86,6 +88,18 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           ))}
         </div>
       </SectionBlock>
+
+      {/* La sequence 3D, epinglee. Elle vient apres le premier ecran et non
+          derriere lui : le titre d'accueil est deja le visuel de la page, et
+          le poser sur les plaques de l'animation le rendait illisible. Ici
+          elle a sa propre section, son propre titre, et le voile creme garde
+          le contraste du texte a chaque image. */}
+      <ScrollSequence
+        level="h2"
+        eyebrow={t.home.sequence.eyebrow}
+        title={accent(t.home.sequence.title)}
+        lead={t.home.sequence.lead}
+      />
 
       {/* la transition tapee a la machine */}
       <Typewriter before={t.home.transition.before} items={t.home.transition.items} />

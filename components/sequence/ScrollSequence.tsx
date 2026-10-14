@@ -33,11 +33,20 @@ export default function ScrollSequence({
   eyebrow,
   title,
   lead,
+  /**
+   * Le niveau du titre. L'accueil a deja son h1, le titre typographique du
+   * premier ecran : la sequence y est une section, donc un h2. Le laboratoire
+   * n'a qu'elle, donc un h1. Deux h1 sur une page desorientent un lecteur
+   * d'ecran, qui s'en sert pour savoir de quoi parle la page.
+   */
+  level = 'h1',
 }: {
   eyebrow: string
   title: React.ReactNode
   lead: string
+  level?: 'h1' | 'h2'
 }) {
+  const Title = level
   const section = useRef<HTMLElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const [ready, setReady] = useState(false)
@@ -191,7 +200,7 @@ export default function ScrollSequence({
       <div className="container seq__inner">
         <div className="seq__text">
           <span className="eyebrow">{eyebrow}</span>
-          <h1 className="seq__title">{title}</h1>
+          <Title className="seq__title">{title}</Title>
           <p className="lead seq__lead">{lead}</p>
         </div>
       </div>

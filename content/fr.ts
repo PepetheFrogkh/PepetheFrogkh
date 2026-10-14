@@ -154,6 +154,11 @@ export const fr: Dict = {
       before: 'On construit',
       items: ['des sites web', 'des automatisations', 'des applications métier'],
     },
+    sequence: {
+      eyebrow: 'Comment ça s’assemble',
+      title: 'Vos outils, mis *ensemble*.',
+      lead: 'Chaque pièce existe déjà quelque part : la caisse, le stock, le site, le tableur. Notre travail est de les faire tourner dans le même sens.',
+    },
     expertises: {
       title: 'Les métiers que nous connaissons',
       lead: 'Les domaines où l’équipe est la plus forte, et les offres adaptées à chacun.',

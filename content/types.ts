@@ -250,6 +250,12 @@ export interface Dict {
      * qui s'ecrit puis s'efface.
      */
     transition: { before: string; items: string[] }
+    /**
+     * La section epinglee de la sequence 3D. Elle a son propre titre : sur
+     * l'accueil elle n'est pas le premier ecran, c'est une section parmi les
+     * autres, et elle doit dire ce qu'elle montre.
+     */
+    sequence: { eyebrow: string; title: string; lead: string }
     expertises: { title: string; lead: string }
     work: { title: string; lead: string }
     pricing: { title: string; lead: string; cta: Cta }

@@ -1,28 +1,10 @@
-import { Fragment, type CSSProperties, type ReactNode } from 'react'
+import { type CSSProperties, type ReactNode } from 'react'
 import HeroPanel from './HeroPanel'
+import { accent } from './accent'
 
-/**
- * Le mot entre asterisques passe en italique orange terre.
- *
- * La convention vaut pour une partie de ligne et pas seulement pour une ligne
- * entiere : « qui font *tourner* » met un seul mot en valeur, au milieu de sa
- * ligne.
- */
 /** Le nombre de caracteres de la ligne la plus longue, asterisques exclues. */
 function longest(lines: string[]): number {
   return lines.reduce((max, line) => Math.max(max, line.replace(/\*/g, '').length), 1)
-}
-
-function accent(line: string): ReactNode[] {
-  return line.split('*').map((part, i) =>
-    i % 2 === 1 ? (
-      <em className="typo__accent" key={i}>
-        {part}
-      </em>
-    ) : (
-      <Fragment key={i}>{part}</Fragment>
-    ),
-  )
 }
 
 /**
@@ -67,7 +49,7 @@ export default function HeroType({
                 {/* le mot entre par un masque, du bas vers le haut : c'est le
                     cadre qui s'ouvre, le texte lui-meme est deja la */}
                 <span className="typo__word" style={{ animationDelay: `${i * 90}ms` }}>
-                  {accent(line)}
+                  {accent(line, 'typo__accent')}
                 </span>
               </span>
             ))}

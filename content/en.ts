@@ -153,6 +153,11 @@ export const en: Dict = {
       before: 'We build',
       items: ['websites', 'automations', 'business apps'],
     },
+    sequence: {
+      eyebrow: 'How it comes together',
+      title: 'Your tools, pulled *together*.',
+      lead: 'Every piece already exists somewhere: the till, the stock, the website, the spreadsheet. Our job is to make them turn the same way.',
+    },
     expertises: {
       title: 'The trades we know',
       lead: 'The fields the team knows best, and the offers that fit each one.',
