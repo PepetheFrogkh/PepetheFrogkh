@@ -113,6 +113,7 @@ export const fr: Dict = {
     ],
     cta: 'Estimer mon projet',
     ctaShort: 'Estimer',
+    seeAll: 'Tout voir',
     currency: 'Devise',
     skip: 'Aller au contenu',
     menu: 'Ouvrir le menu',
@@ -553,27 +554,6 @@ export const fr: Dict = {
 
   footer: {
     columns: [
-      {
-        title: 'Services',
-        links: [
-          { label: 'Sites web', href: 'services' },
-          { label: 'Automatisations', href: 'services' },
-          { label: 'Projets sur mesure', href: 'services' },
-          { label: 'Applications métier', href: 'services' },
-          { label: 'Écoute client', href: 'services' },
-        ],
-      },
-      {
-        title: 'Expertises',
-        links: [
-          { label: 'Restauration', href: 'expertises' },
-          { label: 'Hôtellerie', href: 'expertises' },
-          { label: 'Production et manufacturing', href: 'expertises' },
-          { label: 'Gestion des équipes', href: 'expertises' },
-          { label: 'CRM', href: 'expertises' },
-          { label: 'Assurance et courtage', href: 'expertises' },
-        ],
-      },
       {
         title: 'Le studio',
         links: [

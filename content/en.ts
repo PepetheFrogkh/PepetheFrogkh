@@ -112,6 +112,7 @@ export const en: Dict = {
     ],
     cta: 'Estimate my project',
     ctaShort: 'Estimate',
+    seeAll: 'See all',
     currency: 'Currency',
     skip: 'Skip to content',
     menu: 'Open menu',
@@ -541,27 +542,6 @@ export const en: Dict = {
 
   footer: {
     columns: [
-      {
-        title: 'Services',
-        links: [
-          { label: 'Websites', href: 'services' },
-          { label: 'Automations', href: 'services' },
-          { label: 'Custom projects', href: 'services' },
-          { label: 'Business apps', href: 'services' },
-          { label: 'Guest feedback', href: 'services' },
-        ],
-      },
-      {
-        title: 'Expertise',
-        links: [
-          { label: 'Restaurants', href: 'expertises' },
-          { label: 'Hotels', href: 'expertises' },
-          { label: 'Manufacturing', href: 'expertises' },
-          { label: 'Team management', href: 'expertises' },
-          { label: 'CRM', href: 'expertises' },
-          { label: 'Insurance and brokerage', href: 'expertises' },
-        ],
-      },
       {
         title: 'The studio',
         links: [

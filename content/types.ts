@@ -184,6 +184,8 @@ export interface Dict {
     cta: string
     /** Le libelle court du bouton, sous 560 px. */
     ctaShort: string
+    /** Le lien au bas d'un menu deroulant, vers la liste complete. */
+    seeAll: string
     /** Le nom du groupe de boutons du selecteur de devise. */
     currency: string
     skip: string
