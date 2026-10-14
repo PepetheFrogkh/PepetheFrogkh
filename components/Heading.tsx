@@ -1,4 +1,3 @@
-import type { ElementType } from 'react'
 
 /**
  * Un titre, avec le mot entre asterisques en italique orange terre.
@@ -8,6 +7,13 @@ import type { ElementType } from 'react'
  * ici : le titre est donc rendu par le serveur, lisible sans JavaScript, et
  * deja net si le visiteur reduit les animations.
  */
+/**
+ * Les balises possibles, enumerees plutot que `ElementType` : React Three
+ * Fiber augmente `JSX.IntrinsicElements` avec les objets de la scene, dont les
+ * enfants sont de type `never`, et un `as: ElementType` ne compile plus.
+ */
+type Tag = 'h1' | 'h2' | 'h3' | 'p' | 'span'
+
 export default function Heading({
   text,
   as: Tag = 'h2',
@@ -16,7 +22,7 @@ export default function Heading({
   id,
 }: {
   text: string
-  as?: ElementType
+  as?: Tag
   animate?: boolean
   className?: string
   id?: string

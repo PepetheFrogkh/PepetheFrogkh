@@ -1887,3 +1887,94 @@ body.has-view-cursor [data-cursor='voir'] {
     transform: scaleX(1);
   }
 }
+
+/* ══ Le laboratoire ═══════════════════════════════════════════════════════
+   Les routes /lab servent a juger une piece seule avant de l'integrer.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.lab {
+  min-height: 300vh;
+  background: var(--cream);
+}
+
+/* la scene reste fixee : c'est le defilement qui la fait evoluer */
+.lab__scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.lab__scene canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.lab__labels {
+  position: absolute;
+  /* au-dessus de la plaque, jamais sur l'en-tete orange */
+  top: 15.5%;
+  left: 0;
+  right: 0;
+  transition: opacity 0.4s var(--ease);
+  pointer-events: none;
+}
+
+.lab__label {
+  position: absolute;
+  transform: translateX(-50%);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: clamp(14px, 1.3vw, 18px);
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.lab__text {
+  position: relative;
+  z-index: 1;
+  padding-top: var(--s9);
+  pointer-events: none;
+}
+
+.lab__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(34px, 5vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin: var(--s3) 0 var(--s4);
+  max-width: 17ch;
+}
+
+.lab__title em {
+  font-style: italic;
+  color: var(--terra);
+}
+
+.lab__spacer {
+  height: 200vh;
+}
+
+.lab__readout {
+  position: fixed;
+  z-index: 2;
+  left: var(--s2);
+  bottom: var(--s2);
+  display: flex;
+  gap: var(--s3);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  padding: 8px 16px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--slate);
+  backdrop-filter: blur(8px);
+}
+
+.lab__readout b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
