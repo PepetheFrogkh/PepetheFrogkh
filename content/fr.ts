@@ -491,7 +491,6 @@ export const fr: Dict = {
         simulateur: 'Simulateur',
         reservation: 'Réservation légère',
         referencement: 'Référencement avancé',
-        'animation-3d': 'Animation 3D',
       },
     },
     delays: {

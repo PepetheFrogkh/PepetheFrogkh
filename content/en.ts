@@ -479,7 +479,6 @@ export const en: Dict = {
         simulateur: 'Simulator',
         reservation: 'Light booking',
         referencement: 'Advanced SEO',
-        'animation-3d': '3D animation',
       },
     },
     delays: {

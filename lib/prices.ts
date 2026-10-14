@@ -1,15 +1,43 @@
 /**
  * Toute la grille de prix du site, et rien d'autre.
  *
- * Deux regles tiennent ce fichier.
+ * Un prix s'ecrit dans une seule devise, et l'autre se calcule : le site
+ * s'affiche en euros pour un visiteur europeen, en dollars pour les autres,
+ * et il n'y a pas deux grilles a tenir a jour. Le taux et la regle d'arrondi
+ * sont ecrits une fois, juste en dessous, et s'appliquent a tout.
  *
- * Une valeur par devise et par ligne. Aucune conversion n'est calculee : si le
- * prix en dollars d'une ligne n'a pas ete fixe, la valeur est `null` et le
- * site affiche l'emplacement [À FIXER] a la place. Un taux de change invente
- * serait un prix invente.
+ * Une ligne peut toujours forcer ses deux montants en ecrivant l'objet a la
+ * main, quand le prix affiche doit etre decide et non calcule.
  *
  * Tous les montants sont hors taxes.
  */
+
+/**
+ * Le taux applique, dollars par euro.
+ *
+ * Ce n'est pas un taux de marche : au change d'octobre 2026, un euro vaut
+ * environ 1,15 dollar. C'est un taux commercial, choisi pour que la grille en
+ * dollars reste proche de la grille en euros, parce que les deux marches ne
+ * sont pas les memes. Le changer ici change tous les prix en dollars du site,
+ * d'un coup et sans rien oublier.
+ */
+export const USD_PER_EUR = 1.02
+
+/**
+ * L'arrondi commercial.
+ *
+ * Un prix converti tombe sur 397,80 : ce n'est pas un prix, c'est un calcul.
+ * La regle ramene au plus proche multiple de dix moins un, donc toujours a un
+ * chiffre qui finit par 9, et 397,80 devient 399.
+ *
+ * Au-dela de 2 500 un prix ne finit plus par 9 sans paraitre racoleur : on
+ * arrondit a la centaine, et a partir de 50 000 au millier.
+ */
+function commercial(value: number): number {
+  if (value >= 50_000) return Math.round(value / 1_000) * 1_000
+  if (value >= 2_500) return Math.round(value / 100) * 100
+  return Math.round(value / 10) * 10 - 1
+}
 
 export const CURRENCIES = ['EUR', 'USD'] as const
 export type Currency = (typeof CURRENCIES)[number]
@@ -35,9 +63,17 @@ export type Price =
 /** Ce que le montant compte : par mois, par flux, par page. */
 export type Per = 'month' | 'flow' | 'page' | 'app' | 'condition'
 
-const eur = (value: number): Amount => ({ EUR: value, USD: null })
-const usd = (value: number): Amount => ({ EUR: null, USD: value })
-const both = (value: number, dollars: number): Amount => ({ EUR: value, USD: dollars })
+/** Un prix decide en euros ; les dollars se calculent. */
+const eur = (value: number): Amount => ({
+  EUR: value,
+  USD: commercial(value * USD_PER_EUR),
+})
+
+/** Un prix decide en dollars ; les euros se calculent. */
+const usd = (value: number): Amount => ({
+  EUR: commercial(value / USD_PER_EUR),
+  USD: value,
+})
 
 const fixed = (amount: Amount, per?: Per): Price => ({ kind: 'fixed', amount, per })
 
@@ -104,7 +140,6 @@ export type OptionId =
   | 'simulateur'
   | 'reservation'
   | 'referencement'
-  | 'animation-3d'
 
 export interface Option {
   id: OptionId
@@ -120,7 +155,6 @@ export const OPTIONS: Option[] = [
   { id: 'simulateur', price: fixed(eur(390)) },
   { id: 'reservation', price: fixed(eur(390)) },
   { id: 'referencement', price: fixed(eur(390)) },
-  { id: 'animation-3d', price: fixed(eur(490)) },
 ]
 
 export type DelayId = 'economie' | 'standard' | 'express'
@@ -167,7 +201,7 @@ export const TRANSFER: Price = fixed(eur(1990))
 
 export const AUTOMATION = {
   /** Le premier flux simple. */
-  flow: fixed(both(390, 400), 'flow'),
+  flow: fixed(eur(390), 'flow'),
   condition: fixed(eur(80), 'condition'),
   app: fixed(eur(120), 'app'),
   /**
