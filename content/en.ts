@@ -347,6 +347,7 @@ export const en: Dict = {
     problems: 'Typical problems',
     offer: 'What we offer',
     experience: 'Our experience',
+    experienceNote: 'What the founders built and ran before Kuiper Studio, elsewhere. These are not Kuiper Studio projects.',
     proof: 'Related work',
   },
 

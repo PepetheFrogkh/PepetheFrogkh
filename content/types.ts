@@ -250,6 +250,12 @@ export interface Dict {
     offer: string
     /** Toujours « Notre experience », jamais autre chose. */
     experience: string
+    /**
+     * La phrase qui dit de qui est cette experience. Elle est affichee, pas
+     * seulement commentee : le cahier interdit de la faire passer pour une
+     * realisation de Kuiper Studio.
+     */
+    experienceNote: string
     proof: string
   }
 

@@ -358,6 +358,7 @@ export const fr: Dict = {
     problems: 'Les problèmes typiques',
     offer: 'Ce que nous proposons',
     experience: 'Notre expérience',
+    experienceNote: 'Ce que les fondateurs ont construit et exploité avant Kuiper Studio, chez d’autres. Ce ne sont pas des réalisations de Kuiper Studio.',
     proof: 'Les réalisations liées',
   },
 
