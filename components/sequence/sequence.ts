@@ -1,17 +1,17 @@
 /**
  * La sequence d'images de l'en-tete.
  *
- * Le cahier : une animation 3D precalculee, dessinee image par image sur un
- * canvas selon la progression du defilement. Les vraies images seront
- * deposees dans `public/sequence/` ; en attendant, ce dossier contient une
- * sequence de test, et `PROVIDED` reste a faux pour que l'emplacement
- * [À FOURNIR] s'affiche par-dessus.
+ * Une animation 3D precalculee, dessinee image par image sur un canvas selon
+ * la progression du defilement. Les images vivent dans `public/sequence/` et
+ * la scene qui les produit dans `scripts/sequence/scene.html` : elle se
+ * modifie et se rend a nouveau, voir le README du dossier.
  *
- * Il suffira de remplacer les fichiers et de passer `PROVIDED` a vrai.
+ * Rien de la 3D ne part dans le navigateur du visiteur : il ne recoit que des
+ * WebP, donc ni Three.js, ni WebGL, ni repli a prevoir pour qui n'en a pas.
  */
 
-/** Vrai quand les vraies images ont remplace la sequence de test. */
-export const PROVIDED = false
+/** Vrai des lors que les images du dossier sont la vraie sequence. */
+export const PROVIDED = true
 
 export const DESKTOP = { frames: 144, folder: 'desktop', width: 1600, height: 900 }
 export const MOBILE = { frames: 60, folder: 'mobile', width: 800, height: 1200 }

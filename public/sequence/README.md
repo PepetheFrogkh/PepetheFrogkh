@@ -1,27 +1,49 @@
 # La sequence d'images de l'en-tete
 
-Ce dossier contient aujourd'hui une **sequence de test**, fabriquee par
-`scripts/make-test-sequence.py`. Chaque image porte son numero, ce qui permet
-de verifier que le defilement tombe bien sur la bonne.
+Ce dossier contient la sequence de l'accueil : 144 images en paysage pour le
+bureau, 60 en portrait pour le telephone, dessinees une par une sur un canvas
+selon la progression du defilement.
 
-## Deposer la vraie sequence
+## Ce qu'elle montre
 
-1. Exportez l'animation en WebP, numerotee a partir de 1, sur quatre chiffres :
-   `0001.webp`, `0002.webp`, et ainsi de suite.
-2. `desktop/` : 120 a 180 images, environ 1 600 px de large.
-   `mobile/` : 60 images, en portrait.
-3. Si le nombre d'images change, mettez `DESKTOP.frames` et `MOBILE.frames` a
-   jour dans `components/sequence/sequence.ts`.
-4. Passez `PROVIDED` a `true` dans ce meme fichier : l'emplacement
-   [À FOURNIR] pose par-dessus le canvas disparait.
+Des plaques dispersees, les outils, qui s'assemblent en anneau autour d'une
+planete, puis tournent autour d'elle. C'est le titre de la page, « on construit
+les outils qui font tourner votre entreprise », pris au mot.
 
-## A savoir
+Fond creme `#FFF8F3`, plaques en blanc et peche, accents orange `#FF6B00` et
+ardoise `#8A97AB` : la charte, et rien d'autre.
 
-Le fond doit etre le creme de la charte, `#FFF8F3`, et les tons orange ceux de
-la charte : `#FF6B00` et `#FFE3CF`. La sequence est dessinee en « couvrir »,
-donc elle est recadree sur les bords selon le format de l'ecran : gardez le
-sujet au centre.
+## La refabriquer
 
-Chaque image est chargee telle quelle par le navigateur. A 1 600 px, visez
-moins de 60 ko par image, sinon la sequence complete pese plusieurs dizaines
-de megaoctets.
+La scene est du code, pas un fichier binaire : elle se modifie et se rend a
+nouveau. Elle vit dans `scripts/sequence/scene.html`, en Three.js.
+
+```sh
+# 1. une copie de Three.js a cote de la scene, et un serveur local :
+#    un module ES ne se charge pas depuis file://
+cp node_modules/three/build/three.module.js scripts/sequence/
+cp node_modules/three/build/three.core.js scripts/sequence/
+(cd scripts/sequence && python3 -m http.server 8099 --bind 127.0.0.1 &)
+
+# 2. le rendu, en PNG
+node scripts/render-sequence.mjs /tmp/seq
+
+# 3. l'encodage en WebP, qui remplit ce dossier
+python3 scripts/encode-sequence.py /tmp/seq/frames
+```
+
+Le rendu prend une quarantaine de secondes pour les 204 images, en WebGL
+logiciel. Rien de tout cela ne part dans le navigateur du visiteur : il ne
+recoit que les WebP.
+
+## Si le nombre d'images change
+
+Mettre `DESKTOP.frames` et `MOBILE.frames` a jour dans
+`components/sequence/sequence.ts`, et le nombre d'images de
+`scripts/render-sequence.mjs` avec.
+
+## Le poids
+
+Environ 2,7 Mo pour le bureau et 0,9 Mo pour le telephone. Les dix premieres
+images se chargent avant de rendre la main, le reste arrive derriere : la page
+reste lisible pendant le chargement.
