@@ -146,6 +146,13 @@ export default async function LangLayout({
     >
       <head>
         <CurrencyScript />
+        {/* le flux du blog, pour les lecteurs qui le cherchent */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={`${dict(lang).meta.siteName} · ${dict(lang).map.blog}`}
+          href={`/${lang}/rss.xml`}
+        />
       </head>
       <body>
         <Preloader />

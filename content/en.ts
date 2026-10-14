@@ -601,6 +601,7 @@ export const en: Dict = {
   blog: {
     title: 'Blog',
     lead: 'What we learn building tools for other people’s work.',
+    all: 'All',
     readingTime: 'min read',
     share: 'Share',
     empty: 'No articles yet.',

@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -128,18 +129,16 @@ export default function Header({ locale }: { locale: Locale }) {
       <header className="header" data-scrolled={scrolled}>
         <div className="container header__inner">
           <Link className="header__logo" href={path(locale, 'home')}>
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-              <circle cx="9" cy="9" r="3" fill="#FF6B00" />
-              <ellipse
-                cx="9"
-                cy="9"
-                rx="8"
-                ry="3.2"
-                className="icon"
-                stroke="#C2410C"
-                transform="rotate(-18 9 9)"
-              />
-            </svg>
+            {/* Le logo fourni. On passe le fichier en double densite et on
+                laisse Next servir la bonne taille ; `priority` parce qu'il est
+                dans le premier ecran, sans quoi il arrive apres le texte. */}
+            <Image
+              src="/logo@2x.png"
+              alt=""
+              width={35}
+              height={28}
+              priority
+            />
             Kuiper Studio
           </Link>
 

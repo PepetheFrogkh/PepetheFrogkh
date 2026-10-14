@@ -613,6 +613,7 @@ export const fr: Dict = {
   blog: {
     title: 'Blog',
     lead: 'Ce que nous apprenons en construisant des outils métier.',
+    all: 'Tous',
     readingTime: 'min de lecture',
     share: 'Partager',
     empty: 'Aucun article pour le moment.',

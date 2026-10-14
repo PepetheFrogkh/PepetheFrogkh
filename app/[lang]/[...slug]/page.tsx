@@ -21,6 +21,9 @@ import {
 } from '@/lib/i18n'
 import { alternates } from '@/lib/routes'
 import { visibleCases } from '@/lib/flags'
+import { article, articles, topics } from '@/lib/blog'
+import ArticleView from '@/components/pages/ArticleView'
+import BlogList from '@/components/pages/BlogList'
 import {
   AUTOMATION,
   BUSINESS_APPS,
@@ -67,7 +70,9 @@ type Route =
   | { kind: 'expertise'; key: ExpertiseKey }
   | { kind: 'work' }
   | { kind: 'case'; slug: string }
-  | { kind: 'page'; page: 'pricing' | 'blog' | 'about' | 'contact' }
+  | { kind: 'blog' }
+  | { kind: 'article'; slug: string }
+  | { kind: 'page'; page: 'pricing' | 'about' | 'contact' }
   | { kind: 'text'; page: 'legal' | 'privacy' }
 
 function match(locale: Locale, slug: string[]): Route | null {
@@ -95,9 +100,13 @@ function match(locale: Locale, slug: string[]): Route | null {
     return study ? { kind: 'case', slug: next } : null
   }
 
+  if (is('blog')) {
+    if (!next) return { kind: 'blog' }
+    return { kind: 'article', slug: next }
+  }
+
   if (next) return null
   if (is('pricing')) return { kind: 'page', page: 'pricing' }
-  if (is('blog')) return { kind: 'page', page: 'blog' }
   if (is('about')) return { kind: 'page', page: 'about' }
   if (is('contact')) return { kind: 'page', page: 'contact' }
   if (is('legal')) return { kind: 'text', page: 'legal' }
@@ -166,6 +175,14 @@ export async function generateMetadata({
     const study = visibleCases(t.work.cases).find((c) => c.slug === route.slug)!
     title = `${study.name} · ${t.meta.siteName}`
     description = study.summary
+  } else if (route.kind === 'blog') {
+    title = t.meta.blog.title
+    description = t.meta.blog.description
+  } else if (route.kind === 'article') {
+    const found = await article(lang, route.slug)
+    if (!found) return {}
+    title = `${found.title} · ${t.meta.siteName}`
+    description = found.summary
   } else if (route.kind === 'page' || route.kind === 'text') {
     title = t.meta[route.page].title
     description = t.meta[route.page].description
@@ -294,6 +311,34 @@ export default async function Page({
                 ))}
               </div>
             </Reveal>
+          </div>
+        </section>
+        <FinalCta locale={lang} />
+      </>
+    )
+  }
+
+  if (route.kind === 'article') {
+    const found = await article(lang, route.slug)
+    if (!found) notFound()
+    return <ArticleView locale={lang} article={found} />
+  }
+
+  if (route.kind === 'blog') {
+    const [list, tags] = await Promise.all([articles(lang), topics(lang)])
+    return (
+      <>
+        <Head locale={lang} title={t.blog.title} lead={t.blog.lead} />
+        <section className="section">
+          <div className="container">
+            <BlogList
+              locale={lang}
+              articles={list}
+              topics={tags}
+              all={t.blog.all}
+              readingTime={t.blog.readingTime}
+              empty={t.blog.empty}
+            />
           </div>
         </section>
         <FinalCta locale={lang} />

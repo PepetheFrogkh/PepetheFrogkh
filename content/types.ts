@@ -363,6 +363,8 @@ export interface Dict {
   blog: {
     title: string
     lead: string
+    /** Le filtre qui n'en est pas un : tous les themes. */
+    all: string
     /** Le temps de lecture : « 4 min de lecture ». */
     readingTime: string
     share: string

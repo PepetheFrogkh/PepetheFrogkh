@@ -11,9 +11,10 @@ import {
   servicePath,
 } from '@/lib/i18n'
 import { visibleCases } from '@/lib/flags'
+import { articles } from '@/lib/blog'
 
 /** Le sitemap.xml, les deux langues comprises. */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
   const urls: MetadataRoute.Sitemap = []
 
@@ -38,6 +39,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     for (const study of visibleCases(t.work.cases)) {
       urls.push({ url: SITE_URL + path(locale, 'work', study.slug), lastModified: now })
+    }
+
+    // les articles publies ; les brouillons n'y sont pas, par construction
+    for (const article of await articles(locale)) {
+      urls.push({
+        url: SITE_URL + path(locale, 'blog', article.slug),
+        lastModified: article.date ? new Date(article.date) : now,
+      })
     }
   }
 
