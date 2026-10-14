@@ -1,13 +1,11 @@
 import type { Dict } from './types'
 
 /**
- * The English text of the site, in one place.
+ * Le site en anglais.
  *
- * Same rules as the French file: direct and simple, no em dashes, prices
- * always excluding VAT, and no figure, logo or testimonial that is not in the
- * brief. Anything missing is a visible [TO PROVIDE] slot, never an invention.
- *
- * In a heading, the word between asterisks is set in italic terracotta.
+ * Meme forme qu'en francais, mot pour mot : un bloc ne peut pas manquer d'un
+ * cote et exister de l'autre. Aucun chiffre, logo, temoignage ni nom de client
+ * invente.
  */
 export const en: Dict = {
   langName: 'English',
@@ -15,9 +13,9 @@ export const en: Dict = {
   meta: {
     siteName: 'Kuiper Studio',
     home: {
-      title: 'Kuiper Studio · Improve your guests’ experience. Measure it.',
+      title: 'Kuiper Studio · We build the tools that keep your company running',
       description:
-        'Kuiper Studio helps independent hotels, restaurants and retailers understand what their customers think, fix what goes wrong and improve their margins, with the right digital tools.',
+        'Websites, automations, business apps: delivered fast, at listed prices, by a team that knows your trade.',
     },
     services: {
       title: 'Services · Kuiper Studio',
@@ -35,38 +33,26 @@ export const en: Dict = {
       title: 'Blog · Kuiper Studio',
       description: 'What we learn building tools for other people’s work.',
     },
-    contact: {
-      title: 'Contact · Kuiper Studio',
-      description: 'Let’s talk about your project.',
-    },
     work: {
       title: 'Work · Kuiper Studio',
-      description: 'What we have built for hotels, restaurants and independent owners.',
+      description: 'What we have built, and for whom.',
     },
     about: {
       title: 'About · Kuiper Studio',
       description: 'Two founders, one point of contact. Kuiper Studio is based in Phnom Penh.',
     },
-    legal: { title: 'Legal notice · Kuiper Studio', description: 'Legal notice for Kuiper Studio.' },
-    privacy: { title: 'Privacy · Kuiper Studio', description: 'How Kuiper Studio handles your data.' },
-  },
-
-  nav: {
-    items: [
-      { label: 'Services', href: 'services' },
-      { label: 'Expertise', href: 'expertises' },
-      { label: 'Work', href: 'work' },
-      { label: 'Pricing', href: 'pricing' },
-      { label: 'Blog', href: 'blog' },
-      { label: 'About', href: 'about' },
-      { label: 'Contact', href: 'contact' },
-    ],
-    cta: 'Estimate my project',
-    ctaShort: 'Estimate',
-    currency: 'Currency',
-    skip: 'Skip to content',
-    menu: 'Open the menu',
-    close: 'Close the menu',
+    contact: {
+      title: 'Contact · Kuiper Studio',
+      description: 'Let’s talk about your project.',
+    },
+    legal: {
+      title: 'Legal notice · Kuiper Studio',
+      description: 'Legal notice for Kuiper Studio.',
+    },
+    privacy: {
+      title: 'Privacy · Kuiper Studio',
+      description: 'How Kuiper Studio handles your data.',
+    },
   },
 
   map: {
@@ -96,93 +82,412 @@ export const en: Dict = {
     contact: 'Contact',
   },
 
+  menu: {
+    services: {
+      sites: 'Packs at listed prices, from a single page to a full site.',
+      automations: 'Your tools talk to each other, and repetitive tasks disappear.',
+      custom: 'You have an idea, we build it, billed monthly.',
+      apps: 'Point of sale, inventory, MRP, CRM: your tools, no vendor lock-in.',
+      feedback: 'Every review of your venue in one place.',
+    },
+    expertises: {
+      restaurants: 'Reviews, an NFC badge at payment, inventory.',
+      hotels: 'Team hours, guest feedback, integration with your PMS.',
+      manufacturing: 'Inventory, MRP, bills of materials, production tracking.',
+      teams: 'Clock in and out, time tracking, invoicing.',
+      crm: 'A custom CRM, or we adapt the one you have.',
+      insurance: 'The tools brokers use every day.',
+    },
+  },
+
+  nav: {
+    items: [
+      { label: 'Services', href: 'services' },
+      { label: 'Expertise', href: 'expertises' },
+      { label: 'Work', href: 'work' },
+      { label: 'Pricing', href: 'pricing' },
+      { label: 'Blog', href: 'blog' },
+      { label: 'About', href: 'about' },
+      { label: 'Contact', href: 'contact' },
+    ],
+    cta: 'Estimate my project',
+    ctaShort: 'Estimate',
+    currency: 'Currency',
+    skip: 'Skip to content',
+    menu: 'Open menu',
+    close: 'Close menu',
+  },
+
   hero: {
-    eyebrow: 'Hospitality, restaurants and retail',
-    title: 'Improve your guests’ experience. *Measure it.*',
-    titleLines: [
-      'Improve your',
-      'customers\u2019',
-      'experience.',
-      '*Measure it.*',
+    eyebrow: 'A web agency, for any company',
+    title: 'We build the tools that keep your company *running*.',
+    titleLines: ['We build the tools', 'that keep your', 'company *running*.'],
+    sub: 'Websites, automations, business apps: delivered fast, at listed prices, by a team that knows your trade.',
+    primary: { label: 'Estimate my project', href: 'pricing' },
+    secondary: { label: 'See our expertise', href: 'expertises' },
+    note: 'Listed prices, excluding tax. A two-minute estimate.',
+  },
+
+  home: {
+    services: {
+      title: 'What we do',
+      lead: 'Five services, each with a listed price.',
+    },
+    expertises: {
+      title: 'The trades we know',
+      lead: 'The fields the team knows best, and the offers that fit each one.',
+    },
+    work: {
+      title: 'Our work',
+      lead: 'What we have built, and where from.',
+    },
+    pricing: {
+      title: 'Prices are listed',
+      lead: 'No quote needed to find out what a website costs. For an automation, the simulator gives you an estimate in two minutes.',
+      cta: { label: 'Open the simulator', href: 'pricing' },
+    },
+    blog: {
+      title: 'What we learn',
+      lead: 'Notes from the workshop, not press releases.',
+    },
+    testimonials: {
+      title: 'What they say',
+      lead: 'Published only with the client’s written consent.',
+    },
+  },
+
+  services: {
+    sites: {
+      title: 'Websites',
+      lead: 'Packs at listed prices, from a single page to a full site, with options and lead times in plain sight.',
+      problem: null,
+      delivers: [
+        'An Essentiel pack, one to three pages, simple animations and a free contact form.',
+        'A Pro pack up to six pages, advanced animations, two options included.',
+        'A Complet pack up to ten pages, parallax, one extra language, three options included.',
+        'Custom work for a web app, a client area or integrations.',
+      ],
+      delays:
+        'Economy, delivered within the month, at the base price. Standard, seven days. Express, 72 hours, for the Essentiel pack only.',
+      proof: 'anakut',
+      faq: [
+        {
+          question: 'Who provides the content?',
+          answer: 'You do. Copy, photos and logos come from you; we lay them out.',
+        },
+        {
+          question: 'How does payment work?',
+          answer: '50% on order, 50% on delivery.',
+        },
+        {
+          question: 'What if I want to move elsewhere?',
+          answer:
+            'Moving the site to another host is possible, at a price listed in the grid.',
+        },
+      ],
+    },
+    automations: {
+      title: 'Automations',
+      lead: 'Your tools talk to each other, and repetitive tasks disappear. A simple flow has a listed price; the simulator prices the rest.',
+      problem: null,
+      delivers: [
+        'A flow starts from a trigger, a form, an email or a schedule, and ends in an action: invoicing, follow-up, inventory, a report.',
+        'Every added condition and every connected app has its own price.',
+        'A tool without an open API needs access from its vendor, and that costs.',
+        'Monthly supervision, based on how many flows you run.',
+      ],
+      delays: null,
+      proof: null,
+      faq: [
+        {
+          question: 'Where do the flows run?',
+          answer:
+            'On Kuiper Studio’s own n8n infrastructure. They cannot be moved to yours.',
+        },
+        {
+          question: 'Why does a tool without an open API cost more?',
+          answer:
+            'Without an open API, access has to be obtained from the vendor: that often takes several weeks of paperwork.',
+        },
+      ],
+    },
+    custom: {
+      title: 'Custom projects',
+      lead: 'You have an idea, we build it.',
+      problem: null,
+      delivers: [
+        'One developer and one project manager, billed monthly.',
+        'You keep control of the priorities, month after month.',
+      ],
+      delays: null,
+      proof: null,
+      faq: null,
+    },
+    apps: {
+      title: 'Business apps',
+      lead: 'Point of sale, inventory, MRP, CRM: for companies that want full control without depending on a vendor.',
+      problem: null,
+      delivers: [
+        'A base app, point of sale, inventory, MRP or CRM, as a one-off payment.',
+        'A full ERP, only above a certain scope, and on quote.',
+      ],
+      delays: null,
+      proof: null,
+      faq: null,
+    },
+    feedback: {
+      title: 'Guest feedback',
+      lead: 'One page that gathers every review of your venue and brings out what works and what blocks.',
+      problem: null,
+      delivers: [
+        'Google reviews, with your authorisation.',
+        'Your venue’s own questionnaires.',
+        'TripAdvisor, in part.',
+      ],
+      delays: null,
+      proof: null,
+      faq: [
+        {
+          question: 'Is Booking included?',
+          answer: 'No. Booking is not included.',
+        },
+      ],
+    },
+  },
+
+  serviceLabels: {
+    problem: 'The problem',
+    delivers: 'What we deliver',
+    delays: 'Lead times',
+    price: 'The price',
+    proof: 'A project',
+    faq: 'Frequently asked',
+  },
+
+  expertises: {
+    restaurants: {
+      title: 'Restaurants',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: [
+        'Your reviews in one place, and support to improve service.',
+        'An NFC badge at payment that opens the review page. Offered to every guest, never only to the happy ones.',
+        'Inventory.',
+      ],
+      experience: [
+        'Point of sale, fixed and mobile.',
+        'Self-order kiosks.',
+        'QR code menus.',
+      ],
+      proof: null,
+    },
+    hotels: {
+      title: 'Hotels',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: [
+        'Tracking team hours.',
+        'Guest feedback.',
+        'An NFC badge.',
+        'Integration with existing PMS.',
+      ],
+      experience: ['PMS and legacy systems on the market.'],
+      proof: null,
+    },
+    manufacturing: {
+      title: 'Manufacturing',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: ['Inventory.', 'MRP.', 'Bills of materials.', 'Production tracking.'],
+      experience: null,
+      proof: null,
+    },
+    teams: {
+      title: 'Team management',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: ['Clock in and clock out.', 'Time tracking.', 'Invoicing.'],
+      experience: null,
+      proof: ['ocs'],
+    },
+    crm: {
+      title: 'CRM',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: [
+        'A custom CRM.',
+        'Or adapting HubSpot, Microsoft Dynamics and Salesforce.',
+      ],
+      experience: null,
+      proof: null,
+    },
+    insurance: {
+      title: 'Insurance and brokerage',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: null,
+      experience: null,
+      proof: ['wave'],
+    },
+  },
+
+  expertiseLabels: {
+    understand: 'What we understand about the trade',
+    problems: 'Typical problems',
+    offer: 'What we offer',
+    experience: 'Our experience',
+    proof: 'Related work',
+  },
+
+  work: {
+    title: 'Work',
+    intro: 'What we have built, and for whom.',
+    more: 'Read more',
+    resultLabel: 'Result',
+    otherProjects: 'Other projects',
+    sectorLabel: 'Sector',
+    studio: 'Our studio',
+    cases: [
+      {
+        slug: 'anakut',
+        name: 'Anakut',
+        sector: 'Coaching',
+        country: 'Switzerland',
+        city: 'Neuchâtel',
+        coords: { lat: 46.99, lon: 6.93 },
+        summary: 'A custom coaching management app, and a WordPress site.',
+        site: 'anakut.ch',
+        result: null,
+        shot: null,
+        video: null,
+        context: null,
+        need: null,
+        built: ['A coaching management app', 'A WordPress site'],
+        results: null,
+        quote: null,
+      },
+      {
+        slug: 'mp-massage',
+        name: 'MP Massage',
+        sector: 'Wellbeing',
+        country: 'Switzerland',
+        city: 'Neuchâtel',
+        coords: { lat: 46.99, lon: 6.93 },
+        summary: 'A massage management app, and a site.',
+        site: 'mpmassage.ch',
+        result: null,
+        shot: null,
+        video: null,
+        context: null,
+        need: null,
+        built: ['A massage management app', 'A site'],
+        results: null,
+        quote: null,
+      },
+      {
+        slug: 'ocs',
+        name: 'OCS',
+        sector: 'Team management',
+        country: 'Cambodia',
+        city: null,
+        coords: null,
+        summary: 'Tracking cleaning teams at an airport, with clock-in and invoicing.',
+        site: null,
+        result: null,
+        shot: null,
+        video: null,
+        context: null,
+        need: null,
+        built: ['Team clock-in', 'Invoicing'],
+        results: null,
+        quote: null,
+      },
+      {
+        slug: 'wave',
+        name: 'Wave',
+        sector: 'Insurance and brokerage',
+        country: 'Switzerland',
+        city: null,
+        coords: null,
+        summary: 'A mobile loyalty app, and the tool that runs it.',
+        site: null,
+        result: null,
+        shot: null,
+        video: null,
+        context: null,
+        need: null,
+        built: ['A mobile loyalty app', 'Its management tool'],
+        results: null,
+        quote: null,
+      },
     ],
-    sub: 'Kuiper Studio helps independent hotels, restaurants and retailers understand what their customers think, fix what goes wrong and improve their margins, with the right digital tools.',
-    primary: { label: 'Free review diagnostic', href: 'diagnostic' },
-    secondary: { label: 'Book a call', href: 'booking' },
-    note: '30 minutes with Arnaud, free, no commitment',
   },
 
-  proof: {
-    logosTitle: 'They chose us',
-    figures: [
-      { prefix: 'from ', value: '499', unit: ' € excl. VAT', caption: 'Listed prices' },
-      { value: '72', unit: ' hours', caption: 'For our fastest delivery' },
-      { value: '2', unit: ' founders', caption: 'One point of contact' },
+  caseLabels: {
+    context: 'The context',
+    need: 'The need',
+    built: 'What we built',
+    results: 'Results',
+    quote: 'In their words',
+  },
+
+  testimonials: {
+    title: 'What they say',
+    note: 'Published only with the client’s written consent.',
+    items: [
+      { company: null, author: null, role: null, text: null, photo: null },
+      { company: null, author: null, role: null, text: null, photo: null },
+      { company: null, author: null, role: null, text: null, photo: null },
     ],
   },
 
-  showcase: {
-    title: 'Our work',
-    note: 'Project screenshots',
+  pricing: {
+    title: 'Pricing',
+    lead: 'Prices are listed, excluding tax, in your currency.',
+    disclaimer: 'An indicative estimate, confirmed in writing after a conversation.',
   },
 
-  situations: {
-    title: 'What’s your situation?',
-    more: 'Learn more',
-    cards: [
-      {
-        slug: 'guest-feedback',
-        index: '01',
-        photo: null,
-        title: 'Finally know what your customers think of you.',
-        quote: 'I don\u2019t know what\u2019s going wrong.',
-        tags: ['Reviews', 'Surveys', 'Alerts'],
-        published: true,
-        link: null,
-      },
-      {
-        slug: 'opening',
-        index: '02',
-        photo: null,
-        title: 'Open with everything you need, from day one.',
-        quote: 'I need everything, fast.',
-        tags: ['Website', 'Booking', 'Automations'],
-        published: true,
-        link: null,
-      },
-      {
-        slug: 'profitability',
-        index: '03',
-        photo: null,
-        title: 'Customers, yes. Margin too.',
-        quote: 'I have customers, but no margin.',
-        tags: ['Inventory', 'Waste', 'Margins'],
-        published: true,
-        link: null,
-      },
-      {
-        slug: 'groups',
-        index: '04',
-        photo: null,
-        title: 'Keep your customers loyal across every venue.',
-        quote: 'I want loyalty at scale.',
-        tags: ['Loyalty', 'Dashboards', 'Integrations'],
-        published: true,
-        link: null,
-      },
-      {
-        slug: 'visibility',
-        index: '05',
-        photo: null,
-        title: 'A good-looking site, right away.',
-        quote: 'I just want to be visible.',
-        tags: ['Website', 'Listed price', 'Fast delivery'],
-        published: true,
-        link: 'home#offres',
-      },
-    ],
+  blog: {
+    title: 'Blog',
+    lead: 'What we learn building tools for other people’s work.',
+    readingTime: 'min read',
+    share: 'Share',
+    empty: 'No articles yet.',
   },
 
-  manifesto: 'Guest experience isn’t guesswork. It can be measured, and it improves with the right tools.',
+  contact: {
+    title: 'Let’s talk about your project',
+    body: 'Tell us what you want to build. We answer within two working days.',
+    form: {
+      company: 'Your company',
+      city: 'City',
+      need: 'What you need',
+      needs: [
+        'A website',
+        'An automation',
+        'A custom project',
+        'A business app',
+        'Guest feedback',
+        'Not sure yet',
+      ],
+      name: 'Your name',
+      email: 'Your email',
+      message: 'Your message',
+      consent: 'I agree to be contacted about my enquiry.',
+      submit: 'Send',
+      sending: 'Sending…',
+      success: 'Message received. We will get back to you within two working days.',
+      error: 'Sending failed. Try again, or write to us directly.',
+      required: 'This field is required.',
+      invalidEmail: 'That email address does not look valid.',
+    },
+  },
 
   founders: {
     title: 'The founders',
@@ -190,329 +495,116 @@ export const en: Dict = {
       {
         name: 'Arnaud Sebire',
         role: 'Co-founder, product and client relations',
-        bio: 'Around ten years on operational products: functional design, business processes, development teams.',
-        photo: '/equipe/arnaud-sebire.webp',
+        bio: null,
+        photo: null,
       },
       {
         name: 'Louis Vezia',
-        role: 'Co-founder, technical direction',
-        bio: 'Around ten years on architecture, data, performance and security, including several complex CRM projects.',
-        photo: '/equipe/louis-vezia.webp',
+        role: 'Co-founder, technical lead',
+        bio: null,
+        photo: null,
       },
     ],
-  },
-
-  offers: {
-    title: 'Our offers',
-    note: 'The configurator gives an estimate in two minutes. Prices exclude VAT.',
-    items: [
-      {
-        title: 'Websites',
-        body: 'An animated, carefully built site, delivered in 72 hours, a week or a month, hosted and maintained by us.',
-        price: 'From €499 excl. VAT',
-      },
-      {
-        title: 'Automations',
-        body: 'Your tools connected to each other: less typing, fewer things forgotten, monitored by us.',
-        price: 'From €390 excl. VAT per flow',
-      },
-      {
-        title: 'Custom',
-        body: 'Apps, client portals and integrations, when nothing off the shelf fits.',
-        price: 'On quote',
-      },
-    ],
-  },
-
-  work: {
-    title: 'What we’ve built',
-    intro: 'Three delivered projects. Every result published here is verified, or flagged as missing.',
-    filters: ['Loyalty', 'Coaching', 'Wellness'],
-    all: 'All',
-    resultLabel: 'Result',
-    otherProjects: 'Other projects',
-    sectorLabel: 'Sector',
-    cases: [
-      {
-        slug: 'wave',
-        name: 'Wave',
-        sector: 'Loyalty',
-        country: 'Switzerland',
-        site: 'wavenetwork.ch',
-        summary:
-          'The Wave Pass mobile app, a member benefits programme used at partner venues, and the management tool that runs it.',
-        result: null,
-        shot: null,
-        context: null,
-        need: null,
-        built: null,
-        results: null,
-        quote: null,
-      },
-      {
-        slug: 'anakut',
-        name: 'Anakut',
-        sector: 'Coaching',
-        country: 'Neuchâtel, Switzerland',
-        site: 'anakut.ch',
-        summary: 'A custom app to run a coaching business, and the WordPress site of a boxing coach.',
-        result: null,
-        shot: null,
-        context: null,
-        need: null,
-        built: null,
-        results: null,
-        quote: null,
-      },
-      {
-        slug: 'mp-massage',
-        name: 'MP Massage',
-        sector: 'Wellness',
-        country: 'Neuchâtel, Switzerland',
-        site: 'mpmassage.ch',
-        summary: 'An app to run a massage business, and the site of a Thai massage practitioner.',
-        result: null,
-        shot: null,
-        context: null,
-        need: null,
-        built: null,
-        results: null,
-        quote: null,
-      },
-    ],
-  },
-
-  convictions: {
-    title: 'What we believe',
-    items: [
-      {
-        title: 'A price is shown, not hidden.',
-        body: 'You know the price before you talk to us; the quote only confirms it, in writing.',
-      },
-      {
-        title: 'Fast does not mean sloppy.',
-        body: 'A short method and proven foundations let us deliver in days rather than months.',
-      },
-      {
-        title: 'Going live is not the end.',
-        body: 'A site lives, gets updated and monitored; we stay around, every month.',
-      },
-    ],
-  },
-
-  method: {
-    title: 'Six steps, no surprises',
-    intro: 'The clock starts when we receive your content.',
-    steps: [
-      { title: 'Understand', body: null, demo: null },
-      { title: 'Scope', body: null, demo: null },
-      { title: 'Design', body: null, demo: null },
-      { title: 'Build', body: null, demo: null },
-      { title: 'Launch', body: null, demo: null },
-      { title: 'Grow', body: null, demo: null },
-    ],
-  },
-
-  testimonials: {
-    title: 'What they say',
-    note: 'One video and two written reviews, published with the client’s written consent.',
-  },
-
-  diagnostic: {
-    title: 'What your guests really think',
-    body: 'Tell us your venue: within two business days, you receive a summary of your public reviews, what guests love and what keeps coming up. Free, no commitment.',
-    preview: {
-      title: 'Your summary will contain',
-      lines: [
-        'A summary of your public reviews',
-        'What your guests love',
-        'What keeps coming up as negative',
-      ],
-    },
-    form: {
-      venue: 'Venue name',
-      city: 'City',
-      type: 'Type',
-      types: ['Hotel', 'Restaurant', 'Retail', 'Other'],
-      maps: 'Google Maps link',
-      mapsHint: 'Optional',
-      name: 'Your name',
-      email: 'Your email',
-      consent:
-        'I agree that Kuiper Studio may contact me about this diagnostic and keep this information.',
-      submit: 'Get my diagnostic',
-      sending: 'Sending',
-      success:
-        'That’s recorded. You will receive your review summary within two business days, and a confirmation email right away.',
-      error: 'The form could not be sent. Write to arnaud@kuiperstudio.com and we will take it from there.',
-      required: 'This field is required.',
-      invalidEmail: 'This email address does not look valid.',
-    },
   },
 
   faq: {
-    title: 'Frequently asked questions',
+    title: 'Frequently asked',
     items: [
       {
-        question: 'Is the diagnostic really free?',
-        answer: 'Yes. You receive a summary of your public reviews, with no commitment and no pushy follow-up.',
-      },
-      {
-        question: 'Do you work with a single restaurant?',
-        answer: 'Yes. Our offers are built for the single venue as much as for groups.',
-      },
-      {
-        question: 'How much does a website cost?',
-        answer: 'From €499 excl. VAT; the configurator gives an estimate in two minutes.',
-      },
-      {
-        question: 'How long does it take?',
-        answer: 'From 72 hours to a month depending on the project; the clock starts when we receive your content.',
-      },
-      {
-        question: 'Why a subscription?',
+        question: 'Do you work with any company?',
         answer:
-          'Because a website and automations need hosting, monitoring and changes, every month.',
+          'Yes. Kuiper Studio is a generalist web agency. The Expertise pages show the fields the team knows best.',
+      },
+      {
+        question: 'Are listed prices excluding tax?',
+        answer: 'Yes, every price on this site is excluding tax.',
+      },
+      {
+        question: 'Euros or dollars?',
+        answer:
+          'Euros for visitors in Europe, dollars elsewhere. The switch in the header changes it at any time.',
+      },
+      {
+        question: 'How long does a website take?',
+        answer:
+          'Within the month on Economy, seven days on Standard, 72 hours on Express for the Essentiel pack.',
       },
     ],
   },
 
   finalCta: {
-    title: 'Let’s talk about your guests.',
-    sub: 'Thirty minutes, free, no commitment.',
-    primary: { label: 'Free diagnostic', href: 'diagnostic' },
-    secondary: { label: 'Book a call', href: 'booking' },
+    title: 'What are we building together?',
+    sub: 'Tell us where it hurts. We answer with a price and a lead time.',
+    primary: { label: 'Estimate my project', href: 'pricing' },
+    secondary: { label: 'Write to us', href: 'contact' },
   },
 
   footer: {
     columns: [
       {
-        title: 'Situations',
+        title: 'Services',
         links: [
-          { label: 'Guest feedback', href: 'situations/guest-feedback' },
-          { label: 'Opening', href: 'situations/opening' },
-          { label: 'Profitability', href: 'situations/profitability' },
-          { label: 'Groups and chains', href: 'situations/groups' },
-          { label: 'A good-looking site, right away', href: 'home#offres' },
+          { label: 'Websites', href: 'services' },
+          { label: 'Automations', href: 'services' },
+          { label: 'Custom projects', href: 'services' },
+          { label: 'Business apps', href: 'services' },
+          { label: 'Guest feedback', href: 'services' },
         ],
       },
       {
-        title: 'Offers',
+        title: 'Expertise',
+        links: [
+          { label: 'Restaurants', href: 'expertises' },
+          { label: 'Hotels', href: 'expertises' },
+          { label: 'Manufacturing', href: 'expertises' },
+          { label: 'Team management', href: 'expertises' },
+          { label: 'CRM', href: 'expertises' },
+          { label: 'Insurance and brokerage', href: 'expertises' },
+        ],
+      },
+      {
+        title: 'The studio',
         links: [
           { label: 'Work', href: 'work' },
-          { label: 'Method', href: 'method' },
-          { label: 'Free diagnostic', href: 'diagnostic' },
+          { label: 'Pricing', href: 'pricing' },
+          { label: 'Blog', href: 'blog' },
+          { label: 'About', href: 'about' },
+          { label: 'Contact', href: 'contact' },
         ],
       },
       {
-        title: 'Studio',
+        title: 'Legal',
         links: [
-          { label: 'About', href: 'about' },
           { label: 'Legal notice', href: 'legal' },
           { label: 'Privacy', href: 'privacy' },
         ],
       },
-      {
-        title: 'Contact',
-        links: [
-          { label: 'arnaud@kuiperstudio.com', href: 'mailto:arnaud@kuiperstudio.com' },
-          { label: 'Phnom Penh, Cambodia', href: '' },
-        ],
-      },
     ],
-    legal: 'Kuiper Studio, Phnom Penh. All prices exclude VAT.',
-    tagline: 'Guest experience can be measured.',
+    legal: 'Kuiper Studio, Phnom Penh.',
+    tagline: 'We build the tools that keep your company running.',
   },
 
   cookies: {
     title: 'Cookies',
-    body: 'We use cookies to run the site and, if you accept, to measure its audience. No tracker is set before you agree.',
+    body: 'We use cookies to run the site and, if you agree, to measure its audience. No tracker is set before you agree.',
     accept: 'Accept',
     refuse: 'Refuse',
     customize: 'Customise',
-    save: 'Save my choices',
-    necessary: { title: 'Necessary', body: 'Required for the site to work. Always on.' },
-    analytics: { title: 'Audience measurement', body: 'Tells us which pages are read, without identifying you.' },
+    save: 'Save',
+    necessary: {
+      title: 'Necessary',
+      body: 'Required for the site to work. Always on.',
+    },
+    analytics: {
+      title: 'Audience measurement',
+      body: 'To know which pages get read. Off until you accept.',
+    },
   },
 
-  situationPages: [
-    {
-      slug: 'guest-feedback',
-      quote: '[TO PROVIDE]',
-      title: 'Finally know what your guests think of you.',
-      problem: ['[TO PROVIDE]'],
-      steps: [
-        'We gather your reviews and your surveys.',
-        'We identify the topics that keep coming up.',
-        'Every Monday, a summary, and an alert on every negative review.',
-      ],
-      measures: ['Average Google rating', 'Reviews per month', 'Share of comments by theme'],
-      price: 'After the free diagnostic, price [TO SET with Louis]',
-      proof: null,
-    },
-    {
-      slug: 'opening',
-      quote: '[TO PROVIDE]',
-      title: 'Open with everything you need, from day one.',
-      problem: ['[TO PROVIDE]'],
-      steps: [
-        'The website, the booking and the widgets.',
-        'The automations.',
-        'Your tools connected to each other.',
-      ],
-      measures: ['Direct bookings', 'Enquiries received through the site'],
-      price: 'From €1,290 excl. VAT',
-      proof: null,
-    },
-    {
-      slug: 'profitability',
-      quote: '[TO PROVIDE]',
-      title: 'Guests, yes. Margin too.',
-      problem: ['[TO PROVIDE]'],
-      steps: [
-        'We analyse inventory, waste and margins.',
-        'We build the tooling that is missing.',
-        'We track the results.',
-      ],
-      measures: ['Waste', 'Margin per product', 'Stockouts'],
-      price: 'On quote, after an audit',
-      proof: null,
-    },
-    {
-      slug: 'groups',
-      quote: '[TO PROVIDE]',
-      title: 'Keep your guests loyal across every venue.',
-      problem: ['[TO PROVIDE]'],
-      steps: [
-        'A loyalty app.',
-        'Shared dashboards.',
-        'Integrations with the till and the hotel software.',
-      ],
-      measures: ['Returning guests', 'Benefits redeemed', 'Figures per venue'],
-      price: 'On quote, from 10 venues',
-      proof: null,
-    },
-  ],
-
-  situationLabels: {
-    before: 'Before',
-    after: 'After',
-    problem: 'The problem',
-    steps: 'What we do',
-    measures: 'What you measure',
-    proof: 'The proof',
-    price: 'The price',
+  about: {
+    title: 'About',
+    body: null,
   },
-
-  caseLabels: {
-    context: 'The context',
-    need: 'The need',
-    built: 'What we built',
-    results: 'The results',
-    quote: 'The quote',
-  },
-
-  about: { title: 'Two founders, one point of contact', body: null },
   legal: { title: 'Legal notice', body: null },
   privacy: { title: 'Privacy', body: null },
 }

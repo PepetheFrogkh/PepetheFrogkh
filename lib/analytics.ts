@@ -10,8 +10,8 @@ import { readConsent } from './consent'
  * qu'il sera branche.
  */
 export type TrackedEvent =
-  | 'diagnostic_click'
-  | 'diagnostic_submit'
+  | 'estimate_click'
+  | 'contact_submit'
   | 'book_call_click'
   | 'configurator_start'
   | 'price_shown'

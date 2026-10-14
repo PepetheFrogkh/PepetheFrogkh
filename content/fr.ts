@@ -1,14 +1,11 @@
 import type { Dict } from './types'
 
 /**
- * Le texte francais du site, en un seul endroit.
+ * Le site en francais.
  *
- * Regles du cahier respectees ici : ton direct, simple, vouvoiement ; aucun
- * tiret long ; prix toujours hors taxes ; aucun chiffre, logo ou temoignage
- * qui ne figure pas dans le cahier. Ce qui manque est un emplacement
- * [À FOURNIR] visible, pas une invention.
- *
- * Dans un titre, le mot entre asterisques passe en italique orange terre.
+ * Vouvoiement, ton direct, aucun tiret long. Aucun chiffre, logo, temoignage
+ * ni nom de client invente : ce qui n'a pas ete fourni vaut `null` et
+ * l'affichage pose un emplacement visible.
  */
 export const fr: Dict = {
   langName: 'Français',
@@ -16,9 +13,9 @@ export const fr: Dict = {
   meta: {
     siteName: 'Kuiper Studio',
     home: {
-      title: 'Kuiper Studio · Améliorez l’expérience de vos clients. Mesurez-la.',
+      title: 'Kuiper Studio · On construit les outils qui font tourner votre entreprise',
       description:
-        'Kuiper Studio aide les hôtels, les restaurants et les commerces indépendants à comprendre ce que pensent leurs clients, à corriger ce qui coince et à gagner en rentabilité, avec les bons outils numériques.',
+        'Sites web, automatisations, applications métier : livrés vite, à prix affichés, par une équipe qui connaît votre métier.',
     },
     services: {
       title: 'Services · Kuiper Studio',
@@ -27,8 +24,7 @@ export const fr: Dict = {
     },
     expertises: {
       title: 'Expertises · Kuiper Studio',
-      description:
-        'Les domaines où l’équipe est la plus forte, et les offres adaptées à chacun.',
+      description: 'Les domaines où l’équipe est la plus forte, et les offres adaptées à chacun.',
     },
     pricing: {
       title: 'Tarifs · Kuiper Studio',
@@ -38,41 +34,26 @@ export const fr: Dict = {
       title: 'Blog · Kuiper Studio',
       description: 'Ce que nous apprenons en construisant des outils métier.',
     },
-    contact: {
-      title: 'Contact · Kuiper Studio',
-      description: 'Parlons de votre projet.',
-    },
     work: {
       title: 'Réalisations · Kuiper Studio',
-      description: 'Ce que nous avons construit pour des hôtels, des restaurants et des indépendants.',
+      description: 'Ce que nous avons construit, et pour qui.',
     },
     about: {
       title: 'À propos · Kuiper Studio',
       description: 'Deux fondateurs, un seul interlocuteur. Kuiper Studio est basé à Phnom Penh.',
     },
-    legal: { title: 'Mentions légales · Kuiper Studio', description: 'Mentions légales de Kuiper Studio.' },
+    contact: {
+      title: 'Contact · Kuiper Studio',
+      description: 'Parlons de votre projet.',
+    },
+    legal: {
+      title: 'Mentions légales · Kuiper Studio',
+      description: 'Mentions légales de Kuiper Studio.',
+    },
     privacy: {
       title: 'Confidentialité · Kuiper Studio',
       description: 'Comment Kuiper Studio traite vos données.',
     },
-  },
-
-  nav: {
-    items: [
-      { label: 'Services', href: 'services' },
-      { label: 'Expertises', href: 'expertises' },
-      { label: 'Réalisations', href: 'work' },
-      { label: 'Tarifs', href: 'pricing' },
-      { label: 'Blog', href: 'blog' },
-      { label: 'À propos', href: 'about' },
-      { label: 'Contact', href: 'contact' },
-    ],
-    cta: 'Estimer mon projet',
-    ctaShort: 'Estimer',
-    currency: 'Devise',
-    skip: 'Aller au contenu',
-    menu: 'Ouvrir le menu',
-    close: 'Fermer le menu',
   },
 
   map: {
@@ -102,173 +83,303 @@ export const fr: Dict = {
     contact: 'Contact',
   },
 
-  hero: {
-    eyebrow: 'Hôtellerie, restauration et commerce',
-    title: 'Améliorez l’expérience de vos clients. *Mesurez-la.*',
-    titleLines: [
-      'Améliorez',
-      'l\u2019expérience',
-      'de vos clients.',
-      '*Mesurez-la.*',
-    ],
-    sub: 'Kuiper Studio aide les hôtels, les restaurants et les commerces indépendants à comprendre ce que pensent leurs clients, à corriger ce qui coince et à gagner en rentabilité, avec les bons outils numériques.',
-    primary: { label: 'Diagnostic gratuit de vos avis', href: 'diagnostic' },
-    secondary: { label: 'Réserver un appel', href: 'booking' },
-    note: '30 minutes avec Arnaud, gratuit et sans engagement',
+  menu: {
+    services: {
+      sites: 'Des packs à prix affichés, de la page unique au site complet.',
+      automations: 'Vos outils se parlent, et les tâches répétitives disparaissent.',
+      custom: 'Vous avez une idée, on la construit, facturée au mois.',
+      apps: 'Caisse, inventaire, MRP, CRM : vos outils, sans dépendre d’un éditeur.',
+      feedback: 'Tous les avis de votre établissement au même endroit.',
+    },
+    expertises: {
+      restaurants: 'Avis, badge NFC au paiement, inventaire.',
+      hotels: 'Temps des équipes, retours clients, intégration à votre PMS.',
+      manufacturing: 'Inventaire, MRP, nomenclatures, suivi de production.',
+      teams: 'Pointage, suivi du temps, facturation.',
+      crm: 'Un CRM sur mesure, ou l’adaptation du vôtre.',
+      insurance: 'Les outils du courtage, au quotidien.',
+    },
   },
 
-  proof: {
-    logosTitle: 'Ils nous ont choisis',
-    figures: [
-      { prefix: 'dès ', value: '499', unit: ' € HT', caption: 'Prix affichés' },
-      { value: '72', unit: ' heures', caption: 'Pour la livraison la plus rapide' },
-      { value: '2', unit: ' fondateurs', caption: 'Un seul interlocuteur' },
-    ],
-  },
-
-  showcase: {
-    title: 'Nos réalisations',
-    note: 'Captures des projets',
-  },
-
-  situations: {
-    title: 'Quelle est votre situation ?',
-    more: 'En savoir plus',
-    cards: [
-      {
-        slug: 'ecoute-client',
-        index: '01',
-        photo: null,
-        title: 'Sachez enfin ce que vos clients pensent de vous.',
-        quote: 'Je ne sais pas ce qui ne va pas.',
-        tags: ['Avis', 'Questionnaires', 'Alertes'],
-        published: true,
-        link: null,
-      },
-      {
-        slug: 'ouverture',
-        index: '02',
-        photo: null,
-        title: 'Ouvrez avec tout ce qu\u2019il faut, dès le premier jour.',
-        quote: 'Il me faut tout, vite.',
-        tags: ['Site', 'Réservation', 'Automatisations'],
-        published: true,
-        link: null,
-      },
-      {
-        slug: 'rentabilite',
-        index: '03',
-        photo: null,
-        title: 'Des clients, oui. De la marge, aussi.',
-        quote: 'J\u2019ai des clients, mais pas de marge.',
-        tags: ['Inventaire', 'Pertes', 'Marges'],
-        published: true,
-        link: null,
-      },
-      {
-        slug: 'groupes',
-        index: '04',
-        photo: null,
-        title: 'Fidélisez vos clients dans tous vos établissements.',
-        quote: 'Je veux fidéliser à grande échelle.',
-        tags: ['Fidélité', 'Tableaux de bord', 'Intégrations'],
-        published: true,
-        link: null,
-      },
-      {
-        slug: 'visibilite',
-        index: '05',
-        photo: null,
-        title: 'Un beau site, tout de suite.',
-        quote: 'Je veux juste être visible.',
-        tags: ['Site', 'Prix affiché', 'Livraison rapide'],
-        published: true,
-        link: 'home#offres',
-      },
-    ],
-  },
-
-  manifesto:
-    'L’expérience client ne se devine pas. Elle se mesure, et elle s’améliore avec les bons outils.',
-
-  founders: {
-    title: 'Les fondateurs',
-    people: [
-      {
-        name: 'Arnaud Sebire',
-        role: 'Cofondateur, produit et relation client',
-        bio: 'Une dizaine d\u2019années sur les produits opérationnels : conception fonctionnelle, processus métier, équipes de développement.',
-        photo: '/equipe/arnaud-sebire.webp',
-      },
-      {
-        name: 'Louis Vezia',
-        role: 'Cofondateur, direction technique',
-        bio: 'Une dizaine d\u2019années sur l\u2019architecture, la donnée, la performance et la sécurité, dont plusieurs projets CRM complexes.',
-        photo: '/equipe/louis-vezia.webp',
-      },
-    ],
-  },
-
-  offers: {
-    title: 'Nos offres',
-    note: 'Le configurateur donne une estimation en deux minutes. Prix hors taxes.',
+  nav: {
     items: [
-      {
-        title: 'Sites',
-        body: 'Un site animé et soigné, livré en 72 heures, une semaine ou un mois, hébergé et entretenu par nous.',
-        price: 'À partir de 499 € HT',
-      },
-      {
-        title: 'Automatisations',
-        body: 'Vos outils connectés entre eux : moins de saisie, moins d\u2019oublis, supervisés par nous.',
-        price: 'À partir de 390 € HT par flux',
-      },
-      {
-        title: 'Sur mesure',
-        body: 'Applications, espaces clients et intégrations, quand rien du marché ne colle.',
-        price: 'Sur devis',
-      },
+      { label: 'Services', href: 'services' },
+      { label: 'Expertises', href: 'expertises' },
+      { label: 'Réalisations', href: 'work' },
+      { label: 'Tarifs', href: 'pricing' },
+      { label: 'Blog', href: 'blog' },
+      { label: 'À propos', href: 'about' },
+      { label: 'Contact', href: 'contact' },
     ],
+    cta: 'Estimer mon projet',
+    ctaShort: 'Estimer',
+    currency: 'Devise',
+    skip: 'Aller au contenu',
+    menu: 'Ouvrir le menu',
+    close: 'Fermer le menu',
+  },
+
+  hero: {
+    eyebrow: 'Agence web, pour toute entreprise',
+    title: 'On construit les outils qui font *tourner* votre entreprise.',
+    titleLines: ['On construit', 'les outils', 'qui font *tourner*', 'votre entreprise.'],
+    sub: 'Sites web, automatisations, applications métier : livrés vite, à prix affichés, par une équipe qui connaît votre métier.',
+    primary: { label: 'Estimer mon projet', href: 'pricing' },
+    secondary: { label: 'Voir nos expertises', href: 'expertises' },
+    note: 'Prix affichés, hors taxes. Estimation en deux minutes.',
+  },
+
+  home: {
+    services: {
+      title: 'Ce que nous faisons',
+      lead: 'Cinq services, et un prix affiché pour chacun.',
+    },
+    expertises: {
+      title: 'Les métiers que nous connaissons',
+      lead: 'Les domaines où l’équipe est la plus forte, et les offres adaptées à chacun.',
+    },
+    work: {
+      title: 'Nos réalisations',
+      lead: 'Ce que nous avons construit, et depuis où.',
+    },
+    pricing: {
+      title: 'Les prix sont affichés',
+      lead: 'Pas de devis pour savoir combien coûte un site. Pour une automatisation, le simulateur donne une estimation en deux minutes.',
+      cta: { label: 'Ouvrir le simulateur', href: 'pricing' },
+    },
+    blog: {
+      title: 'Ce que nous apprenons',
+      lead: 'Des notes de chantier, pas des communiqués.',
+    },
+    testimonials: {
+      title: 'Ce qu’ils en disent',
+      lead: 'Publié uniquement avec l’accord écrit du client.',
+    },
+  },
+
+  services: {
+    sites: {
+      title: 'Sites web',
+      lead: 'Des packs à prix affichés, de la page unique au site complet, avec les options et les délais en clair.',
+      problem: null,
+      delivers: [
+        'Un pack Essentiel, d’une à trois pages, animations simples et formulaire de contact offert.',
+        'Un pack Pro jusqu’à six pages, animations avancées, deux options incluses.',
+        'Un pack Complet jusqu’à dix pages, parallaxe, une langue supplémentaire, trois options incluses.',
+        'Du sur mesure pour une application web, un espace client ou des intégrations.',
+      ],
+      delays:
+        'Économie, livré dans le mois, au prix de base. Standard, sept jours. Express, 72 heures, pour le pack Essentiel uniquement.',
+      proof: 'anakut',
+      faq: [
+        {
+          question: 'Qui fournit les contenus ?',
+          answer:
+            'Vous. Les textes, les photos et les logos sont fournis par vos soins ; nous les mettons en page.',
+        },
+        {
+          question: 'Comment se passe le paiement ?',
+          answer: '50 % à la commande, 50 % à la livraison.',
+        },
+        {
+          question: 'Et si je veux partir ailleurs ?',
+          answer:
+            'Le transfert du site vers un autre hébergeur est possible, à un tarif affiché dans la grille.',
+        },
+      ],
+    },
+    automations: {
+      title: 'Automatisations',
+      lead: 'Vos outils se parlent, et les tâches répétitives disparaissent. Un flux simple a un prix affiché ; le simulateur chiffre le reste.',
+      problem: null,
+      delivers: [
+        'Un flux part d’un déclencheur, formulaire, email ou horaire, et aboutit à une action : facturation, relance, inventaire, rapport.',
+        'Chaque condition ajoutée et chaque application connectée ont leur prix.',
+        'Un outil sans API ouverte demande un accès auprès de l’éditeur, et cela se paie.',
+        'Une supervision mensuelle, selon le nombre de flux.',
+      ],
+      delays: null,
+      proof: null,
+      faq: [
+        {
+          question: 'Où tournent les flux ?',
+          answer:
+            'Sur l’infrastructure n8n de Kuiper Studio. Ils ne sont pas transférables vers la vôtre.',
+        },
+        {
+          question: 'Pourquoi un outil sans API ouverte coûte plus cher ?',
+          answer:
+            'Sans API ouverte, il faut obtenir un accès auprès de l’éditeur : cela prend souvent plusieurs semaines de démarches.',
+        },
+      ],
+    },
+    custom: {
+      title: 'Projets sur mesure',
+      lead: 'Vous avez une idée, on la construit.',
+      problem: null,
+      delivers: [
+        'Un développeur et un chef de projet, facturés au mois.',
+        'Vous gardez la main sur les priorités, mois après mois.',
+      ],
+      delays: null,
+      proof: null,
+      faq: null,
+    },
+    apps: {
+      title: 'Applications métier',
+      lead: 'Caisse, inventaire, MRP, CRM : pour les entreprises qui veulent le contrôle total sans dépendre d’un éditeur.',
+      problem: null,
+      delivers: [
+        'Une application de base, caisse, inventaire, MRP ou CRM, en paiement unique.',
+        'Un ERP complet, seulement à partir d’un certain périmètre, et sur devis.',
+      ],
+      delays: null,
+      proof: null,
+      faq: null,
+    },
+    feedback: {
+      title: 'Écoute client',
+      lead: 'Une page qui rassemble tous les avis de votre établissement et fait ressortir les points forts et les points bloquants.',
+      problem: null,
+      delivers: [
+        'Les avis Google, avec votre autorisation.',
+        'Les questionnaires de votre établissement.',
+        'TripAdvisor, en partie.',
+      ],
+      delays: null,
+      proof: null,
+      faq: [
+        {
+          question: 'Booking est-il inclus ?',
+          answer: 'Non. Booking n’est pas inclus.',
+        },
+      ],
+    },
+  },
+
+  serviceLabels: {
+    problem: 'Le problème',
+    delivers: 'Ce qu’on livre',
+    delays: 'Les délais',
+    price: 'Le prix',
+    proof: 'Une réalisation',
+    faq: 'Questions fréquentes',
+  },
+
+  expertises: {
+    restaurants: {
+      title: 'Restauration',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: [
+        'L’agrégation de vos avis, et l’accompagnement pour améliorer le service.',
+        'Un badge NFC au moment du paiement, qui ouvre la page d’avis. Proposé à tous les clients, jamais seulement aux clients satisfaits.',
+        'L’inventaire.',
+      ],
+      experience: [
+        'Caisses et caisses mobiles.',
+        'Bornes de commande.',
+        'Menus par QR code.',
+      ],
+      proof: null,
+    },
+    hotels: {
+      title: 'Hôtellerie',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: [
+        'Le suivi du temps des équipes.',
+        'Les retours clients.',
+        'Un badge NFC.',
+        'L’intégration aux PMS existants.',
+      ],
+      experience: ['PMS et systèmes hérités du marché.'],
+      proof: null,
+    },
+    manufacturing: {
+      title: 'Production et manufacturing',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: [
+        'L’inventaire.',
+        'Le MRP.',
+        'Les nomenclatures, les BOM.',
+        'Le suivi de production.',
+      ],
+      experience: null,
+      proof: null,
+    },
+    teams: {
+      title: 'Gestion des équipes',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: [
+        'Le pointage d’arrivée et de départ.',
+        'Le suivi du temps.',
+        'La facturation.',
+      ],
+      experience: null,
+      proof: ['ocs'],
+    },
+    crm: {
+      title: 'CRM',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: [
+        'Un CRM sur mesure.',
+        'Ou l’adaptation de HubSpot, Microsoft Dynamics et Salesforce.',
+      ],
+      experience: null,
+      proof: null,
+    },
+    insurance: {
+      title: 'Assurance et courtage',
+      lead: null,
+      understand: null,
+      problems: null,
+      offer: null,
+      experience: null,
+      proof: ['wave'],
+    },
+  },
+
+  expertiseLabels: {
+    understand: 'Ce que nous comprenons du métier',
+    problems: 'Les problèmes typiques',
+    offer: 'Ce que nous proposons',
+    experience: 'Notre expérience',
+    proof: 'Les réalisations liées',
   },
 
   work: {
-    title: 'Ce que nous avons construit',
-    intro: 'Trois projets livrés. Les résultats publiés ici sont vérifiés, ou signalés comme manquants.',
-    filters: ['Fidélité', 'Coaching', 'Bien-être'],
-    all: 'Tous',
+    title: 'Réalisations',
+    intro: 'Ce que nous avons construit, et pour qui.',
+    more: 'En savoir plus',
     resultLabel: 'Résultat',
     otherProjects: 'Autres projets',
     sectorLabel: 'Secteur',
+    studio: 'Notre studio',
     cases: [
-      {
-        slug: 'wave',
-        name: 'Wave',
-        sector: 'Fidélité',
-        country: 'Suisse',
-        site: 'wavenetwork.ch',
-        summary:
-          'L\u2019application mobile du Wave Pass, un programme d\u2019avantages pour les membres utilisé chez des établissements partenaires, et l\u2019outil de gestion qui la pilote.',
-        result: null,
-        shot: null,
-        context: null,
-        need: null,
-        built: null,
-        results: null,
-        quote: null,
-      },
       {
         slug: 'anakut',
         name: 'Anakut',
         sector: 'Coaching',
-        country: 'Neuchâtel, Suisse',
+        country: 'Suisse',
+        city: 'Neuchâtel',
+        coords: { lat: 46.99, lon: 6.93 },
+        summary: 'Application sur mesure de gestion du coaching, et site WordPress.',
         site: 'anakut.ch',
-        summary:
-          'Une application sur mesure pour gérer l\u2019activité de coaching, et le site WordPress d\u2019un coach de boxe.',
         result: null,
         shot: null,
+        video: null,
         context: null,
         need: null,
-        built: null,
+        built: ['Une application de gestion du coaching', 'Un site WordPress'],
         results: null,
         quote: null,
       },
@@ -276,163 +387,213 @@ export const fr: Dict = {
         slug: 'mp-massage',
         name: 'MP Massage',
         sector: 'Bien-être',
-        country: 'Neuchâtel, Suisse',
+        country: 'Suisse',
+        city: 'Neuchâtel',
+        coords: { lat: 46.99, lon: 6.93 },
+        summary: 'Application de gestion des massages, et site.',
         site: 'mpmassage.ch',
-        summary:
-          'Une application pour gérer l\u2019activité de massage, et le site d\u2019une praticienne en massage thaï.',
         result: null,
         shot: null,
+        video: null,
         context: null,
         need: null,
-        built: null,
+        built: ['Une application de gestion des massages', 'Un site'],
+        results: null,
+        quote: null,
+      },
+      {
+        slug: 'ocs',
+        name: 'OCS',
+        sector: 'Gestion des équipes',
+        country: 'Cambodge',
+        city: null,
+        coords: null,
+        summary:
+          'Suivi des équipes de nettoyage dans un aéroport, avec pointage et facturation.',
+        site: null,
+        result: null,
+        shot: null,
+        video: null,
+        context: null,
+        need: null,
+        built: ['Le pointage des équipes', 'La facturation'],
+        results: null,
+        quote: null,
+      },
+      {
+        slug: 'wave',
+        name: 'Wave',
+        sector: 'Assurance et courtage',
+        country: 'Suisse',
+        city: null,
+        coords: null,
+        summary: 'Application mobile de fidélité, et son outil de gestion.',
+        site: null,
+        result: null,
+        shot: null,
+        video: null,
+        context: null,
+        need: null,
+        built: ['Une application mobile de fidélité', 'Son outil de gestion'],
         results: null,
         quote: null,
       },
     ],
   },
 
-  convictions: {
-    title: 'Nos convictions',
-    items: [
-      {
-        title: 'Un prix se montre, il ne se cache pas.',
-        body: 'Vous connaissez le prix avant de nous parler ; le devis ne fait que le confirmer, par écrit.',
-      },
-      {
-        title: 'Vite ne veut pas dire bâclé.',
-        body: 'Une méthode courte et des bases éprouvées permettent de livrer en jours plutôt qu\u2019en mois.',
-      },
-      {
-        title: 'La mise en ligne n\u2019est pas la fin.',
-        body: 'Un site vit, se met à jour, se surveille ; nous restons là, chaque mois.',
-      },
-    ],
-  },
-
-  method: {
-    title: 'Six étapes, sans surprise',
-    intro: 'Le délai démarre à la réception de vos contenus.',
-    steps: [
-      { title: 'Comprendre', body: null, demo: null },
-      { title: 'Cadrer', body: null, demo: null },
-      { title: 'Dessiner', body: null, demo: null },
-      { title: 'Construire', body: null, demo: null },
-      { title: 'Lancer', body: null, demo: null },
-      { title: 'Faire grandir', body: null, demo: null },
-    ],
+  caseLabels: {
+    context: 'Le contexte',
+    need: 'Le besoin',
+    built: 'Ce que nous avons construit',
+    results: 'Les résultats',
+    quote: 'Le mot du client',
   },
 
   testimonials: {
     title: 'Ce qu’ils en disent',
-    note: 'Une vidéo et deux avis écrits, publiés avec l’accord écrit du client.',
+    note: 'Publié uniquement avec l’accord écrit du client.',
+    items: [
+      { company: null, author: null, role: null, text: null, photo: null },
+      { company: null, author: null, role: null, text: null, photo: null },
+      { company: null, author: null, role: null, text: null, photo: null },
+    ],
   },
 
-  diagnostic: {
-    title: 'Ce que vos clients pensent vraiment',
-    body: 'Indiquez votre établissement : sous 48 heures ouvrées, vous recevez le résumé de vos avis publics, ce qu’ils aiment et ce qui revient en négatif. Gratuit, sans engagement.',
-    preview: {
-      title: 'Votre résumé contiendra',
-      lines: [
-        'Le résumé de vos avis publics',
-        'Ce que vos clients aiment',
-        'Ce qui revient en négatif',
-      ],
-    },
+  pricing: {
+    title: 'Tarifs',
+    lead: 'Les prix sont affichés, hors taxes, dans votre devise.',
+    disclaimer: 'Estimation indicative, confirmée par écrit après un échange.',
+  },
+
+  blog: {
+    title: 'Blog',
+    lead: 'Ce que nous apprenons en construisant des outils métier.',
+    readingTime: 'min de lecture',
+    share: 'Partager',
+    empty: 'Aucun article pour le moment.',
+  },
+
+  contact: {
+    title: 'Parlons de votre projet',
+    body: 'Dites-nous ce que vous voulez construire. Nous répondons sous deux jours ouvrés.',
     form: {
-      venue: 'Nom de l’établissement',
+      company: 'Votre entreprise',
       city: 'Ville',
-      type: 'Type',
-      types: ['Hôtel', 'Restaurant', 'Commerce', 'Autre'],
-      maps: 'Lien Google Maps',
-      mapsHint: 'Facultatif',
+      need: 'Votre besoin',
+      needs: [
+        'Un site web',
+        'Une automatisation',
+        'Un projet sur mesure',
+        'Une application métier',
+        'De l’écoute client',
+        'Je ne sais pas encore',
+      ],
       name: 'Votre nom',
       email: 'Votre email',
-      consent:
-        'J’accepte que Kuiper Studio me contacte au sujet de ce diagnostic et conserve ces informations.',
-      submit: 'Recevoir mon diagnostic',
-      sending: 'Envoi en cours',
-      success:
-        'C’est enregistré. Vous recevez le résumé de vos avis sous 48 heures ouvrées, et un email de confirmation tout de suite.',
-      error: 'L’envoi a échoué. Écrivez à arnaud@kuiperstudio.com et nous prenons le relais.',
-      required: 'Ce champ est obligatoire.',
+      message: 'Votre message',
+      consent: 'J’accepte d’être recontacté au sujet de ma demande.',
+      submit: 'Envoyer',
+      sending: 'Envoi…',
+      success: 'Message reçu. Nous revenons vers vous sous deux jours ouvrés.',
+      error: 'L’envoi a échoué. Réessayez, ou écrivez-nous directement.',
+      required: 'Ce champ est requis.',
       invalidEmail: 'Cette adresse email ne semble pas valide.',
     },
+  },
+
+  founders: {
+    title: 'Les fondateurs',
+    people: [
+      {
+        name: 'Arnaud Sebire',
+        role: 'Cofondateur, produit et relation client',
+        bio: null,
+        photo: null,
+      },
+      {
+        name: 'Louis Vezia',
+        role: 'Cofondateur, direction technique',
+        bio: null,
+        photo: null,
+      },
+    ],
   },
 
   faq: {
     title: 'Questions fréquentes',
     items: [
       {
-        question: 'Le diagnostic est-il vraiment gratuit ?',
+        question: 'Travaillez-vous avec toutes les entreprises ?',
         answer:
-          'Oui. Vous recevez le résumé de vos avis publics, sans engagement et sans relance insistante.',
+          'Oui. Kuiper Studio est une agence web généraliste. Les pages Expertises montrent les domaines où l’équipe est la plus forte.',
       },
       {
-        question: 'Travaillez-vous avec un seul restaurant ?',
-        answer: 'Oui. Nos offres sont pensées pour l’établissement unique comme pour les groupes.',
+        question: 'Les prix affichés sont-ils hors taxes ?',
+        answer: 'Oui, tous les prix du site sont hors taxes.',
       },
       {
-        question: 'Combien coûte un site ?',
-        answer: 'À partir de 499 € HT ; le configurateur donne une estimation en deux minutes.',
-      },
-      {
-        question: 'En combien de temps ?',
+        question: 'En euros ou en dollars ?',
         answer:
-          'De 72 heures à un mois selon le projet ; le délai démarre à la réception de vos contenus.',
+          'En euros pour les visiteurs d’Europe, en dollars ailleurs. Le sélecteur de l’en-tête permet de changer à tout moment.',
       },
       {
-        question: 'Pourquoi un abonnement ?',
+        question: 'Combien de temps pour un site ?',
         answer:
-          'Parce qu’un site et des automatisations s’hébergent, se surveillent et évoluent, chaque mois.',
+          'Dans le mois en Économie, sept jours en Standard, 72 heures en Express pour le pack Essentiel.',
       },
     ],
   },
 
   finalCta: {
-    title: 'Parlons de vos clients.',
-    sub: 'Trente minutes, gratuites et sans engagement.',
-    primary: { label: 'Diagnostic gratuit', href: 'diagnostic' },
-    secondary: { label: 'Réserver un appel', href: 'booking' },
+    title: 'On construit quoi, ensemble ?',
+    sub: 'Dites-nous où ça coince. Nous vous répondons avec un prix et un délai.',
+    primary: { label: 'Estimer mon projet', href: 'pricing' },
+    secondary: { label: 'Nous écrire', href: 'contact' },
   },
 
   footer: {
     columns: [
       {
-        title: 'Situations',
+        title: 'Services',
         links: [
-          { label: 'Écoute client', href: 'situations/ecoute-client' },
-          { label: 'Ouverture', href: 'situations/ouverture' },
-          { label: 'Rentabilité', href: 'situations/rentabilite' },
-          { label: 'Groupes et chaînes', href: 'situations/groupes' },
-          { label: 'Un beau site, tout de suite', href: 'home#offres' },
+          { label: 'Sites web', href: 'services' },
+          { label: 'Automatisations', href: 'services' },
+          { label: 'Projets sur mesure', href: 'services' },
+          { label: 'Applications métier', href: 'services' },
+          { label: 'Écoute client', href: 'services' },
         ],
       },
       {
-        title: 'Offres',
+        title: 'Expertises',
+        links: [
+          { label: 'Restauration', href: 'expertises' },
+          { label: 'Hôtellerie', href: 'expertises' },
+          { label: 'Production et manufacturing', href: 'expertises' },
+          { label: 'Gestion des équipes', href: 'expertises' },
+          { label: 'CRM', href: 'expertises' },
+          { label: 'Assurance et courtage', href: 'expertises' },
+        ],
+      },
+      {
+        title: 'Le studio',
         links: [
           { label: 'Réalisations', href: 'work' },
-          { label: 'Méthode', href: 'method' },
-          { label: 'Diagnostic gratuit', href: 'diagnostic' },
+          { label: 'Tarifs', href: 'pricing' },
+          { label: 'Blog', href: 'blog' },
+          { label: 'À propos', href: 'about' },
+          { label: 'Contact', href: 'contact' },
         ],
       },
       {
-        title: 'Studio',
+        title: 'Légal',
         links: [
-          { label: 'À propos', href: 'about' },
           { label: 'Mentions légales', href: 'legal' },
           { label: 'Confidentialité', href: 'privacy' },
         ],
       },
-      {
-        title: 'Contact',
-        links: [
-          { label: 'arnaud@kuiperstudio.com', href: 'mailto:arnaud@kuiperstudio.com' },
-          { label: 'Phnom Penh, Cambodge', href: '' },
-        ],
-      },
     ],
-    legal: 'Kuiper Studio, Phnom Penh. Tous les prix sont hors taxes.',
-    tagline: 'L’expérience client se mesure.',
+    legal: 'Kuiper Studio, Phnom Penh.',
+    tagline: 'On construit les outils qui font tourner votre entreprise.',
   },
 
   cookies: {
@@ -441,99 +602,21 @@ export const fr: Dict = {
     accept: 'Accepter',
     refuse: 'Refuser',
     customize: 'Personnaliser',
-    save: 'Enregistrer mes choix',
+    save: 'Enregistrer',
     necessary: {
       title: 'Nécessaires',
       body: 'Indispensables au fonctionnement du site. Toujours actifs.',
     },
     analytics: {
       title: 'Mesure d’audience',
-      body: 'Nous indiquent les pages consultées, sans vous identifier.',
+      body: 'Pour savoir quelles pages sont lues. Désactivés tant que vous n’avez pas accepté.',
     },
-  },
-
-  situationPages: [
-    {
-      slug: 'ecoute-client',
-      quote: '[À FOURNIR]',
-      title: 'Sachez enfin ce que vos clients pensent de vous.',
-      problem: ['[À FOURNIR]'],
-      steps: [
-        'On rassemble vos avis et vos questionnaires.',
-        'On identifie les sujets qui reviennent.',
-        'Chaque lundi, un résumé et une alerte à chaque avis négatif.',
-      ],
-      measures: ['Note Google moyenne', 'Nombre d’avis par mois', 'Part des remarques par thème'],
-      price: 'Après le diagnostic gratuit, prix [À FIXER avec Louis]',
-      proof: null,
-    },
-    {
-      slug: 'ouverture',
-      quote: '[À FOURNIR]',
-      title: 'Ouvrez avec tout ce qu’il faut, dès le premier jour.',
-      problem: ['[À FOURNIR]'],
-      steps: [
-        'Le site, la réservation et les widgets.',
-        'Les automatisations.',
-        'Vos outils connectés entre eux.',
-      ],
-      measures: ['Réservations directes', 'Demandes reçues par le site'],
-      price: 'À partir de 1 290 € HT',
-      proof: null,
-    },
-    {
-      slug: 'rentabilite',
-      quote: '[À FOURNIR]',
-      title: 'Des clients, oui. De la marge, aussi.',
-      problem: ['[À FOURNIR]'],
-      steps: [
-        'On analyse l’inventaire, les pertes et les marges.',
-        'On outille ce qui manque.',
-        'On suit les résultats.',
-      ],
-      measures: ['Pertes', 'Marge par produit', 'Ruptures de stock'],
-      price: 'Sur devis, après un audit',
-      proof: null,
-    },
-    {
-      slug: 'groupes',
-      quote: '[À FOURNIR]',
-      title: 'Fidélisez vos clients dans tous vos établissements.',
-      problem: ['[À FOURNIR]'],
-      steps: [
-        'Une application de fidélité.',
-        'Des tableaux de bord communs.',
-        'Des intégrations avec la caisse et le logiciel hôtelier.',
-      ],
-      measures: ['Clients qui reviennent', 'Avantages utilisés', 'Chiffres par établissement'],
-      price: 'Sur devis, à partir de 10 établissements',
-      proof: null,
-    },
-  ],
-
-  situationLabels: {
-    before: 'Avant',
-    after: 'Après',
-    problem: 'Le problème',
-    steps: 'Ce qu’on fait',
-    measures: 'Ce que vous mesurez',
-    proof: 'La preuve',
-    price: 'Le prix',
-  },
-
-  caseLabels: {
-    context: 'Le contexte',
-    need: 'Le besoin',
-    built: 'Ce qu’on a construit',
-    results: 'Les résultats',
-    quote: 'La citation',
   },
 
   about: {
-    title: 'Deux fondateurs, un seul interlocuteur',
+    title: 'À propos',
     body: null,
   },
-
   legal: { title: 'Mentions légales', body: null },
   privacy: { title: 'Confidentialité', body: null },
 }

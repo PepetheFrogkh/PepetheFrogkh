@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { dict, type CaseStudy } from '@/content'
 import { path, type Locale } from '@/lib/i18n'
 import CaseCard from '@/components/CaseCard'
-import Counter from '@/components/Counter'
 import FinalCta from '@/components/FinalCta'
 import Heading from '@/components/Heading'
 import Reveal from '@/components/Reveal'
@@ -114,7 +113,14 @@ export default function CaseView({ locale, study }: { locale: Locale; study: Cas
             {study.results ? (
               <div className="grid grid--3">
                 {study.results.map((figure) => (
-                  <Counter key={figure.caption} figure={figure} />
+                  <div className="figure" key={figure.caption}>
+                    <div className="figure__value">
+                      {figure.prefix}
+                      {figure.value}
+                      {figure.unit}
+                    </div>
+                    <div className="figure__caption">{figure.caption}</div>
+                  </div>
                 ))}
               </div>
             ) : (

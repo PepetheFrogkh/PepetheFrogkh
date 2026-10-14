@@ -435,6 +435,39 @@ p:last-child {
   color: var(--terra);
 }
 
+/* une carte qui est un lien entier : tout le rectangle est cliquable */
+.card--link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+.card--link:hover,
+.card--link:focus-visible {
+  transform: translateY(-3px);
+  border-color: var(--peach);
+  box-shadow: var(--lift);
+}
+
+.card--link .link-more {
+  margin-top: auto;
+}
+
+.card__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
 .card__quote {
   font-style: italic;
   color: var(--slate);
@@ -1873,6 +1906,8 @@ body.has-view-cursor [data-cursor='voir'] {
 }
 
 .typo__text {
+  /* la colonne devient l'unite de mesure du titre : 100cqi vaut sa largeur */
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   /* centre, et non reparti : l'espace restant va au-dessus et en dessous du
@@ -1929,10 +1964,13 @@ body.has-view-cursor [data-cursor='voir'] {
   /* Deux bornes, pas une : la largeur tient la plus longue ligne dans le
      conteneur de 1 200 px, la hauteur empeche les quatre lignes de pousser le
      sous-titre hors de l'ecran sur un portable au format large. */
-  /* Deux bornes toujours, mais resserrees : la colonne de texte ne fait plus
-     que la moitie de la largeur, et la hauteur doit laisser la place au
-     sous-titre et aux deux boutons sur un ecran de 768 px. */
-  font-size: clamp(34px, min(7.6vw, 9.6vh), 112px);
+  /* Trois bornes. La hauteur, pour laisser la place au sous-titre et aux deux
+     boutons sur un ecran de 768 px. La largeur de la colonne divisee par la
+     longueur de la ligne la plus longue, parce que le titre ne se coupe pas et
+     doit tenir dans sa colonne en francais comme en anglais. Et un plancher et
+     un plafond. Le facteur 200 vient de la largeur moyenne d'une lettre de
+     Fraunces en graisse 600, mesuree a l'ecran. */
+  font-size: clamp(30px, min(9.6vh, calc(200cqi / var(--chars, 18))), 112px);
   line-height: 0.98;
   /* desserree : a cette taille une approche trop serree fait se toucher les
      lettres, et le mot se lit moins vite qu'il ne se devine */
@@ -1952,7 +1990,8 @@ body.has-view-cursor [data-cursor='voir'] {
   will-change: transform;
 }
 
-.typo__line--accent {
+/* le mot entre asterisques, dans un titre */
+.typo__accent {
   color: var(--terra);
   font-style: italic;
 }

@@ -1,5 +1,29 @@
-import type { ReactNode } from 'react'
+import { Fragment, type CSSProperties, type ReactNode } from 'react'
 import HeroPanel from './HeroPanel'
+
+/**
+ * Le mot entre asterisques passe en italique orange terre.
+ *
+ * La convention vaut pour une partie de ligne et pas seulement pour une ligne
+ * entiere : « qui font *tourner* » met un seul mot en valeur, au milieu de sa
+ * ligne.
+ */
+/** Le nombre de caracteres de la ligne la plus longue, asterisques exclues. */
+function longest(lines: string[]): number {
+  return lines.reduce((max, line) => Math.max(max, line.replace(/\*/g, '').length), 1)
+}
+
+function accent(line: string): ReactNode[] {
+  return line.split('*').map((part, i) =>
+    i % 2 === 1 ? (
+      <em className="typo__accent" key={i}>
+        {part}
+      </em>
+    ) : (
+      <Fragment key={i}>{part}</Fragment>
+    ),
+  )
+}
 
 /**
  * L'en-tete, typographique.
@@ -30,28 +54,23 @@ export default function HeroType({
   return (
     <section className="typo">
       <div className="container typo__inner">
-        <div className="typo__text">
+        {/* La taille du titre se calcule sur la ligne la plus longue, et non
+            sur la seule largeur de la fenetre : « We build the tools » et
+            « On construit » n'ont pas la meme longueur, et un titre qui ne se
+            coupe pas doit tenir dans sa colonne dans les deux langues. */}
+        <div className="typo__text" style={{ '--chars': longest(lines) } as CSSProperties}>
           <span className="eyebrow typo__eyebrow">{eyebrow}</span>
 
           <h1 className="typo__title">
-            {lines.map((line, i) => {
-              const accent = line.startsWith('*') && line.endsWith('*')
-              const body = accent ? line.slice(1, -1) : line
-              return (
-                <span
-                  className={['typo__line', accent ? 'typo__line--accent' : '']
-                    .filter(Boolean)
-                    .join(' ')}
-                  key={line}
-                >
-                  {/* le mot entre par un masque, du bas vers le haut : c'est le
-                      cadre qui s'ouvre, le texte lui-meme est deja la */}
-                  <span className="typo__word" style={{ animationDelay: `${i * 90}ms` }}>
-                    {body}
-                  </span>
+            {lines.map((line, i) => (
+              <span className="typo__line" key={line}>
+                {/* le mot entre par un masque, du bas vers le haut : c'est le
+                    cadre qui s'ouvre, le texte lui-meme est deja la */}
+                <span className="typo__word" style={{ animationDelay: `${i * 90}ms` }}>
+                  {accent(line)}
                 </span>
-              )
-            })}
+              </span>
+            ))}
           </h1>
 
           <div className="typo__foot">{children}</div>

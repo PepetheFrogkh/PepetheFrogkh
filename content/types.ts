@@ -7,8 +7,10 @@ import type { ExpertiseKey, ServiceKey } from '@/lib/i18n'
  * fichier ne decrit que leur forme, pour qu'une langue ne puisse pas oublier
  * un bloc que l'autre a.
  *
- * Convention d'ecriture : dans un titre, le mot entre asterisques passe en
- * italique orange terre. « Ameliorez l'experience. *Mesurez-la.* »
+ * Deux conventions d'ecriture. Dans un titre, le mot entre asterisques passe
+ * en italique orange terre : « On construit les outils qui font *tourner*
+ * votre entreprise. » Et `null` ne veut jamais dire « vide » : il veut dire
+ * « pas encore fourni », et l'affichage pose un emplacement visible.
  */
 
 /** Ce qui manque devient un emplacement visible, jamais une invention. */
@@ -37,47 +39,31 @@ export interface Figure {
   caption: string
 }
 
-export interface SituationCard {
-  slug: string
-  /** La photo plein cadre de la carte, ou null. */
-  photo: string | null
-  /** Le numero affiche dans la carte. */
-  index: string
-  title: string
-  /** La phrase du client, rendue en italique. */
-  quote: string
-  tags: string[]
-  /** Le cahier marque Rentabilite et Groupes en V2 : mettre false pour les
-   *  retirer du site sans toucher au code. */
-  published: boolean
-  /** Ou mene « En savoir plus ». null pour la page situation du meme slug ;
-   *  le cahier renvoie la carte 05 vers l'offre Sites. */
-  link: string | null
+export interface FaqItem {
+  question: string
+  answer: string
 }
 
-export interface SituationPage {
-  slug: string
-  /** Reprise de la carte, pour l'en-tete de la page. */
-  quote: string
+export interface FooterColumn {
   title: string
-  /** Deux ou trois phrases, dans les mots du client. */
-  problem: string[]
-  /** Trois etapes numerotees. */
-  steps: string[]
-  /** Les indicateurs suivis avant et apres. */
-  measures: string[]
-  /** Le prix : « a partir de », ou « sur devis ». */
-  price: string
-  /** Le slug de l'etude de cas qui sert de preuve, ou null pour un
-   *  emplacement [À FOURNIR]. */
-  proof: string | null
+  links: Cta[]
 }
 
+/**
+ * Une realisation.
+ *
+ * `slug` sert aussi de clef d'accord : OCS et Wave ne sortent que si
+ * SHOW_OCS et SHOW_WAVE valent true, et le filtre est dans `lib/flags.ts`.
+ */
 export interface CaseStudy {
   slug: string
   name: string
   sector: string
   country: string
+  /** La ville, pour le globe des realisations. */
+  city: string | null
+  /** Les coordonnees pour le globe, ou null. */
+  coords: { lat: number; lon: number } | null
   /** Une phrase. */
   summary: string
   /** Le site du projet, affiche sous sa capture. */
@@ -86,6 +72,8 @@ export interface CaseStudy {
   result: string | null
   /** La capture du projet, ou null. */
   shot: string | null
+  /** La video de la carte plein ecran, ou null. */
+  video: string | null
   context: string | null
   need: string | null
   built: string[] | null
@@ -95,21 +83,63 @@ export interface CaseStudy {
   quote: { text: string; author: string } | null
 }
 
-export interface MethodStep {
-  title: string
-  body: string | null
-  /** La demo de l'etape : une image ou une video, ou null. */
-  demo: string | null
+/**
+ * Un temoignage.
+ *
+ * Le cahier interdit d'en inventer un : tant que le texte et la photo n'ont
+ * pas ete fournis, les deux valent null et la carte affiche son emplacement.
+ */
+export interface Testimonial {
+  /** Le nom de l'entreprise, ou null tant qu'il n'est pas autorise. */
+  company: string | null
+  author: string | null
+  role: string | null
+  text: string | null
+  photo: string | null
 }
 
-export interface FaqItem {
-  question: string
-  answer: string
+/**
+ * Une page de service : le gabarit de la section 5 du cahier.
+ *
+ * Le prix ne vient pas d'ici mais de `lib/prices.ts` : un prix ne doit pas
+ * pouvoir etre ecrit deux fois a deux endroits.
+ */
+export interface ServicePage {
+  title: string
+  lead: string | null
+  /** Le probleme, dans les mots du client. */
+  problem: string[] | null
+  /** Ce qu'on livre. */
+  delivers: string[] | null
+  /** Les delais annonces. */
+  delays: string | null
+  /** Le slug de la realisation liee, ou null. */
+  proof: string | null
+  /** Une FAQ courte. */
+  faq: FaqItem[] | null
 }
 
-export interface FooterColumn {
+/**
+ * Une page d'expertise : le gabarit de la section 6 du cahier.
+ *
+ * `experience` porte l'experience personnelle des fondateurs, et seulement
+ * elle. Le cahier est formel : elle n'apparait que sur ces pages, toujours
+ * sous l'intitule « Notre experience », et jamais presentee comme une
+ * realisation de Kuiper Studio.
+ */
+export interface ExpertisePage {
   title: string
-  links: Cta[]
+  lead: string | null
+  /** Ce qu'on comprend du metier. */
+  understand: string[] | null
+  /** Les problemes typiques. */
+  problems: string[] | null
+  /** Ce qu'on propose. */
+  offer: string[] | null
+  /** Notre experience, celle des fondateurs, avant Kuiper Studio. */
+  experience: string[] | null
+  /** Les slugs des realisations liees. */
+  proof: string[] | null
 }
 
 export interface Dict {
@@ -142,6 +172,13 @@ export interface Dict {
     blog: string
     contact: string
   }
+
+  /** La ligne de description sous chaque entree des menus deroulants. */
+  menu: {
+    services: Record<ServiceKey, string>
+    expertises: Record<ExpertiseKey, string>
+  }
+
   nav: {
     items: Cta[]
     cta: string
@@ -153,14 +190,13 @@ export interface Dict {
     menu: string
     close: string
   }
+
   hero: {
     eyebrow: string
     title: string
     /**
-     * Le titre decoupe en lignes, pour l'en-tete typographique. Les retours
-     * sont un choix de composition, pas un hasard de largeur : ils changent
-     * d'une langue a l'autre. La derniere ligne porte les asterisques et
-     * devient la phrase qui reste seule a l'ecran.
+     * Le titre decoupe en lignes. Les retours sont un choix de composition,
+     * pas un hasard de largeur : ils changent d'une langue a l'autre.
      */
     titleLines: string[]
     sub: string
@@ -168,62 +204,91 @@ export interface Dict {
     secondary: Cta
     note: string
   }
-  proof: {
-    logosTitle: string
-    figures: Figure[]
+
+  /** Les en-tetes des sections de l'accueil. */
+  home: {
+    services: { title: string; lead: string }
+    expertises: { title: string; lead: string }
+    work: { title: string; lead: string }
+    pricing: { title: string; lead: string; cta: Cta }
+    blog: { title: string; lead: string }
+    testimonials: { title: string; lead: string }
   }
-  showcase: { title: string; note: string }
-  situations: {
-    title: string
-    more: string
-    cards: SituationCard[]
+
+  services: Record<ServiceKey, ServicePage>
+  /** Les intitules du gabarit d'une page de service. */
+  serviceLabels: {
+    problem: string
+    delivers: string
+    delays: string
+    price: string
+    proof: string
+    faq: string
   }
-  manifesto: string
-  founders: {
-    title: string
-    people: { name: string; role: string | null; bio: string | null; photo: string | null }[]
+
+  expertises: Record<ExpertiseKey, ExpertisePage>
+  /** Les intitules du gabarit d'une page d'expertise. */
+  expertiseLabels: {
+    understand: string
+    problems: string
+    offer: string
+    /** Toujours « Notre experience », jamais autre chose. */
+    experience: string
+    proof: string
   }
-  offers: {
-    title: string
-    note: string
-    items: { title: string; body: string | null; price: string }[]
-  }
+
   work: {
     title: string
     intro: string
-    filters: string[]
-    all: string
+    more: string
     cases: CaseStudy[]
     resultLabel: string
     otherProjects: string
     sectorLabel: string
+    /** Le libelle du point du studio sur le globe. */
+    studio: string
   }
-  convictions: {
-    title: string
-    items: { title: string; body: string | null }[]
+  caseLabels: {
+    context: string
+    need: string
+    built: string
+    results: string
+    quote: string
   }
-  method: {
-    title: string
-    intro: string
-    steps: MethodStep[]
-  }
+
   testimonials: {
     title: string
     note: string
+    items: Testimonial[]
   }
-  diagnostic: {
+
+  pricing: {
+    title: string
+    lead: string
+    /** La mention qui accompagne toute estimation. */
+    disclaimer: string
+  }
+
+  blog: {
+    title: string
+    lead: string
+    /** Le temps de lecture : « 4 min de lecture ». */
+    readingTime: string
+    share: string
+    empty: string
+  }
+
+  contact: {
     title: string
     body: string
-    preview: { title: string; lines: string[] }
     form: {
-      venue: string
+      company: string
       city: string
-      type: string
-      types: string[]
-      maps: string
-      mapsHint: string
+      need: string
+      needs: string[]
       name: string
       email: string
+      message: string
       consent: string
       submit: string
       sending: string
@@ -233,21 +298,30 @@ export interface Dict {
       invalidEmail: string
     }
   }
+
+  founders: {
+    title: string
+    people: { name: string; role: string | null; bio: string | null; photo: string | null }[]
+  }
+
   faq: {
     title: string
     items: FaqItem[]
   }
+
   finalCta: {
     title: string
     sub: string
     primary: Cta
     secondary: Cta
   }
+
   footer: {
     columns: FooterColumn[]
     legal: string
     tagline: string
   }
+
   cookies: {
     title: string
     body: string
@@ -258,25 +332,7 @@ export interface Dict {
     necessary: { title: string; body: string }
     analytics: { title: string; body: string }
   }
-  situationPages: SituationPage[]
-  /** Les blocs du gabarit d'une page situation. */
-  situationLabels: {
-    /** Le bloc « Ce que vous mesurez » affiche l'avant et l'apres. */
-    before: string
-    after: string
-    problem: string
-    steps: string
-    measures: string
-    proof: string
-    price: string
-  }
-  caseLabels: {
-    context: string
-    need: string
-    built: string
-    results: string
-    quote: string
-  }
+
   about: {
     title: string
     body: string | null

@@ -5,19 +5,19 @@ import { dict } from '@/content'
 import type { Locale } from '@/lib/i18n'
 import { track } from '@/lib/analytics'
 
-type Errors = Partial<Record<'venue' | 'city' | 'name' | 'email' | 'consent', string>>
+type Errors = Partial<Record<'company' | 'city' | 'name' | 'email' | 'consent', string>>
 
 /**
- * Le formulaire du diagnostic gratuit.
+ * Le formulaire de contact.
  *
- * Champs du cahier : nom de l'etablissement, ville, type, lien Google Maps
- * facultatif, votre nom, votre email, case de consentement obligatoire. La
- * protection anti-spam est invisible : un champ leurre hors ecran et le temps
- * passe sur le formulaire, verifies cote serveur. Aucun captcha, donc rien a
- * charger et rien a cliquer.
+ * Votre entreprise, votre ville, ce dont vous avez besoin, votre nom, votre
+ * email, un message, et une case de consentement obligatoire. La protection
+ * anti-spam est invisible : un champ leurre hors ecran et le temps passe sur
+ * le formulaire, verifies cote serveur. Aucun captcha, donc rien a charger et
+ * rien a cliquer.
  */
-export default function DiagnosticForm({ locale }: { locale: Locale }) {
-  const t = dict(locale).diagnostic.form
+export default function ContactForm({ locale }: { locale: Locale }) {
+  const t = dict(locale).contact.form
   const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
   const [errors, setErrors] = useState<Errors>({})
   const openedAt = useRef(Date.now())
@@ -36,7 +36,7 @@ export default function DiagnosticForm({ locale }: { locale: Locale }) {
     const get = (k: string) => String(form.get(k) ?? '').trim()
 
     const next: Errors = {}
-    if (!get('venue')) next.venue = t.required
+    if (!get('company')) next.company = t.required
     if (!get('city')) next.city = t.required
     if (!get('name')) next.name = t.required
     const email = get('email')
@@ -53,10 +53,10 @@ export default function DiagnosticForm({ locale }: { locale: Locale }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          venue: get('venue'),
+          company: get('company'),
           city: get('city'),
-          type: get('type'),
-          maps: get('maps'),
+          need: get('need'),
+          message: get('message'),
           name: get('name'),
           email,
           consent: true,
@@ -68,7 +68,7 @@ export default function DiagnosticForm({ locale }: { locale: Locale }) {
         }),
       })
       if (!res.ok) throw new Error(String(res.status))
-      track('diagnostic_submit')
+      track('contact_submit')
       setState('done')
     } catch {
       setState('error')
@@ -78,22 +78,19 @@ export default function DiagnosticForm({ locale }: { locale: Locale }) {
   return (
     <form className="form" onSubmit={onSubmit} noValidate>
       <div className="form__pair">
-        <Field id="venue" label={t.venue} error={errors.venue} required />
+        <Field id="company" label={t.company} error={errors.company} required />
         <Field id="city" label={t.city} error={errors.city} required />
       </div>
 
-      <div className="form__pair">
-        <div className="field">
-          <label htmlFor="type">{t.type}</label>
-          <select id="type" name="type" defaultValue={t.types[0]}>
-            {t.types.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </div>
-        <Field id="maps" label={t.maps} hint={t.mapsHint} type="url" />
+      <div className="field">
+        <label htmlFor="need">{t.need}</label>
+        <select id="need" name="need" defaultValue={t.needs[0]}>
+          {t.needs.map((need) => (
+            <option key={need} value={need}>
+              {need}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="form__pair">
@@ -106,6 +103,11 @@ export default function DiagnosticForm({ locale }: { locale: Locale }) {
           type="email"
           autoComplete="email"
         />
+      </div>
+
+      <div className="field">
+        <label htmlFor="message">{t.message}</label>
+        <textarea id="message" name="message" rows={4} />
       </div>
 
       {/* le leurre : hors ecran, hors tabulation, et ignore des lecteurs d'ecran */}

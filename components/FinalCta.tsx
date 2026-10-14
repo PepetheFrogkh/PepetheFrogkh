@@ -20,7 +20,7 @@ export default function FinalCta({ locale }: { locale: Locale }) {
               locale={locale}
               href={t.primary.href}
               label={t.primary.label}
-              event="diagnostic_click"
+              event="estimate_click"
             />
             <Cta
               locale={locale}

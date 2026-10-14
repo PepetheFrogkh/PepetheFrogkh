@@ -22,6 +22,7 @@ import {
 import { alternates } from '@/lib/routes'
 import { visibleCases } from '@/lib/flags'
 import CaseCard from '@/components/CaseCard'
+import ContactForm from '@/components/ContactForm'
 import FinalCta from '@/components/FinalCta'
 import Heading from '@/components/Heading'
 import Reveal from '@/components/Reveal'
@@ -228,6 +229,23 @@ export default async function Page({
     )
   }
 
+  if (route.kind === 'page' && route.page === 'contact') {
+    return (
+      <>
+        <Head locale={lang} title={t.contact.title} lead={t.contact.body} />
+        <section className="section">
+          <div className="container measure measure--narrow">
+            <Reveal>
+              <div className="card">
+                <ContactForm locale={lang} />
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      </>
+    )
+  }
+
   if (route.kind === 'text') {
     const text = t[route.page]
     return (
@@ -302,7 +320,7 @@ function Index({ locale, kind }: { locale: Locale; kind: 'services' | 'expertise
           key={key}
         >
           <h2 className="card__title">{children[key]}</h2>
-          <span className="link-more">{t.situations.more}</span>
+          <span className="link-more">{t.work.more}</span>
         </Link>
       ))}
     </div>
