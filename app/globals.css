@@ -384,9 +384,10 @@ p:last-child {
   background: var(--peach);
 }
 
-.btn[aria-disabled='true'] {
+.btn[aria-disabled='true'],
+.btn:disabled {
   cursor: not-allowed;
-  opacity: 0.75;
+  opacity: 0.4;
 }
 
 .btn--small {
@@ -523,10 +524,22 @@ p:last-child {
   gap: 10px;
 }
 
+/* Sept entrees, le logo, le selecteur de devise, FR / EN et le bouton
+   principal tiennent sur une ligne de 1 200 px, mais de justesse : les
+   libelles ne doivent donc jamais revenir a la ligne, et la rangee garde sa
+   largeur naturelle plutot que de comprimer « À propos » sur deux lignes. En
+   dessous de la largeur ou tout cela tient, c'est le menu plein ecran qui
+   prend la suite. */
 .header__nav {
   display: none;
-  gap: var(--s3);
+  gap: var(--s2);
   align-items: center;
+  flex: none;
+}
+
+.header__nav a,
+.header__nav .menu__trigger {
+  white-space: nowrap;
 }
 
 .header__nav a {
@@ -729,7 +742,11 @@ p:last-child {
   background: var(--ink);
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 1180px) {
+  .header__inner {
+    gap: var(--s2);
+  }
+
   .header__nav {
     display: flex;
   }
@@ -2968,6 +2985,496 @@ body.has-view-cursor [data-cursor='voir'] {
   gap: var(--s2);
   width: min(100%, 22rem);
   justify-items: start;
+}
+
+/* ══ Le configurateur, etape par etape ════════════════════════════════════
+   Une question par ecran, un rail d'etapes sur lequel on revient d'un clic,
+   et le total visible en permanence : le prix n'est jamais garde pour la fin.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.wiz {
+  container-type: inline-size;
+}
+
+.wiz__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s3);
+}
+
+/* le total en cours, dans un jeton qui tressaute quand il change */
+.wiz__tally {
+  flex: none;
+  text-align: right;
+  background: var(--peach);
+  border-radius: var(--r-pill);
+  padding: 8px 18px;
+}
+
+.wiz__tally-label {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--terra);
+}
+
+.wiz__tally-value {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--ink);
+  animation: wiz-pop 0.28s var(--ease) both;
+}
+
+@keyframes wiz-pop {
+  from {
+    transform: scale(0.94);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* ── le rail des etapes ─────────────────────────────────────────────────── */
+
+.wiz__rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: var(--s4) 0 0;
+  padding: 0;
+  counter-reset: none;
+}
+
+.wiz__rail-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* le trait qui relie une etape a la suivante */
+.wiz__rail-item:not(:last-child)::after {
+  content: '';
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+.wiz__dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--slate);
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  padding: 7px 14px 7px 7px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+
+.wiz__dot:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.wiz__dot-num {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--slate);
+}
+
+.wiz__dot[data-done] {
+  color: var(--ink);
+  border-color: var(--terra);
+}
+
+.wiz__dot[data-done] .wiz__dot-num {
+  background: var(--peach);
+  border-color: var(--peach);
+  color: var(--terra);
+}
+
+.wiz__dot[data-on] {
+  color: var(--ink);
+  background: var(--peach);
+  border-color: var(--terra);
+}
+
+.wiz__dot[data-on] .wiz__dot-num {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--ink);
+}
+
+/* sous 640 px le nom des etapes s'efface : les numeros suffisent a se situer,
+   et la question est ecrite en toutes lettres juste dessous */
+@container (max-width: 640px) {
+  .wiz__dot-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .wiz__dot {
+    padding: 7px;
+  }
+
+  /* sans les traits de liaison, les cinq pastilles tiennent sur une rangee :
+     un trait qui finit une ligne ne relie plus rien */
+  .wiz__rail-item:not(:last-child)::after {
+    display: none;
+  }
+
+  .wiz__rail {
+    gap: var(--s2);
+  }
+}
+
+/* ── la scene ───────────────────────────────────────────────────────────── */
+
+.wiz__stage {
+  margin-top: var(--s4);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--border);
+  /* la plus haute des cinq etapes, pour que la page ne saute pas d'un cran a
+     l'autre : le bouton « suivant » reste sous le doigt */
+  min-height: 19rem;
+}
+
+.wiz__step {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 var(--s4);
+}
+
+.wiz__step:focus {
+  outline: none;
+}
+
+.wiz__step:focus-visible {
+  outline: 2px solid var(--terra);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
+.wiz__count {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--terra);
+}
+
+.wiz__question {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.wiz__help {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--slate);
+  max-width: 46ch;
+}
+
+/* ── etape 1 : le compteur de pages ─────────────────────────────────────── */
+
+.wiz__pages {
+  display: grid;
+  justify-items: center;
+  gap: var(--s2);
+}
+
+.wiz__counter {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.wiz__step-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease);
+}
+
+.wiz__step-btn:hover:not(:disabled) {
+  background: var(--peach);
+}
+
+.wiz__step-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.wiz__number {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(56px, 9vw, 84px);
+  line-height: 1;
+  color: var(--ink);
+  min-width: 2.2em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.wiz__slider-label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--slate);
+}
+
+.wiz__slider {
+  width: min(100%, 26rem);
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.wiz__slider:focus-visible {
+  outline: 2px solid var(--terra);
+  outline-offset: 6px;
+}
+
+.wiz__slider::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(
+    to right,
+    var(--orange) 0 var(--fill, 0%),
+    var(--peach) var(--fill, 0%) 100%
+  );
+}
+
+.wiz__slider::-moz-range-track {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--peach);
+}
+
+.wiz__slider::-moz-range-progress {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--orange);
+}
+
+.wiz__slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid var(--orange);
+}
+
+.wiz__slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid var(--orange);
+}
+
+.wiz__pack {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  margin: var(--s2) 0 0;
+  text-align: center;
+  max-width: 44ch;
+}
+
+.wiz__pack-label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--terra);
+}
+
+.wiz__pack-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--ink);
+}
+
+/* ── etapes 2 a 4 : les cartes ──────────────────────────────────────────── */
+
+.wiz__cards {
+  display: grid;
+  gap: var(--s2);
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+}
+
+.wiz__cards--wide {
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+}
+
+.wiz__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 5.2rem;
+  text-align: left;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s var(--ease),
+    background-color 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+
+.wiz__card:hover:not(:disabled) {
+  border-color: var(--terra);
+  transform: translateY(-2px);
+}
+
+.wiz__card[data-on] {
+  border-color: var(--terra);
+  background: var(--peach);
+}
+
+.wiz__card:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.wiz__card-name {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.wiz__card-price {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--terra);
+  white-space: nowrap;
+}
+
+/* ── etape 5 : le prix ──────────────────────────────────────────────────── */
+
+.wiz__result {
+  display: grid;
+  gap: var(--s4);
+}
+
+@container (min-width: 760px) {
+  .wiz__result {
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--s6);
+  }
+
+  .wiz__result .conf__send {
+    grid-column: 1 / -1;
+    justify-items: start;
+    justify-self: start;
+  }
+}
+
+.wiz__price {
+  display: grid;
+  gap: 2px;
+}
+
+.conf__total-value--small {
+  font-size: clamp(20px, 2vw, 26px);
+}
+
+.wiz__recap {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 6px var(--s3);
+  margin: 0;
+  font-size: 14px;
+}
+
+.wiz__recap dt {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  color: var(--slate);
+}
+
+.wiz__recap dd {
+  margin: 0;
+  color: var(--ink);
+}
+
+.wiz__edit {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--terra);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── la navigation ─────────────────────────────────────────────────────── */
+
+.wiz__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  justify-content: space-between;
+  margin-top: var(--s4);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wiz__tally-value {
+    animation: none;
+  }
+
+  .wiz__card:hover:not(:disabled) {
+    transform: none;
+  }
 }
 
 /* ══ Les tableaux de prix ═════════════════════════════════════════════════

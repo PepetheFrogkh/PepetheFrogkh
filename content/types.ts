@@ -329,6 +329,25 @@ export interface Dict {
     email: string
     emailNote: string
     consent: string
+    /** Les quatre etapes et l'ecran de resultat, dans l'ordre. */
+    steps: { short: string; question: string; help: string }[]
+    /** « Etape 2 sur 5 ». */
+    stepOf: (current: number, total: number) => string
+    pagesUnit: (count: number) => string
+    pagesMore: string
+    packIs: string
+    noOption: string
+    runningTotal: string
+    next: string
+    back: string
+    seeResult: string
+    restart: string
+    recap: string
+    recapPages: string
+    recapOptions: string
+    recapDelay: string
+    recapPlan: string
+    edit: string
   }
 
   /** Les libelles du simulateur d'automatisation. */

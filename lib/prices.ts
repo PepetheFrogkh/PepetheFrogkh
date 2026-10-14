@@ -65,15 +65,35 @@ export interface Pack {
   included?: number
   /** Les options deja comprises, qui ne consomment pas un des `included`. */
   free?: OptionId[]
+  /**
+   * Le nombre de pages que le pack couvre. Absent pour le sur-mesure, qui
+   * n'a pas de plafond. C'est cette colonne que lit le configurateur : le
+   * visiteur dit combien de pages il lui faut, et le pack s'en deduit, au
+   * lieu de lui demander de comprendre la grille avant de l'utiliser.
+   */
+  pages?: number
 }
 
 export const PACKS: Pack[] = [
-  { id: 'essentiel-1', price: fixed(eur(499)) },
-  { id: 'essentiel-3', price: fixed(eur(799)) },
-  { id: 'pro', price: fixed(eur(1290)), featured: true, included: 2 },
-  { id: 'complet', price: fixed(eur(1999)), included: 3, free: ['langue'] },
+  { id: 'essentiel-1', price: fixed(eur(499)), pages: 1 },
+  { id: 'essentiel-3', price: fixed(eur(799)), pages: 3 },
+  { id: 'pro', price: fixed(eur(1290)), featured: true, included: 2, pages: 6 },
+  { id: 'complet', price: fixed(eur(1999)), included: 3, free: ['langue'], pages: 10 },
   { id: 'sur-mesure', price: { kind: 'quote' } },
 ]
+
+/**
+ * Le pack qui couvre ce nombre de pages.
+ *
+ * Au-dela du plus grand plafond, c'est le sur-mesure : un site de quinze
+ * pages ne se vend pas en ajoutant cinq pages au pack Complet, il se chiffre.
+ */
+export function packForPages(pages: number): Pack {
+  return PACKS.find((p) => p.pages !== undefined && pages <= p.pages) ?? PACKS[PACKS.length - 1]
+}
+
+/** Le plus grand nombre de pages encore couvert par un pack chiffre. */
+export const MAX_PAGES = Math.max(...PACKS.map((p) => p.pages ?? 0))
 
 export type OptionId =
   | 'formulaire-contact'
