@@ -93,7 +93,7 @@ const SEGMENTS: Record<PageKey, Record<Locale, string>> = {
 }
 
 /**
- * Les cinq services, et les six expertises.
+ * Les cinq services, et les sept expertises.
  *
  * Leurs adresses enfants sont declarees ici, langue par langue, et non
  * deduites d'une position dans une liste de contenu : une page de service
@@ -112,6 +112,7 @@ const SERVICE_SLUGS: Record<ServiceKey, Record<Locale, string>> = {
 
 export const EXPERTISES = [
   'restaurants',
+  'retail',
   'hotels',
   'manufacturing',
   'teams',
@@ -122,6 +123,7 @@ export type ExpertiseKey = (typeof EXPERTISES)[number]
 
 const EXPERTISE_SLUGS: Record<ExpertiseKey, Record<Locale, string>> = {
   restaurants: { fr: 'restauration', en: 'restaurants', km: 'restaurants' },
+  retail: { fr: 'commerce-de-detail', en: 'retail', km: 'retail' },
   hotels: { fr: 'hotellerie', en: 'hotels', km: 'hotels' },
   manufacturing: { fr: 'production-et-manufacturing', en: 'manufacturing', km: 'manufacturing' },
   teams: { fr: 'gestion-des-equipes', en: 'team-management', km: 'team-management' },
