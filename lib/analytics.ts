@@ -15,6 +15,7 @@ export type TrackedEvent =
   | 'book_call_click'
   | 'configurator_start'
   | 'price_shown'
+  | 'currency_change'
 
 declare global {
   interface Window {

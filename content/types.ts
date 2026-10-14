@@ -15,6 +15,12 @@ export const TBD = {
   en: '[TO PROVIDE]',
 } as const
 
+/** Un prix qui n'a pas encore ete fixe. Jamais une conversion inventee. */
+export const TBF = {
+  fr: '[À FIXER]',
+  en: '[TO SET]',
+} as const
+
 export interface Cta {
   label: string
   href: string
@@ -123,6 +129,8 @@ export interface Dict {
     cta: string
     /** Le libelle court du bouton, sous 560 px. */
     ctaShort: string
+    /** Le nom du groupe de boutons du selecteur de devise. */
+    currency: string
     skip: string
     menu: string
     close: string

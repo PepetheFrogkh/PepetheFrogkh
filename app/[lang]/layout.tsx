@@ -7,6 +7,7 @@ import { alternates } from '@/lib/routes'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CookieBanner from '@/components/CookieBanner'
+import CurrencyScript from '@/components/CurrencyScript'
 import Preloader from '@/components/Preloader'
 import SmoothScroll from '@/components/SmoothScroll'
 import ViewCursor from '@/components/ViewCursor'
@@ -139,7 +140,13 @@ export default async function LangLayout({
     <html
       lang={lang}
       className={`${fraunces.variable} ${nunitoSans.variable} ${nunito.variable}`}
+      // le script de devise pose data-currency avant l'hydratation : sans cela
+      // React signale un ecart entre le HTML du serveur et celui du client
+      suppressHydrationWarning
     >
+      <head>
+        <CurrencyScript />
+      </head>
       <body>
         <Preloader />
         <a className="skip" href="#contenu">

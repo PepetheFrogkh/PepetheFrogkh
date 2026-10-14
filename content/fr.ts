@@ -59,6 +59,7 @@ export const fr: Dict = {
     ],
     cta: 'Diagnostic gratuit',
     ctaShort: 'Diagnostic',
+    currency: 'Devise',
     skip: 'Aller au contenu',
     menu: 'Ouvrir le menu',
     close: 'Fermer le menu',

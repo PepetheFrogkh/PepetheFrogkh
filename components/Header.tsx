@@ -8,6 +8,7 @@ import { other, path, type Locale } from '@/lib/i18n'
 import { translatePath } from '@/lib/routes'
 import { resolve } from '@/lib/links'
 import { track } from '@/lib/analytics'
+import CurrencySwitch from './CurrencySwitch'
 
 /**
  * L'en-tete, fixe.
@@ -89,6 +90,7 @@ export default function Header({ locale }: { locale: Locale }) {
           </nav>
 
           <div className="header__right">
+            <CurrencySwitch label={t.nav.currency} />
             {switcher}
             <Link
               className="btn btn--primary btn--small header__cta"
@@ -118,6 +120,7 @@ export default function Header({ locale }: { locale: Locale }) {
           <div className="container header__inner">
             <span className="header__logo">Kuiper Studio</span>
             <div className="header__right">
+              <CurrencySwitch label={t.nav.currency} />
               {switcher}
               <button
                 className="header__burger"

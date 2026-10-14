@@ -2117,6 +2117,69 @@ body.has-view-cursor [data-cursor='voir'] {
   }
 }
 
+/* ══ Les prix, dans deux devises ══════════════════════════════════════════
+   Les deux montants sont dans le HTML ; l'attribut pose sur la balise html
+   decide lequel se voit. Les pages restent donc statiques, donc en cache chez
+   l'hebergeur, tout en montrant le bon prix. Sans JavaScript l'attribut
+   n'existe pas et c'est l'euro qui s'affiche.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+[data-cur] {
+  display: none;
+}
+
+:root[data-currency='EUR'] [data-cur='EUR'],
+:root[data-currency='USD'] [data-cur='USD'],
+:root:not([data-currency]) [data-cur='EUR'] {
+  display: inline;
+}
+
+.price {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* un prix qui n'a pas ete fixe : le meme code que les autres emplacements,
+   mais on ne confond pas un contenu manquant avec une decision manquante */
+.tbd--fix {
+  white-space: nowrap;
+}
+
+/* ── le selecteur de devise ────────────────────────────────────────────── */
+
+.currency {
+  display: inline-flex;
+  background: var(--peach);
+  border-radius: var(--r-pill);
+  padding: 2px;
+}
+
+.currency__btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition:
+    background 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.currency__btn[aria-pressed='true'] {
+  background: var(--white);
+}
+
+.currency__btn:hover {
+  color: var(--terra);
+}
+
 /* ══ La sequence cinematique ══════════════════════════════════════════════
    Une animation 3D precalculee, dessinee image par image sur un canvas selon
    la progression du defilement. Le canvas est decoratif : le texte est dans le
@@ -2286,6 +2349,28 @@ body.has-view-cursor [data-cursor='voir'] {
 
 .lab__spacer {
   height: 200vh;
+}
+
+/* une table de relecture, pour les pages du laboratoire */
+.lab-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--s5);
+  font-size: 15px;
+}
+
+.lab-table th,
+.lab-table td {
+  text-align: left;
+  padding: 10px var(--s2) 10px 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: baseline;
+}
+
+.lab-table th {
+  font-family: var(--font-ui);
+  font-weight: 400;
+  color: var(--slate);
 }
 
 /* ce qui vient apres l'en-tete : la vague doit s'y mettre en pause */

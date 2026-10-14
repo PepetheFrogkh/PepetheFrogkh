@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Fraunces, Nunito, Nunito_Sans } from 'next/font/google'
 import '../globals.css'
+import CurrencyScript from '@/components/CurrencyScript'
 
 /**
  * Le gabarit du laboratoire.
@@ -34,7 +35,14 @@ export const viewport: Viewport = {
 
 export default function LabLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${fraunces.variable} ${nunitoSans.variable} ${nunito.variable}`}>
+    <html
+      lang="fr"
+      className={`${fraunces.variable} ${nunitoSans.variable} ${nunito.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <CurrencyScript />
+      </head>
       <body>{children}</body>
     </html>
   )

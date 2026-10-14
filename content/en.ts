@@ -55,6 +55,7 @@ export const en: Dict = {
     ],
     cta: 'Free diagnostic',
     ctaShort: 'Diagnostic',
+    currency: 'Currency',
     skip: 'Skip to content',
     menu: 'Open the menu',
     close: 'Close the menu',
