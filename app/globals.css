@@ -2126,23 +2126,13 @@ body.has-view-cursor [data-cursor='voir'] {
   background: var(--cream);
 }
 
-/* La scene reste fixee : c'est le defilement qui la fait evoluer. Elle occupe
-   la moitie droite sur grand ecran, le bas de l'ecran sur mobile. Le texte
-   garde sa moitie, donc les cellules ne passent jamais dessous. */
+/* La scene reste fixee et prend tout l'ecran : c'est le defilement qui la
+   fait evoluer. Le texte passe par-dessus, en encre sur creme et peche, ou il
+   garde tout son contraste. */
 .lab__scene {
   position: fixed;
-  left: 0;
-  right: 0;
-  top: 46%;
-  bottom: 0;
+  inset: 0;
   z-index: 0;
-}
-
-@media (min-width: 1000px) {
-  .lab__scene {
-    left: 50%;
-    top: 0;
-  }
 }
 
 .lab__scene canvas {
@@ -2151,8 +2141,8 @@ body.has-view-cursor [data-cursor='voir'] {
   height: 100%;
 }
 
-/* L'image fixe : les memes trois cartes, en CSS. Elle tient la place tant que
-   la scene n'a rien dessine, et reprend la main sans WebGL ou sous 30 i/s. */
+/* L'image fixe, en CSS. Elle tient la place tant que la scene n'a rien
+   dessine, et reprend la main sans WebGL ou sous 30 i/s. */
 .lab__still {
   position: absolute;
   inset: 0;
@@ -2165,46 +2155,25 @@ body.has-view-cursor [data-cursor='voir'] {
   opacity: 1;
 }
 
-.lab__labels {
-  position: absolute;
-  inset: 0;
-  transition: opacity 0.4s var(--ease);
-  pointer-events: none;
-}
-
-.lab__label {
-  position: absolute;
-  transform: translateY(-100%);
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: clamp(13px, 1.1vw, 17px);
-  letter-spacing: 0.01em;
-  color: var(--ink);
-  white-space: nowrap;
-}
-
-/* Le texte reste colle en haut pendant que la scene se range : sans cela la
-   moitie gauche se vide des le premier ecran passe. */
 .lab__text {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 1;
   padding-top: var(--s9);
   pointer-events: none;
 }
 
-/* la colonne de texte reste dans sa moitie, quelle que soit la largeur */
+/* Le texte de l'en-tete s'en va au defilement, comme il le fera sur l'accueil.
+   Rien ne se vide derriere lui : la vague occupe tout l'ecran, et c'est elle
+   que le defilement vient montrer. */
+.lab--wave .lab__text {
+  position: relative;
+}
+
 .lab__copy {
   display: flex;
   flex-direction: column;
   gap: var(--s3);
   max-width: 34rem;
-}
-
-@media (min-width: 1000px) {
-  .lab__copy {
-    max-width: min(34rem, 44vw);
-  }
 }
 
 .lab__title {
@@ -2227,6 +2196,84 @@ body.has-view-cursor [data-cursor='voir'] {
 
 .lab__spacer {
   height: 200vh;
+}
+
+/* ce qui vient apres l'en-tete : la vague doit s'y mettre en pause */
+.lab__after {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  background: var(--white);
+  border-radius: var(--r-card) var(--r-card) 0 0;
+  padding: var(--section) var(--gutter);
+}
+
+.lab__after .lead {
+  max-width: 40ch;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ── l'image fixe de la vague ──────────────────────────────────────────────
+   Trois arcs en degrade et une trame de points, aux couleurs de la charte.
+   Elle donne la meme lecture de nappe lumineuse que la scene, sans demander
+   une seule image par seconde.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.wave-still {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.wave-still__arc {
+  position: absolute;
+  left: 50%;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  filter: blur(2px);
+}
+
+.wave-still__arc--1 {
+  width: 150%;
+  height: 46%;
+  top: 36%;
+  background: radial-gradient(60% 100% at 50% 100%, var(--peach), rgba(255, 227, 207, 0) 72%);
+}
+
+.wave-still__arc--2 {
+  width: 110%;
+  height: 34%;
+  top: 48%;
+  background: radial-gradient(
+    55% 100% at 50% 100%,
+    rgba(255, 107, 0, 0.3),
+    rgba(255, 107, 0, 0) 70%
+  );
+}
+
+.wave-still__arc--3 {
+  width: 78%;
+  height: 24%;
+  top: 58%;
+  background: radial-gradient(
+    50% 100% at 50% 100%,
+    rgba(255, 107, 0, 0.45),
+    rgba(255, 107, 0, 0) 68%
+  );
+}
+
+/* la trame de points : ce qui rappelle le plus les particules */
+.wave-still__grain {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--terra) 0.9px, transparent 1.1px);
+  background-size: 11px 11px;
+  opacity: 0.22;
+  -webkit-mask-image: radial-gradient(58% 42% at 50% 56%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(58% 42% at 50% 56%, #000 0%, transparent 78%);
 }
 
 /* le lecteur de mise au point, derriere ?debug=1 */

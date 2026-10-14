@@ -2,51 +2,37 @@
 
 import dynamic from 'next/dynamic'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import HeroPanel from '../HeroPanel'
-import {
-  CARDS,
-  CARD_H,
-  CARD_W,
-  CARD_Y,
-  DESKTOP_COUNT,
-  MOBILE_COUNT,
-  viewHalf,
-} from './layout'
+import WaveStill from './WaveStill'
+import { DESKTOP_COUNT, MOBILE_COUNT } from './wave'
 
 /**
- * L'en-tete « le tableur qui se range », sur sa route de test.
+ * L'en-tete « la vague », sur sa route de test.
  *
  * Le texte est dans le HTML et s'affiche tout de suite ; la scene est importee
- * ensuite, sans rendu serveur, et le canvas est decoratif. Elle occupe la
- * moitie droite de l'ecran sur grand ecran, le bas de l'ecran sur mobile : le
- * texte garde sa place et les cellules ne passent jamais dessous.
+ * ensuite, sans rendu serveur, et le canvas est decoratif.
  *
  * La page fait trois ecrans de haut : la progression vaut 0 en haut et 1 a la
  * fin du deuxieme ecran, comme sur le site.
  *
- * Il n'y a jamais de zone blanche. L'image fixe, les memes trois cartes en
- * CSS, est dessous des le premier octet ; elle s'efface quand la scene a
- * dessine sa premiere image, et revient si WebGL manque ou si la machine
- * n'arrive pas a suivre.
+ * Il n'y a jamais de zone blanche. L'image fixe en CSS est dessous des le
+ * premier octet ; elle s'efface quand la scene a dessine sa premiere image, et
+ * revient si WebGL manque ou si la machine n'arrive pas a suivre. Hors de
+ * l'ecran, la boucle s'arrete : la carte graphique se repose.
  *
  * Le lecteur de mise au point (progression, images par seconde, nombre de
- * cellules) ne s'affiche qu'avec `?debug=1`. Avec `?fps=0` le garde-fou des
+ * points) ne s'affiche qu'avec `?debug=1`. Avec `?fps=0` le garde-fou des
  * 30 i/s est desarme : c'est ce qu'il faut pour regarder la scene sur une
  * machine sans carte graphique, ou elle cederait la place a l'image fixe en
  * deux secondes.
  */
 
-const Scene = dynamic(() => import('./SpreadsheetScene'), { ssr: false })
+const Scene = dynamic(() => import('./WaveScene'), { ssr: false })
 
 /** Vrai quand le navigateur sait ouvrir un contexte WebGL. */
 function hasWebGL(): boolean {
   try {
     const canvas = document.createElement('canvas')
-    return Boolean(
-      canvas.getContext('webgl2') ||
-        canvas.getContext('webgl') ||
-        canvas.getContext('experimental-webgl'),
-    )
+    return Boolean(canvas.getContext('webgl2') || canvas.getContext('webgl'))
   } catch {
     return false
   }
@@ -57,12 +43,15 @@ const FPS_FLOOR = 30
 
 export default function HeroLab() {
   const progressRef = useRef(0)
+  /** L'etendue ou l'en-tete est actif : c'est elle qu'on observe, pas le
+      canvas, qui est fixe et donc toujours a l'ecran. */
+  const rangeRef = useRef<HTMLDivElement>(null)
   const [readout, setReadout] = useState({ progress: 0, fps: 0 })
-  const [aspect, setAspect] = useState(0.9)
   const [ready, setReady] = useState(false)
   const [painted, setPainted] = useState(false)
   const [mobile, setMobile] = useState(false)
   const [still, setStill] = useState(false)
+  const [paused, setPaused] = useState(false)
   const [debug, setDebug] = useState(false)
   /** Pourquoi la scene a rendu la main, s'il y a lieu. */
   const [fallback, setFallback] = useState<'' | 'webgl' | 'fps'>('')
@@ -72,10 +61,9 @@ export default function HeroLab() {
   useEffect(() => {
     setMobile(window.matchMedia('(max-width: 720px)').matches)
     setStill(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+
     const params = new URLSearchParams(window.location.search)
     setDebug(params.get('debug') === '1')
-    // le seuil, abaissable pour regarder la scene sur une machine sans carte
-    // graphique, ou elle cederait la place a l'image fixe en deux secondes
     const floor = params.get('fps') !== null ? Number(params.get('fps')) : FPS_FLOOR
 
     if (!hasWebGL()) {
@@ -83,23 +71,22 @@ export default function HeroLab() {
       return
     }
 
-    // le rapport du cadre de la scene, pas celui de la fenetre
-    const frame = () => {
-      const node = document.querySelector('.lab__scene')
-      if (!node) return
-      const box = node.getBoundingClientRect()
-      if (box.height > 0) setAspect(box.width / box.height)
-    }
-    frame()
-
     const onScroll = () => {
       const span = window.innerHeight * 2
       progressRef.current = Math.max(0, Math.min(1, window.scrollY / span))
     }
     onScroll()
-
     window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', frame)
+
+    // hors de l'ecran, la boucle s'arrete
+    let observer: IntersectionObserver | undefined
+    if (rangeRef.current && 'IntersectionObserver' in window) {
+      observer = new IntersectionObserver(
+        ([entry]) => setPaused(!entry.isIntersecting),
+        { threshold: 0 },
+      )
+      observer.observe(rangeRef.current)
+    }
 
     // la scene arrive apres le texte
     const idle =
@@ -133,7 +120,7 @@ export default function HeroLab() {
 
     return () => {
       window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', frame)
+      observer?.disconnect()
       cancelAnimationFrame(raf)
       if (typeof window.cancelIdleCallback === 'function' && typeof idle === 'number') {
         window.cancelIdleCallback(idle)
@@ -147,16 +134,12 @@ export default function HeroLab() {
   // l'image fixe tient la place tant que la scene n'a rien dessine
   const showStill = !scene || !painted
 
-  // les noms des cartes n'ont de sens qu'une fois les cartes formees
-  const labels = scene && painted ? Math.max(0, Math.min(1, (readout.progress - 0.62) / 0.3)) : 0
-  const half = viewHalf(aspect)
-
   return (
-    <div className="lab">
+    <div className="lab lab--wave">
       <div className="lab__scene" aria-hidden="true">
         {/* l'image fixe : jamais de zone blanche, meme sans WebGL */}
         <div className="lab__still" data-shown={showStill}>
-          <HeroPanel />
+          <WaveStill />
         </div>
 
         {scene ? (
@@ -164,46 +147,39 @@ export default function HeroLab() {
             progress={() => progressRef.current}
             mobile={mobile}
             still={still}
+            paused={paused}
             onPainted={onPainted}
           />
         ) : null}
-
-        {/* Les noms des cartes sont du HTML pose par-dessus la scene, pas de la
-            geometrie : le texte reste net a toutes les densites. */}
-        <div className="lab__labels" style={{ opacity: labels }}>
-          {CARDS.map((name, i) => (
-            <span
-              className="lab__label"
-              key={name}
-              style={{
-                // la carte est centree en x : son bord gauche sert de repere
-                left: `${50 - (CARD_W / 2 / half.w) * 50}%`,
-                top: `${50 - ((CARD_Y[i] + CARD_H / 2 + 0.1) / half.h) * 50}%`,
-              }}
-            >
-              {name}
-            </span>
-          ))}
-        </div>
       </div>
 
-      <header className="lab__text">
-        <div className="container">
-          <div className="lab__copy">
-            <span className="eyebrow">Laboratoire · en-tête</span>
-            <h1 className="lab__title">
-              Ce qui coince chaque semaine dans votre entreprise, <em>on le règle</em>.
-            </h1>
-            <p className="lead">
-              Tableurs, messageries, tâches répétitives : on les remplace par des outils sur mesure
-              que vos équipes utilisent vraiment. Module par module, en commençant par le plus
-              urgent.
-            </p>
+      <div className="lab__range" ref={rangeRef}>
+        <header className="lab__text">
+          <div className="container">
+            <div className="lab__copy">
+              <span className="eyebrow">Laboratoire · en-tête</span>
+              <h1 className="lab__title">
+                On construit les outils qui font <em>tourner</em> votre entreprise.
+              </h1>
+              <p className="lead">
+                Sites web, automatisations, applications métier : livrés vite, à prix affichés,
+                par une équipe qui connaît votre métier.
+              </p>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <div className="lab__spacer" />
+        <div className="lab__spacer" />
+      </div>
+
+      {/* Un bloc apres l'en-tete, pour verifier ce qui se passe quand la scene
+          quitte l'ecran : la boucle doit s'arreter. */}
+      <section className="lab__after">
+        <p className="lead">
+          Fin de l&rsquo;en-tête. La suite de l&rsquo;accueil viendra ici, et la vague se met en
+          pause dès qu&rsquo;elle quitte l&rsquo;écran.
+        </p>
+      </section>
 
       {debug ? (
         <footer className="lab__readout">
@@ -214,9 +190,9 @@ export default function HeroLab() {
             images/s <b>{readout.fps}</b>
           </span>
           <span>
-            cellules <b>{mobile ? MOBILE_COUNT : DESKTOP_COUNT}</b>
+            points <b>{(mobile ? MOBILE_COUNT : DESKTOP_COUNT).toLocaleString('fr-FR')}</b>
           </span>
-          <span>{still ? 'image fixe' : 'animé'}</span>
+          <span>{still ? 'image fixe' : paused ? 'en pause' : 'animé'}</span>
           <span>
             rendu{' '}
             <b>
