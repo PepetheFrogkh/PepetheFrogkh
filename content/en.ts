@@ -130,6 +130,8 @@ export const en: Dict = {
     desktopShot: 'desktop screenshot',
     phoneShot: 'phone screenshot',
     figures: 'verified figures',
+    updatedOn: 'last updated',
+    photo: 'photo',
   },
 
   hero: {
@@ -893,13 +895,13 @@ export const en: Dict = {
       {
         name: 'Arnaud Sebire',
         role: 'Co-founder, product and client relations',
-        bio: null,
+        bio: 'Self taught. He came into tech through a point of sale vendor, was hired two years later by another one in Cambodia, and became a product manager early: early enough to make his mistakes while they were still cheap. Two and a half years there, then three years at a data management and automated flow company. He started Kuiper Studio to answer what had annoyed him for years: nobody wanted to look at the small projects. His conviction fits in one sentence, and it is on this site: your budget is nothing to be ashamed of.',
         photo: null,
       },
       {
         name: 'Louis Vezia',
         role: 'Co-founder, technical lead',
-        bio: null,
+        bio: 'An engineer with a master’s degree from France. Around ten years in tech, seven of them in Cambodia, where he has lived since 2019. He worked at a point of sale vendor, spending two years building loyalty programmes for restaurants in Hong Kong, then at an air purification systems company, and on custom builds for clients. He decides how things get built.',
         photo: null,
       },
     ],
@@ -980,8 +982,124 @@ export const en: Dict = {
 
   about: {
     title: 'About',
-    body: null,
+    body: 'Kuiper Studio is a two person studio, based in Phnom Penh. We spent the last ten years inside the tools companies use every day: tills, inventories, CRMs, data flows. We built them, took them over, broke them and fixed them, for restaurants, hotels, shops and workshops. We started the studio for one specific reason: too many useful projects get turned away because their budget is judged too small. We would rather look, challenge the idea, and say what fits inside the budget on the table.',
   },
-  legal: { title: 'Legal notice', body: null },
-  privacy: { title: 'Privacy', body: null },
+  legal: {
+    title: 'Legal notice',
+    intro:
+      'The information below concerns the publisher of this site. The company registration is under way: the entries that depend on it are flagged and will be filled in as soon as it is issued.',
+    updated: '14 October 2026',
+    sections: [
+      {
+        heading: 'Site publisher',
+        facts: [
+          { label: 'Name', value: 'Kuiper Studio' },
+          { label: 'Legal form', value: null },
+          { label: 'Registration number', value: null },
+          { label: 'Registered office', value: 'Phnom Penh, Cambodia' },
+          { label: 'Full address', value: null },
+          { label: 'Publication director', value: 'Arnaud Sebire' },
+          { label: 'Contact', value: 'arnaud@kuiperstudio.com' },
+        ],
+      },
+      {
+        heading: 'Hosting',
+        body: ['This site is hosted by Hostinger, on a server located in Singapore.'],
+        facts: [
+          { label: 'Host', value: 'Hostinger' },
+          { label: 'Server location', value: 'Singapore' },
+          { label: 'Host’s legal details', value: null },
+        ],
+      },
+      {
+        heading: 'Intellectual property',
+        body: [
+          'The copy, images and code on this site belong to Kuiper Studio, unless stated otherwise on the page concerned.',
+          'The names and trademarks of the companies mentioned belong to their respective owners. Mentioning them implies neither a partnership nor an endorsement on their part.',
+          'The projects shown here are published with the written consent of the clients concerned. A project without that consent does not appear on this site.',
+        ],
+      },
+      {
+        heading: 'Listed prices',
+        body: [
+          'Prices shown on this site exclude tax.',
+          'They are shown in euros for visitors in Europe and in US dollars for everyone else. The dollar amount is calculated from the euro amount at a fixed commercial rate, which is not the market rate.',
+          'A listed price indicates a current rate, not a firm offer. The final price of a project is the one on the signed quote.',
+        ],
+      },
+      {
+        heading: 'The simulators',
+        body: [
+          'The site configurator and the automation simulator give an estimate calculated from the published price grid. That estimate does not bind Kuiper Studio: it exists to give an order of magnitude before a conversation.',
+        ],
+      },
+      {
+        heading: 'Governing law',
+        body: ['This site is published from Cambodia and is governed by Cambodian law.'],
+        facts: [{ label: 'Competent jurisdiction', value: null }],
+      },
+    ],
+  },
+
+  privacy: {
+    title: 'Privacy',
+    intro:
+      'What this site collects, why, where it goes, and how to have it deleted. No tracker is set before you agree to it.',
+    updated: '14 October 2026',
+    sections: [
+      {
+        heading: 'What we collect',
+        body: [
+          'Only what you send us yourself, through the contact form, the site configurator or the automation simulator.',
+        ],
+        facts: [
+          { label: 'Contact form', value: 'Name, email address, message, and the fields you fill in.' },
+          { label: 'Site configurator', value: 'Email address, and the detail of the estimate you built.' },
+          { label: 'Automation simulator', value: 'Email address, and the detail of the flow you built.' },
+          { label: 'Browsing', value: 'Nothing, until you have accepted audience measurement.' },
+        ],
+      },
+      {
+        heading: 'Why',
+        body: [
+          'To answer your enquiry, and for that alone. We sell no data, and we send no newsletter.',
+          'You consent to being contacted about your enquiry by ticking the box on the form. Without that box ticked, the form is not sent.',
+        ],
+      },
+      {
+        heading: 'Where it goes',
+        body: [
+          'Enquiries are sent to HubSpot, the customer relationship tool Kuiper Studio uses. They are stored there and read by the two founders.',
+          'No other company receives this data.',
+        ],
+        facts: [
+          { label: 'Recipient', value: 'HubSpot' },
+          { label: 'Location of HubSpot data', value: null },
+          { label: 'Retention period', value: null },
+        ],
+      },
+      {
+        heading: 'Cookies',
+        body: [
+          'The site works without cookies. Only one thing is stored in your browser without your agreement: your currency choice and your answer to the cookie banner, so you are not asked again on every page. It serves nothing else and never leaves your browser.',
+          'Audience measurement is switched on only if you accept it. Until you answer, or if you decline, no tracker is set and no visit is measured.',
+          'You can change your mind at any time from the banner, or by clearing this site’s data in your browser.',
+        ],
+      },
+      {
+        heading: 'Your rights',
+        body: [
+          'You can ask to see the data we hold about you, to have it corrected, or to have it deleted. Write to arnaud@kuiperstudio.com: we answer within two working days.',
+          'Deletion is final. We keep no copy just in case.',
+        ],
+      },
+      {
+        heading: 'Third party services',
+        body: [
+          'Fonts are served from this site, not from an outside service: no request is sent to a third party when a page is displayed.',
+          'The site contains no share buttons, no social network pixels, and no video embedded from a third party platform.',
+        ],
+      },
+    ],
+  },
 }

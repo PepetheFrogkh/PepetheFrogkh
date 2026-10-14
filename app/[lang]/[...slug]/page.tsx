@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { dict } from '@/content'
@@ -301,14 +302,29 @@ export default async function Page({
           <div className="container measure measure--narrow">
             <Reveal>
               <p className="lead">{t.about.body ?? <Tbd locale={lang} />}</p>
-              <div className="grid grid--2" style={{ marginTop: 'var(--s6)' }}>
+            </Reveal>
+            <Reveal>
+              <h2 className="legal__heading" style={{ marginTop: 'var(--s7)' }}>
+                {t.founders.title}
+              </h2>
+              <div className="founders">
                 {t.founders.people.map((person) => (
-                  <div className="card" key={person.name}>
-                    <h3>{person.name}</h3>
-                    <p className="muted small" style={{ marginTop: 8, marginBottom: 0 }}>
-                      {person.role ?? <Tbd locale={lang} />}
-                    </p>
-                  </div>
+                  <article className="founder" key={person.name}>
+                    {/* La photo n'est pas fournie : l'emplacement le dit, et
+                        garde sa place dans la mise en page. */}
+                    <div className="founder__photo">
+                      {person.photo ? (
+                        <Image src={person.photo} alt="" width={160} height={160} />
+                      ) : (
+                        <Tbd locale={lang} what={t.words.photo} />
+                      )}
+                    </div>
+                    <div className="founder__text">
+                      <h3 className="founder__name">{person.name}</h3>
+                      <p className="founder__role">{person.role ?? <Tbd locale={lang} />}</p>
+                      <p className="founder__bio">{person.bio ?? <Tbd locale={lang} />}</p>
+                    </div>
+                  </article>
                 ))}
               </div>
             </Reveal>
@@ -403,7 +419,43 @@ export default async function Page({
         <Head locale={lang} title={text.title} />
         <section className="section">
           <div className="container measure measure--narrow">
-            <p className="lead">{text.body ?? <Tbd locale={lang} />}</p>
+            <p className="lead">{text.intro}</p>
+            {/* La date dit de quand parle la page. Sans elle, un avis legal ne
+                vaut rien : le lecteur ne sait pas ce qu'il lit. */}
+            {text.updated ? (
+              <p className="small muted legal__date">{text.updated}</p>
+            ) : (
+              <p className="small legal__date">
+                <Tbd locale={lang} what={t.words.updatedOn} />
+              </p>
+            )}
+
+            {text.sections ? (
+              text.sections.map((part) => (
+                <section className="legal__part" key={part.heading}>
+                  <h2 className="legal__heading">{part.heading}</h2>
+                  {part.body?.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
+                  {/* Les faits sont une liste de definitions, pas des
+                      paragraphes : un numero d'enregistrement se cherche a
+                      l'oeil, il ne se lit pas dans une phrase. */}
+                  {part.facts ? (
+                    <dl className="legal__facts">
+                      {part.facts.map((fact) => (
+                        <div key={fact.label}>
+                          <dt>{fact.label}</dt>
+                          <dd>{fact.value ?? <Tbd locale={lang} />}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : null}
+                </section>
+              ))
+            ) : (
+              <TbdBlock locale={lang} what={text.title.toLowerCase()} />
+            )}
+
             <p className="small" style={{ marginTop: 'var(--s5)' }}>
               <Link className="link-more" href={path(lang, 'home')}>
                 Kuiper Studio

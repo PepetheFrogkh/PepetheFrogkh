@@ -856,6 +856,137 @@ html[lang='km'] {
   color: var(--terra);
 }
 
+/* ── les fondateurs ───────────────────────────────────────────────────────
+   Une photo a gauche, le nom, le role et la biographie a droite. Sous 560 px
+   la photo passe au-dessus : une colonne de 160 px ne laisse pas de quoi lire
+   une biographie a cote d'elle.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.founders {
+  display: grid;
+  gap: var(--s5);
+  margin-top: var(--s4);
+}
+
+.founder {
+  display: grid;
+  gap: var(--s3);
+}
+
+@media (min-width: 560px) {
+  .founder {
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: var(--s4);
+    align-items: start;
+  }
+}
+
+.founder__photo {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  width: 160px;
+  max-width: 100%;
+  border-radius: var(--r-image);
+  background: var(--peach);
+  overflow: hidden;
+  text-align: center;
+  padding: var(--s2);
+}
+
+.founder__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.founder__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  margin: 0;
+  color: var(--ink);
+}
+
+.founder__role {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--terra);
+  margin: 2px 0 var(--s2);
+}
+
+.founder__bio {
+  margin: 0;
+  line-height: 1.7;
+  color: var(--slate);
+}
+
+/* ── les pages legales ────────────────────────────────────────────────────
+   Des rubriques, et des couples intitule / valeur. Un numero
+   d'enregistrement se cherche a l'oeil : il tient dans une liste de
+   definitions, pas dans un paragraphe.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.legal__date {
+  margin: var(--s2) 0 var(--s5);
+}
+
+.legal__part {
+  margin-top: var(--s5);
+}
+
+.legal__heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.25;
+  color: var(--ink);
+  margin: 0 0 var(--s2);
+}
+
+.legal__part p {
+  margin: 0 0 var(--s2);
+  line-height: 1.7;
+  color: var(--slate);
+}
+
+.legal__facts {
+  display: grid;
+  gap: 0;
+  margin: var(--s2) 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.legal__facts > div {
+  display: grid;
+  gap: 2px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+@media (min-width: 620px) {
+  .legal__facts > div {
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+    gap: var(--s3);
+    align-items: baseline;
+  }
+}
+
+.legal__facts dt {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--slate);
+}
+
+.legal__facts dd {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
 /* ── le bandeau de la version khmere ──────────────────────────────────────
    Tant que la traduction n'est pas fournie, les pages khmeres servent le
    texte anglais. Le dire est la condition pour que ce ne soit pas trompeur,

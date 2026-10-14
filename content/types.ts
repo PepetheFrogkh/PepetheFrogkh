@@ -222,6 +222,10 @@ export interface Dict {
     desktopShot: string
     phoneShot: string
     figures: string
+    /** « date de mise a jour », pour l'emplacement des pages legales. */
+    updatedOn: string
+    /** « photo », pour l'emplacement d'un portrait non fourni. */
+    photo: string
   }
 
   hero: {
@@ -475,6 +479,34 @@ export interface Dict {
     title: string
     body: string | null
   }
-  legal: { title: string; body: string | null }
-  privacy: { title: string; body: string | null }
+  legal: LegalPage
+  privacy: LegalPage
+}
+
+/**
+ * Une page legale : des sections, et des faits.
+ *
+ * Un avis legal n'est pas un paragraphe : c'est une suite de rubriques, dont
+ * certaines sont des couples intitule / valeur. Une valeur `null` reste un
+ * emplacement visible, parce qu'inventer un numero d'enregistrement ou une
+ * duree de conservation engagerait la societe sur un fait faux.
+ */
+export interface LegalSection {
+  heading: string
+  /** Les paragraphes de la rubrique. */
+  body?: string[]
+  /** Les lignes « intitule : valeur ». `null` devient un emplacement. */
+  facts?: { label: string; value: string | null }[]
+}
+
+export interface LegalPage {
+  title: string
+  intro: string
+  sections: LegalSection[] | null
+  /**
+   * La date a laquelle le texte a ete ecrit, telle quelle. Une page legale
+   * sans date ne vaut rien : le lecteur doit savoir de quand elle parle. A
+   * remettre a jour a chaque modification de fond.
+   */
+  updated: string | null
 }

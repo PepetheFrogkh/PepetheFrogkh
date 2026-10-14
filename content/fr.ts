@@ -131,6 +131,8 @@ export const fr: Dict = {
     desktopShot: 'capture ordinateur',
     phoneShot: 'capture téléphone',
     figures: 'chiffres vérifiés',
+    updatedOn: 'date de mise à jour',
+    photo: 'photo',
   },
 
   hero: {
@@ -896,13 +898,13 @@ export const fr: Dict = {
       {
         name: 'Arnaud Sebire',
         role: 'Cofondateur, produit et relation client',
-        bio: null,
+        bio: 'Autodidacte. Entré dans la tech par un éditeur de caisses, recruté deux ans plus tard par un autre au Cambodge, où il devient chef de produit très tôt : assez tôt pour faire ses erreurs quand elles coûtaient encore peu. Deux ans et demi là-bas, puis trois ans dans une société de gestion de données et de flux automatisés. Il monte Kuiper Studio pour répondre à ce qui l’agaçait depuis des années : les petits projets, personne ne voulait les regarder. Sa conviction tient en une phrase, et elle est sur ce site : votre budget n’est pas une honte.',
         photo: null,
       },
       {
         name: 'Louis Vezia',
         role: 'Cofondateur, direction technique',
-        bio: null,
+        bio: 'Ingénieur, diplômé d’un master en France. Une dizaine d’années dans la tech, dont sept au Cambodge, où il vit depuis 2019. Il a travaillé dans un éditeur de caisses, où il a passé deux ans à développer des programmes de fidélité pour des restaurants à Hong Kong, puis dans une société de systèmes de purification de l’air, et sur des développements sur mesure pour des clients. C’est lui qui décide comment les choses sont construites.',
         photo: null,
       },
     ],
@@ -983,8 +985,128 @@ export const fr: Dict = {
 
   about: {
     title: 'À propos',
-    body: null,
+    body: 'Kuiper Studio est un studio de deux personnes, basé à Phnom Penh. Nous avons passé les dix dernières années dans les outils que les entreprises utilisent tous les jours : des caisses, des inventaires, des CRM, des flux de données. Nous les avons construits, repris, cassés et réparés, pour des restaurants, des hôtels, des commerces et des ateliers. Nous avons monté le studio pour une raison précise : trop de projets utiles se font refuser parce que leur budget est jugé trop petit. Nous préférons regarder, bousculer l’idée, et dire ce qui tient dans le budget annoncé.',
   },
-  legal: { title: 'Mentions légales', body: null },
-  privacy: { title: 'Confidentialité', body: null },
+  legal: {
+    title: 'Mentions légales',
+    intro:
+      'Les informations ci-dessous concernent l’éditeur de ce site. L’enregistrement de la société est en cours : les mentions qui en dépendent sont signalées et seront complétées dès qu’il sera délivré.',
+    updated: '14 octobre 2026',
+    sections: [
+      {
+        heading: 'L’éditeur du site',
+        facts: [
+          { label: 'Dénomination', value: 'Kuiper Studio' },
+          { label: 'Forme juridique', value: null },
+          { label: 'Numéro d’enregistrement', value: null },
+          { label: 'Siège', value: 'Phnom Penh, Cambodge' },
+          { label: 'Adresse complète', value: null },
+          { label: 'Directeur de la publication', value: 'Arnaud Sebire' },
+          { label: 'Contact', value: 'arnaud@kuiperstudio.com' },
+        ],
+      },
+      {
+        heading: 'L’hébergeur',
+        body: [
+          'Le site est hébergé par Hostinger, sur un serveur situé à Singapour.',
+        ],
+        facts: [
+          { label: 'Hébergeur', value: 'Hostinger' },
+          { label: 'Localisation du serveur', value: 'Singapour' },
+          { label: 'Coordonnées légales de l’hébergeur', value: null },
+        ],
+      },
+      {
+        heading: 'La propriété intellectuelle',
+        body: [
+          'Les textes, les images et le code de ce site appartiennent à Kuiper Studio, sauf mention contraire sur la page concernée.',
+          'Les noms et les marques des sociétés citées appartiennent à leurs propriétaires respectifs. Leur mention ne vaut ni partenariat ni recommandation de leur part.',
+          'Les réalisations présentées le sont avec l’accord écrit des clients concernés. Une réalisation sans cet accord n’apparaît pas sur ce site.',
+        ],
+      },
+      {
+        heading: 'Les prix affichés',
+        body: [
+          'Les prix indiqués sur ce site sont hors taxes.',
+          'Ils sont affichés en euros pour les visiteurs situés en Europe et en dollars américains pour les autres. Le montant en dollars est calculé à partir du montant en euros, à un taux commercial fixe qui n’est pas le taux du marché.',
+          'Un prix affiché est une indication de tarif courant, pas une offre ferme. Le prix définitif d’un projet est celui du devis signé.',
+        ],
+      },
+      {
+        heading: 'Les simulateurs',
+        body: [
+          'Le configurateur de site et le simulateur d’automatisation donnent une estimation calculée à partir de la grille de prix publiée. Cette estimation n’engage pas Kuiper Studio : elle sert à donner un ordre de grandeur avant un échange.',
+        ],
+      },
+      {
+        heading: 'Le droit applicable',
+        body: [
+          'Ce site est édité depuis le Cambodge et relève du droit cambodgien.',
+        ],
+        facts: [{ label: 'Juridiction compétente', value: null }],
+      },
+    ],
+  },
+
+  privacy: {
+    title: 'Confidentialité',
+    intro:
+      'Ce qui est collecté sur ce site, pourquoi, où cela va, et comment le faire supprimer. Aucun traceur n’est déposé avant votre accord.',
+    updated: '14 octobre 2026',
+    sections: [
+      {
+        heading: 'Ce que nous collectons',
+        body: [
+          'Uniquement ce que vous nous envoyez vous-même, par le formulaire de contact, par le configurateur de site ou par le simulateur d’automatisation.',
+        ],
+        facts: [
+          { label: 'Formulaire de contact', value: 'Nom, adresse email, message, et les champs que vous remplissez.' },
+          { label: 'Configurateur de site', value: 'Adresse email, et le détail de l’estimation que vous avez construite.' },
+          { label: 'Simulateur d’automatisation', value: 'Adresse email, et le détail du flux que vous avez construit.' },
+          { label: 'Navigation', value: 'Rien, tant que vous n’avez pas accepté la mesure d’audience.' },
+        ],
+      },
+      {
+        heading: 'Pourquoi',
+        body: [
+          'Pour répondre à votre demande, et pour cela seulement. Nous ne vendons aucune donnée, et nous n’envoyons pas de lettre d’information.',
+          'Vous consentez à être recontacté au sujet de votre demande en cochant la case du formulaire. Sans cette case cochée, le formulaire n’est pas envoyé.',
+        ],
+      },
+      {
+        heading: 'Où cela va',
+        body: [
+          'Les demandes sont transmises à HubSpot, l’outil de gestion de la relation client utilisé par Kuiper Studio. Elles y sont conservées et consultées par les deux fondateurs.',
+          'Aucune autre société ne reçoit ces données.',
+        ],
+        facts: [
+          { label: 'Destinataire', value: 'HubSpot' },
+          { label: 'Localisation des données HubSpot', value: null },
+          { label: 'Durée de conservation', value: null },
+        ],
+      },
+      {
+        heading: 'Les cookies',
+        body: [
+          'Le site fonctionne sans cookie. Un seul élément est enregistré dans votre navigateur sans votre accord : votre choix de devise et votre réponse au bandeau de cookies, pour ne pas vous reposer la question à chaque page. Il ne sert à rien d’autre et ne quitte pas votre navigateur.',
+          'La mesure d’audience n’est activée que si vous l’acceptez. Tant que vous n’avez pas répondu, ou si vous refusez, aucun traceur n’est déposé et aucune visite n’est mesurée.',
+          'Vous pouvez revenir sur votre choix à tout moment depuis le bandeau, ou en effaçant les données du site dans votre navigateur.',
+        ],
+      },
+      {
+        heading: 'Vos droits',
+        body: [
+          'Vous pouvez demander à consulter les données que nous avons sur vous, à les faire corriger, ou à les faire supprimer. Écrivez à arnaud@kuiperstudio.com : nous répondons sous deux jours ouvrés.',
+          'Une suppression est définitive. Nous ne gardons pas de copie pour « au cas où ».',
+        ],
+      },
+      {
+        heading: 'Les services tiers',
+        body: [
+          'Les polices de caractères sont servies depuis ce site, et non depuis un service extérieur : aucune requête n’est envoyée à un tiers lors de l’affichage d’une page.',
+          'Le site ne contient ni bouton de partage, ni pixel de réseau social, ni vidéo intégrée depuis une plateforme tierce.',
+        ],
+      },
+    ],
+  },
 }
