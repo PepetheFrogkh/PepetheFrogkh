@@ -2315,6 +2315,156 @@ body.has-view-cursor [data-cursor='voir'] {
   }
 }
 
+/* ══ Le configurateur de sites ════════════════════════════════════════════
+   Le prix se met a jour a chaque choix, et l'email n'est demande qu'au moment
+   d'envoyer l'estimation. Les deux devises sont dans le HTML, comme partout.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.conf {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: var(--s4);
+}
+
+.conf__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  margin: 0 0 4px;
+}
+
+.conf__head .muted {
+  margin: 0;
+}
+
+.conf__grid {
+  display: grid;
+  gap: var(--s4);
+  margin-top: var(--s4);
+}
+
+@media (min-width: 760px) {
+  .conf__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.conf__group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.conf__group legend {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+  padding: 0 0 var(--s2);
+}
+
+.conf__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  cursor: pointer;
+}
+
+.conf__row[data-off] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.conf__row input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--orange);
+}
+
+.conf__label {
+  font-size: 15px;
+  color: var(--slate);
+}
+
+.conf__row input:checked + .conf__label {
+  color: var(--ink);
+}
+
+/* l'option offerte par le pack, marquee sur place */
+.conf__free {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--terra);
+  background: var(--peach);
+  border-radius: var(--r-pill);
+  padding: 2px 8px;
+}
+
+.conf__note {
+  margin: var(--s2) 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--slate);
+}
+
+.conf__total {
+  display: grid;
+  gap: var(--s3);
+  margin-top: var(--s4);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--border);
+}
+
+@media (min-width: 760px) {
+  .conf__total {
+    grid-template-columns: auto auto 1fr;
+    align-items: end;
+    gap: var(--s6);
+  }
+}
+
+.conf__total-label {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--slate);
+}
+
+.conf__total-value {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.conf__send {
+  display: grid;
+  gap: var(--s2);
+  justify-items: start;
+}
+
+@media (min-width: 760px) {
+  .conf__send {
+    justify-self: end;
+    justify-items: end;
+  }
+}
+
+.conf__form {
+  display: grid;
+  gap: var(--s2);
+  width: min(100%, 22rem);
+  justify-items: start;
+}
+
 /* ══ Les tableaux de prix ═════════════════════════════════════════════════
    De vraies tables : ce sont des lignes de prix, un lecteur d'ecran doit
    pouvoir les annoncer comme telles. Les deux devises sont dans le HTML et

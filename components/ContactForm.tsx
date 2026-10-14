@@ -49,10 +49,11 @@ export default function ContactForm({ locale }: { locale: Locale }) {
 
     setState('sending')
     try {
-      const res = await fetch('/api/diagnostic', {
+      const res = await fetch('/api/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          kind: 'contact',
           company: get('company'),
           city: get('city'),
           need: get('need'),

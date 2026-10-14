@@ -301,6 +301,29 @@ export interface Dict {
     conditions: string[]
   }
 
+  /** Les libelles du configurateur de sites. */
+  configurator: {
+    title: string
+    lead: string
+    pack: string
+    options: string
+    delay: string
+    plan: string
+    noPlan: string
+    included: string
+    setup: string
+    monthly: string
+    includedNote: string
+    quoteNote: string
+    send: string
+    sending: string
+    sent: string
+    failed: string
+    email: string
+    emailNote: string
+    consent: string
+  }
+
   blog: {
     title: string
     lead: string

@@ -15,7 +15,7 @@ import {
 import { path, servicePath, type Locale, type ServiceKey } from '@/lib/i18n'
 import { visibleCases } from '@/lib/flags'
 import CaseCard from '@/components/CaseCard'
-import ConfiguratorSlot from '@/components/ConfiguratorSlot'
+import SiteConfigurator from '@/components/SiteConfigurator'
 import Cta from '@/components/Cta'
 import Faq from '@/components/Faq'
 import FinalCta from '@/components/FinalCta'
@@ -115,7 +115,7 @@ export default function ServiceView({
               ))}
             </ul>
             <div style={{ marginTop: 'var(--s5)' }}>
-              <ConfiguratorSlot locale={locale} />
+              <SiteConfigurator locale={locale} />
             </div>
           </Reveal>
         ) : null}

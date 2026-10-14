@@ -57,13 +57,21 @@ export interface Pack {
   price: Price
   /** Le pack mis en avant dans la grille. */
   featured?: boolean
+  /**
+   * Le nombre d'options comprises dans le pack. Le configurateur deduit les
+   * plus cheres des options choisies : c'est la lecture la plus favorable au
+   * client, et elle est annoncee a l'ecran.
+   */
+  included?: number
+  /** Les options deja comprises, qui ne consomment pas un des `included`. */
+  free?: OptionId[]
 }
 
 export const PACKS: Pack[] = [
   { id: 'essentiel-1', price: fixed(eur(499)) },
   { id: 'essentiel-3', price: fixed(eur(799)) },
-  { id: 'pro', price: fixed(eur(1290)), featured: true },
-  { id: 'complet', price: fixed(eur(1999)) },
+  { id: 'pro', price: fixed(eur(1290)), featured: true, included: 2 },
+  { id: 'complet', price: fixed(eur(1999)), included: 3, free: ['langue'] },
   { id: 'sur-mesure', price: { kind: 'quote' } },
 ]
 

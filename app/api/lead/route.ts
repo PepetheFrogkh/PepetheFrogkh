@@ -1,23 +1,18 @@
 import { NextResponse } from 'next/server'
 
 /**
- * L'envoi du formulaire de diagnostic.
+ * L'arrivee d'un contact, d'une estimation de site ou d'une estimation
+ * d'automatisation.
  *
- * Le cahier decrit la suite : le contact et l'entreprise sont crees dans
- * HubSpot avec une note « Diagnostic demande », Arnaud recoit une
- * notification, le visiteur recoit un email de confirmation, puis le resume
- * part sous 48 heures ouvrees.
- *
- * Ce qui est fait ici : la validation, l'anti-spam, la creation du contact,
- * de l'entreprise, de leur association et de la note, puis l'appel du
- * webhook de notification. L'email de confirmation au visiteur est un
- * workflow HubSpot declenche par la note, pas du code : il se configure dans
- * HubSpot, et la liste de controle du cahier demande de tester la chaine de
- * bout en bout avant la mise en ligne.
+ * Les trois formulaires du site passent par ici : le contact, le
+ * configurateur de sites et le simulateur d'automatisation. Ils different par
+ * ce qu'ils racontent, pas par ce qu'ils creent : un contact HubSpot, une
+ * entreprise quand elle est connue, leur association, et une note qui porte le
+ * detail. Un seul endroit a configurer, un seul a tester.
  *
  * Variables attendues, documentees dans le README :
- *   HUBSPOT_TOKEN              jeton d'application privee HubSpot
- *   DIAGNOSTIC_NOTIFY_WEBHOOK  webhook qui previent arnaud@kuiperstudio.com
+ *   HUBSPOT_TOKEN         jeton d'application privee HubSpot
+ *   LEAD_NOTIFY_WEBHOOK   webhook qui previent arnaud@kuiperstudio.com
  */
 
 const HUBSPOT = 'https://api.hubapi.com'
@@ -26,17 +21,29 @@ const NOTIFY_TO = 'arnaud@kuiperstudio.com'
 /** Le formulaire doit avoir ete ouvert au moins ce temps la. */
 const MIN_ELAPSED_MS = 3000
 
+type Kind = 'contact' | 'configurator' | 'simulator'
+
 interface Payload {
-  venue?: string
+  kind?: Kind
+  company?: string
   city?: string
-  type?: string
-  maps?: string
+  need?: string
+  message?: string
   name?: string
   email?: string
   consent?: boolean
   locale?: string
+  /** Le detail de l'estimation, tel que le composant l'a calcule. */
+  estimate?: unknown
   trap?: string
   elapsed?: number
+}
+
+/** L'intitule de la note, par type de formulaire. */
+const TITLE: Record<Kind, string> = {
+  contact: 'Demande de contact',
+  configurator: 'Estimation de site',
+  simulator: 'Estimation d’automatisation',
 }
 
 function clean(value: unknown, max = 200): string {
@@ -67,14 +74,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'corps illisible' }, { status: 400 })
   }
 
-  const venue = clean(payload.venue)
+  const kind: Kind =
+    payload.kind === 'configurator' || payload.kind === 'simulator' ? payload.kind : 'contact'
+  const company = clean(payload.company)
   const city = clean(payload.city)
-  const type = clean(payload.type, 40)
-  const maps = clean(payload.maps, 500)
+  const need = clean(payload.need, 80)
+  const message = clean(payload.message, 2000)
   const name = clean(payload.name, 120)
   const email = clean(payload.email, 160)
 
-  if (!venue || !city || !name || !email || payload.consent !== true) {
+  // L'email et le consentement sont toujours requis. Le nom et l'entreprise ne
+  // le sont que pour le contact : une estimation ne demande que l'email, et
+  // c'est ce que promet le cahier.
+  if (!email || payload.consent !== true) {
+    return NextResponse.json({ error: 'champs obligatoires manquants' }, { status: 422 })
+  }
+  if (kind === 'contact' && (!company || !name)) {
     return NextResponse.json({ error: 'champs obligatoires manquants' }, { status: 422 })
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
@@ -86,11 +101,22 @@ export async function POST(request: Request) {
   const trapped = clean(payload.trap) !== '' || (payload.elapsed ?? 0) < MIN_ELAPSED_MS
   if (trapped) return NextResponse.json({ ok: true })
 
+  /** Le corps de la note : ce que le formulaire a dit, et rien de plus. */
+  const lines = [
+    TITLE[kind],
+    company ? `Entreprise : ${company}` : null,
+    city ? `Ville : ${city}` : null,
+    need ? `Besoin : ${need}` : null,
+    `Langue : ${payload.locale ?? 'fr'}`,
+    message ? `Message :\n${message}` : null,
+    payload.estimate ? `Estimation :\n${JSON.stringify(payload.estimate, null, 2)}` : null,
+  ].filter(Boolean) as string[]
+
   const token = process.env.HUBSPOT_TOKEN
   if (!token) {
     // en developpement on ne perd rien en silence, on le dit
     if (process.env.NODE_ENV !== 'production') {
-      console.warn('[diagnostic] HUBSPOT_TOKEN absent, rien envoye :', { venue, city, email })
+      console.warn('[lead] HUBSPOT_TOKEN absent, rien envoye :', { kind, email, company })
       return NextResponse.json({ ok: true, stored: false })
     }
     return NextResponse.json({ error: 'HubSpot non configure' }, { status: 503 })
@@ -104,47 +130,41 @@ export async function POST(request: Request) {
       {
         properties: {
           email,
-          firstname,
-          lastname: restName.join(' '),
-          company: venue,
-          city,
+          firstname: firstname || undefined,
+          lastname: restName.join(' ') || undefined,
+          company: company || undefined,
+          city: city || undefined,
           hs_language: payload.locale === 'fr' ? 'fr' : 'en',
         },
       },
       token,
     )
 
-    const company = await hubspot(
-      '/crm/v3/objects/companies',
-      { properties: { name: venue, city, website: maps || undefined } },
-      token,
-    )
-
-    // HubSpot attend l'identifiant du type d'association ; 279 est
-    // « company to contact » sur l'association par defaut.
-    await fetch(
-      `${HUBSPOT}/crm/v4/objects/companies/${company.id}/associations/contacts/${contact.id}`,
-      {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify([
-          { associationCategory: 'HUBSPOT_DEFINED', associationTypeId: 279 },
-        ]),
-      },
-    )
+    if (company) {
+      const org = await hubspot(
+        '/crm/v3/objects/companies',
+        { properties: { name: company, city: city || undefined } },
+        token,
+      )
+      // HubSpot attend l'identifiant du type d'association ; 279 est
+      // « company to contact » sur l'association par defaut.
+      await fetch(
+        `${HUBSPOT}/crm/v4/objects/companies/${org.id}/associations/contacts/${contact.id}`,
+        {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify([
+            { associationCategory: 'HUBSPOT_DEFINED', associationTypeId: 279 },
+          ]),
+        },
+      )
+    }
 
     const note = await hubspot(
       '/crm/v3/objects/notes',
       {
         properties: {
-          hs_note_body: [
-            'Diagnostic demandé',
-            `Établissement : ${venue}`,
-            `Ville : ${city}`,
-            `Type : ${type}`,
-            maps ? `Google Maps : ${maps}` : 'Google Maps : non fourni',
-            `Langue : ${payload.locale ?? 'fr'}`,
-          ].join('\n'),
+          hs_note_body: lines.join('\n'),
           hs_timestamp: new Date().toISOString(),
         },
       },
@@ -158,32 +178,29 @@ export async function POST(request: Request) {
       body: JSON.stringify([{ associationCategory: 'HUBSPOT_DEFINED', associationTypeId: 202 }]),
     })
 
-    const hook = process.env.DIAGNOSTIC_NOTIFY_WEBHOOK
+    const hook = process.env.LEAD_NOTIFY_WEBHOOK
     if (hook) {
       await fetch(hook, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to: NOTIFY_TO,
-          subject: `Diagnostic demandé · ${venue}, ${city}`,
-          venue,
+          subject: `${TITLE[kind]}${company ? ` · ${company}` : ''}`,
+          kind,
+          company,
           city,
-          type,
-          maps,
+          need,
           name,
           email,
           contactId: contact.id,
+          body: lines.join('\n'),
         }),
-      }).catch((error) => {
-        // la demande est deja dans HubSpot : une notification perdue ne doit
-        // pas faire echouer l'envoi cote visiteur
-        console.error('[diagnostic] notification impossible', error)
       })
     }
 
     return NextResponse.json({ ok: true, stored: true })
   } catch (error) {
-    console.error('[diagnostic]', error)
+    console.error('[lead]', error)
     return NextResponse.json({ error: 'envoi impossible' }, { status: 502 })
   }
 }
