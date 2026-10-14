@@ -210,6 +210,11 @@ export interface Dict {
   /** Les en-tetes des sections de l'accueil. */
   home: {
     services: { title: string; lead: string }
+    /**
+     * La transition tapee a la machine : « On construit » suivi de chaque mot
+     * qui s'ecrit puis s'efface.
+     */
+    transition: { before: string; items: string[] }
     expertises: { title: string; lead: string }
     work: { title: string; lead: string }
     pricing: { title: string; lead: string; cta: Cta }

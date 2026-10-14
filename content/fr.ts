@@ -135,6 +135,10 @@ export const fr: Dict = {
       title: 'Ce que nous faisons',
       lead: 'Cinq services, et un prix affiché pour chacun.',
     },
+    transition: {
+      before: 'On construit',
+      items: ['des sites web', 'des automatisations', 'des applications métier'],
+    },
     expertises: {
       title: 'Les métiers que nous connaissons',
       lead: 'Les domaines où l’équipe est la plus forte, et les offres adaptées à chacun.',

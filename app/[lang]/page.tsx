@@ -16,9 +16,12 @@ import Cta from '@/components/Cta'
 import Faq from '@/components/Faq'
 import FinalCta from '@/components/FinalCta'
 import HeroType from '@/components/HeroType'
+import MaskReveal from '@/components/MaskReveal'
 import Price from '@/components/Price'
 import Reveal from '@/components/Reveal'
 import SectionBlock from '@/components/SectionBlock'
+import SplitHeading from '@/components/SplitHeading'
+import Typewriter from '@/components/Typewriter'
 import { Tbd } from '@/components/Tbd'
 
 /**
@@ -67,7 +70,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <SectionBlock tone="cream" id="services">
         <Reveal>
           <div className="section__head">
-            <h2>{t.home.services.title}</h2>
+            <SplitHeading text={t.home.services.title} />
             <p className="lead">{t.home.services.lead}</p>
           </div>
         </Reveal>
@@ -84,11 +87,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </div>
       </SectionBlock>
 
+      {/* la transition tapee a la machine */}
+      <Typewriter before={t.home.transition.before} items={t.home.transition.items} />
+
       {/* les six expertises */}
       <SectionBlock id="expertises">
         <Reveal>
           <div className="section__head">
-            <h2>{t.home.expertises.title}</h2>
+            <SplitHeading text={t.home.expertises.title} />
             <p className="lead">{t.home.expertises.lead}</p>
           </div>
         </Reveal>
@@ -109,13 +115,15 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <SectionBlock tone="cream" id="realisations">
         <Reveal>
           <div className="section__head">
-            <h2>{t.home.work.title}</h2>
+            <SplitHeading text={t.home.work.title} />
             <p className="lead">{t.home.work.lead}</p>
           </div>
         </Reveal>
         <div className="grid grid--3">
-          {cases.map((study) => (
-            <CaseCard key={study.slug} locale={lang} study={study} />
+          {cases.map((study, i) => (
+            <MaskReveal key={study.slug} delay={i * 90}>
+              <CaseCard locale={lang} study={study} />
+            </MaskReveal>
           ))}
         </div>
       </SectionBlock>
@@ -124,7 +132,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <SectionBlock id="tarifs">
         <Reveal>
           <div className="section__head">
-            <h2>{t.home.pricing.title}</h2>
+            <SplitHeading text={t.home.pricing.title} />
             <p className="lead">{t.home.pricing.lead}</p>
           </div>
         </Reveal>
@@ -158,7 +166,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <SectionBlock tone="peach" id="temoignages">
         <Reveal>
           <div className="section__head">
-            <h2>{t.testimonials.title}</h2>
+            <SplitHeading text={t.testimonials.title} />
             <p className="lead">{t.testimonials.note}</p>
           </div>
         </Reveal>
@@ -187,7 +195,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <SectionBlock id="faq">
         <Reveal>
           <div className="section__head">
-            <h2>{t.faq.title}</h2>
+            <SplitHeading text={t.faq.title} />
           </div>
         </Reveal>
         <Faq items={t.faq.items} />
@@ -199,7 +207,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <SectionBlock tone="cream">
         <Reveal>
           <div className="section__head">
-            <h2>{t.home.blog.title}</h2>
+            <SplitHeading text={t.home.blog.title} />
             <p className="lead">{t.home.blog.lead}</p>
           </div>
           <Link className="link-more" href={path(lang, 'blog')}>

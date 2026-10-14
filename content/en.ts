@@ -134,6 +134,10 @@ export const en: Dict = {
       title: 'What we do',
       lead: 'Five services, each with a listed price.',
     },
+    transition: {
+      before: 'We build',
+      items: ['websites', 'automations', 'business apps'],
+    },
     expertises: {
       title: 'The trades we know',
       lead: 'The fields the team knows best, and the offers that fit each one.',

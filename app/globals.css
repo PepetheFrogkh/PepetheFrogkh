@@ -2315,6 +2315,134 @@ body.has-view-cursor [data-cursor='voir'] {
   }
 }
 
+/* ══ Les titres qui glissent ligne par ligne ══════════════════════════════
+   Le serveur rend les mots en texte simple ; le composant les regroupe par
+   ligne au montage et pose un masque par ligne. Sans JavaScript, il ne reste
+   que des mots dans un titre, ce qui est exactement ce qu'il faut.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.sh__w {
+  display: inline-block;
+}
+
+.sh__line {
+  display: block;
+  overflow: hidden;
+  /* de quoi laisser passer accents et jambages sans ecarter les lignes */
+  padding: 0.08em 0 0.14em;
+  margin: -0.08em 0 -0.14em;
+}
+
+.sh__inner {
+  display: block;
+  will-change: transform;
+}
+
+/* ══ La transition tapee a la machine ═════════════════════════════════════ */
+
+.type {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  background: var(--cream);
+  overflow: clip;
+}
+
+.type__inner {
+  width: 100%;
+}
+
+.type__line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(28px, 5vw, 72px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.type__before {
+  color: var(--slate);
+}
+
+.type__word {
+  color: var(--terra);
+  font-style: italic;
+}
+
+/* le curseur clignote de son cote : il ne depend pas du defilement */
+.type__caret {
+  display: inline-block;
+  width: 0.06em;
+  height: 0.84em;
+  margin-left: 0.04em;
+  vertical-align: -0.08em;
+  background: var(--orange);
+  animation: caret 1s steps(1, end) infinite;
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* les trois mots, toujours lisibles, celui en cours marque */
+.type__all {
+  list-style: none;
+  margin: var(--s6) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s5);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--slate-light);
+}
+
+.type__all li {
+  position: relative;
+  padding-left: 18px;
+  transition: color 0.3s var(--ease);
+}
+
+.type__all li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+  transition:
+    background-color 0.3s var(--ease),
+    opacity 0.3s var(--ease);
+}
+
+.type__all li[data-active='true'] {
+  color: var(--ink);
+}
+
+.type__all li[data-active='true']::before {
+  background: var(--orange);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .type {
+    min-height: 0;
+    padding-block: var(--section);
+  }
+
+  .type__caret {
+    animation: none;
+  }
+}
+
 /* ══ Les prix, dans deux devises ══════════════════════════════════════════
    Les deux montants sont dans le HTML ; l'attribut pose sur la balise html
    decide lequel se voit. Les pages restent donc statiques, donc en cache chez
