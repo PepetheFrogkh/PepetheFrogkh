@@ -175,11 +175,52 @@ n'est pas un emplacement vide, c'est un parti pris qui tient debout tout seul.
 
 ---
 
-## 5. Les deux photos des fondateurs
+## 5. Les deux photos des fondateurs — fournies
 
-Les biographies sont écrites. Il manque **votre portrait et celui de Louis**.
-L'emplacement garde déjà sa place dans la mise en page, donc rien ne bougera
-quand elles arriveront.
+Elles étaient dans votre dépôt `Kuiper-Studio/KuiperWebsite`,
+`public/images/arnaud.webp` et `louis.webp`. Installées.
+
+Elles font 256 × 256 et s'affichent à 160 : net sur un écran ordinaire, un peu
+juste sur un écran rétine. Si vous avez les originaux, ils remplacent les
+fichiers sans toucher au code.
+
+---
+
+## 5 bis. Ce que votre dépôt contient d'autre
+
+En l'ouvrant, j'ai trouvé plus que les portraits. **Je n'y ai rien pris
+d'autre**, et voici pourquoi.
+
+### `config/pricing.ts` : vos anciens prix
+
+Vous me disiez d'aller les chercher sur kuiperstudio.com. Ils étaient dans le
+dépôt, et **ils correspondent déjà à ma grille, au centime près** : packs,
+pages en plus, options, vitesses, hébergement, abonnements, automatisation,
+supervision, transfert. Trois règles me manquaient, elles sont reprises.
+
+Une seule différence volontaire : l'option « animation 3D » à 490 €, que vous
+aviez demandé de retirer. Elle reste absente.
+
+### `public/logos/` et `public/shots/` : de la donnée client
+
+Il y a `anakut.svg` (vectoriel, meilleur que mon PNG), `anakut-stacked.svg`,
+`mp-massage.webp`, `mp-massage-mark.webp`, et `mysmarthood.png`. Côté captures :
+`anakut-dashboard`, `anakut-revenue`, `msh-1`, `msh-2`, `smoh-dashboard`,
+`smoh-opportunities`, plus un dossier `products`.
+
+**Je n'y ai pas touché**, pour trois raisons :
+
+1. `anakut-revenue` est, d'après son nom, exactement ce que votre frère a
+   demandé de ne pas publier. Toute capture Anakut doit repasser par
+   `scripts/redact-shots.py`, et les zones se déclarent image par image.
+2. `mysmarthood` / `msh` et `smoh` sont des clients dont je ne sais rien : ni
+   accord de publication, ni contexte. La règle est la même pour eux que pour
+   OCS.
+3. Le logo Anakut vectoriel, lui, est un gain net et sans risque. **Dites-moi
+   si je le prends** et je remplace le PNG.
+
+Dites-moi lesquelles de ces captures sont autorisées, et pour chacune ce qu'il
+faut couvrir, et je les installe caviardées.
 
 ---
 
