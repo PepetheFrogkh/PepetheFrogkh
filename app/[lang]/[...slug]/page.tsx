@@ -292,15 +292,13 @@ export default async function Page({
               <div className="founders">
                 {t.founders.people.map((person) => (
                   <article className="founder" key={person.name}>
-                    {/* La photo n'est pas fournie : l'emplacement le dit, et
-                        garde sa place dans la mise en page. */}
-                    <div className="founder__photo">
-                      {person.photo ? (
-                        <Image src={person.photo} alt="" width={160} height={160} />
-                      ) : (
-                        <Tbd locale={lang} what={t.words.photo} />
-                      )}
-                    </div>
+                    {/* Sans photo, pas de cadre vide : la biographie prend
+                        toute la largeur. */}
+                    {person.photo ? (
+                      <div className="founder__photo">
+                        <Image src={person.photo} alt="" width={256} height={256} />
+                      </div>
+                    ) : null}
                     <div className="founder__text">
                       <h3 className="founder__name">{person.name}</h3>
                       <p className="founder__role">{person.role ?? <Tbd locale={lang} />}</p>

@@ -1016,6 +1016,12 @@ html[lang='km'] {
     gap: var(--s4);
     align-items: start;
   }
+
+  /* Sans photo, la biographie prend toute la largeur : la colonne de 160 px
+     resterait sinon vide a sa gauche, et le texte y serait ecrase. */
+  .founder:not(:has(.founder__photo)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .founder__photo {
