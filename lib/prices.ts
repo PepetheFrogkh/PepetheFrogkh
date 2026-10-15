@@ -113,8 +113,21 @@ export interface Pack {
 export const PACKS: Pack[] = [
   { id: 'essentiel-1', price: fixed(eur(499)), pages: 1 },
   { id: 'essentiel-3', price: fixed(eur(799)), pages: 3 },
-  { id: 'pro', price: fixed(eur(1290)), featured: true, included: 2, pages: 6 },
-  { id: 'complet', price: fixed(eur(1999)), included: 3, free: ['langue'], pages: 10 },
+  {
+    id: 'pro',
+    price: fixed(eur(1290)),
+    featured: true,
+    included: 2,
+    free: ['animations-avancees'],
+    pages: 6,
+  },
+  {
+    id: 'complet',
+    price: fixed(eur(1999)),
+    included: 3,
+    free: ['animations-avancees', 'langue'],
+    pages: 10,
+  },
   { id: 'sur-mesure', price: { kind: 'quote' } },
 ]
 
@@ -129,7 +142,17 @@ export function packForPages(pages: number): Pack {
 }
 
 /** Le plus grand nombre de pages encore couvert par un pack chiffre. */
-export const MAX_PAGES = Math.max(...PACKS.map((p) => p.pages ?? 0))
+export const PACKED_PAGES = Math.max(...PACKS.map((p) => p.pages ?? 0))
+
+/**
+ * Le plus grand nombre de pages que le configurateur laisse demander.
+ *
+ * Au-dela de dix, aucun pack ne couvre le besoin et le projet passe en
+ * sur-mesure. Le curseur va quand meme jusqu'a quinze : quelqu'un qui a besoin
+ * de douze pages doit pouvoir le dire et lire la reponse, plutot que de buter
+ * sur une butee sans explication.
+ */
+export const MAX_PAGES = 15
 
 export type OptionId =
   | 'formulaire-contact'
@@ -164,13 +187,27 @@ export interface Delay {
   price: Price
   /** Le delai express ne vaut que pour le pack Essentiel. */
   only?: PackId[]
+  /** Le pack Complet ne se livre qu'en economie. */
+  except?: PackId[]
 }
 
 export const DELAYS: Delay[] = [
   { id: 'economie', price: { kind: 'percent', value: 0 } },
-  { id: 'standard', price: { kind: 'percent', value: 25 } },
+  /**
+   * Le pack Complet ne se livre qu'en economie : dix pages, des animations et
+   * une langue de plus demandent au moins trois semaines, et aucun supplement
+   * ne les fait tenir en sept jours.
+   */
+  { id: 'standard', price: { kind: 'percent', value: 25 }, except: ['complet'] },
   { id: 'express', price: { kind: 'percent', value: 50 }, only: ['essentiel-1', 'essentiel-3'] },
 ]
+
+/** Vrai quand ce delai est proposable pour ce pack. */
+export function delayAllowed(delay: Delay, pack: PackId): boolean {
+  if (delay.only && !delay.only.includes(pack)) return false
+  if (delay.except?.includes(pack)) return false
+  return true
+}
 
 export type PlanId =
   | 'hebergement-wordpress'

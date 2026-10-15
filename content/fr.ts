@@ -1181,7 +1181,7 @@ export const fr: Dict = {
     ],
     stepOf: (current, total) => `Étape ${current} sur ${total}`,
     pagesUnit: (count) => (count > 1 ? 'pages' : 'page'),
-    pagesMore: 'et plus',
+    pagesMore: '· projet sur mesure',
     packIs: 'Votre pack',
     noOption: 'Aucune option pour le moment.',
     runningTotal: 'Total en cours',

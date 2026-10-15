@@ -7,6 +7,8 @@ import { formatPrice } from '@/lib/money'
 import {
   DELAYS,
   MAX_PAGES,
+  PACKED_PAGES,
+  delayAllowed,
   OPTIONS,
   PLANS,
   packForPages,
@@ -114,8 +116,16 @@ export default function SiteConfigurator({ locale }: { locale: Locale }) {
 
   const current = packForPages(pages)
   const pack = current.id
-  const expressAllowed = DELAYS.find((d) => d.id === 'express')!.only!.includes(pack)
-  const effectiveDelay: DelayId = delay === 'express' && !expressAllowed ? 'standard' : delay
+  const allowedDelays = useMemo(() => DELAYS.filter((d) => delayAllowed(d, pack)), [pack])
+  /**
+   * Le delai retenu : celui que le visiteur a choisi, ou le plus rapide encore
+   * permis pour son pack. Le pack Complet ne se livre qu'en economie, et
+   * l'express ne vaut que pour l'Essentiel : changer de pack doit corriger le
+   * delai tout seul, pas laisser un choix impossible affiche.
+   */
+  const effectiveDelay: DelayId = allowedDelays.some((d) => d.id === delay)
+    ? delay
+    : allowedDelays[allowedDelays.length - 1].id
 
   const go = (next: number) => {
     const target = Math.max(0, Math.min(RESULT, next))
@@ -254,7 +264,15 @@ export default function SiteConfigurator({ locale }: { locale: Locale }) {
     return formatPrice(price, currency, locale)
   }
 
-  const pagesLabel = `${pages}${pages > MAX_PAGES ? '+' : ''}`
+  /**
+   * Le curseur va jusqu'a quinze pages, et non jusqu'a dix.
+   *
+   * Aucun pack ne couvre au-dela de dix : le projet passe alors en sur-mesure,
+   * et c'est `packForPages` qui le dit. Mais quelqu'un qui a besoin de douze
+   * pages doit pouvoir le demander et lire la reponse, plutot que de buter sur
+   * une butee sans explication.
+   */
+  const pagesLabel = String(pages)
   const question = t.steps[step]
 
   return (
@@ -325,8 +343,8 @@ export default function SiteConfigurator({ locale }: { locale: Locale }) {
               <button
                 type="button"
                 className="wiz__step-btn"
-                onClick={() => setPages((n) => Math.min(MAX_PAGES + 1, n + 1))}
-                disabled={pages > MAX_PAGES}
+                onClick={() => setPages((n) => Math.min(MAX_PAGES, n + 1))}
+                disabled={pages >= MAX_PAGES}
                 aria-label="+1"
               >
                 +
@@ -334,8 +352,8 @@ export default function SiteConfigurator({ locale }: { locale: Locale }) {
             </div>
 
             <label className="wiz__slider-label" htmlFor="wiz-pages">
-              {pages > MAX_PAGES
-                ? `${MAX_PAGES} ${t.pagesUnit(MAX_PAGES)} ${t.pagesMore}`
+              {pages > PACKED_PAGES
+                ? `${pages} ${t.pagesUnit(pages)} ${t.pagesMore}`
                 : `${pages} ${t.pagesUnit(pages)}`}
             </label>
             <input
@@ -343,12 +361,12 @@ export default function SiteConfigurator({ locale }: { locale: Locale }) {
               className="wiz__slider"
               type="range"
               min={1}
-              max={MAX_PAGES + 1}
+              max={MAX_PAGES}
               step={1}
               value={pages}
               // la part remplie de la piste suit la valeur : WebKit ne sait pas
               // la peindre seul des qu'on redessine la piste
-              style={{ '--fill': `${((pages - 1) / MAX_PAGES) * 100}%` } as CSSProperties}
+              style={{ '--fill': `${((pages - 1) / (MAX_PAGES - 1)) * 100}%` } as CSSProperties}
               onChange={(e) => {
                 setPages(Number(e.currentTarget.value))
                 track('configurator_start')
@@ -403,7 +421,7 @@ export default function SiteConfigurator({ locale }: { locale: Locale }) {
         {step === 2 ? (
           <div className="wiz__cards wiz__cards--wide">
             {DELAYS.map((item) => {
-              const off = item.id === 'express' && !expressAllowed
+              const off = !allowedDelays.some((d) => d.id === item.id)
               return (
                 <button
                   type="button"
