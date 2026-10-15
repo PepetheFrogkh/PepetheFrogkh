@@ -48,6 +48,18 @@ export default function ScrollSequence({
 }) {
   const Title = level
   const section = useRef<HTMLElement>(null)
+  /**
+   * L'enveloppe que ScrollTrigger epingle.
+   *
+   * Il ne faut surtout pas lui laisser epingler la `<section>` elle-meme :
+   * epingler un element l'enveloppe dans un `pin-spacer` insere dans le DOM,
+   * et le parent reel de la section cesse d'etre celui que React a note. Au
+   * demontage, React appelle `removeChild` sur l'ancien parent et le
+   * navigateur repond « The node to be removed is not a child of this node ».
+   * En epinglant un enfant, le `pin-spacer` reste a l'interieur de la section,
+   * que React retire alors d'un bloc, avec tout ce qu'elle contient.
+   */
+  const pinned = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const [ready, setReady] = useState(false)
   const [loaded, setLoaded] = useState(0)
@@ -160,7 +172,7 @@ export default function ScrollSequence({
             trigger: node,
             start: 'top top',
             end: () => `+=${set.frames * 12}`,
-            pin: true,
+            pin: pinned.current ?? undefined,
             scrub: 0.4,
             anticipatePin: 1,
             invalidateOnRefresh: true,
@@ -189,6 +201,7 @@ export default function ScrollSequence({
 
   return (
     <section className="seq" ref={section}>
+      <div className="seq__pin" ref={pinned}>
       <canvas className="seq__canvas" ref={canvas} data-ready={ready} aria-hidden="true" />
 
       {/* L'emplacement de la vraie animation. Il disparait quand PROVIDED
@@ -209,6 +222,7 @@ export default function ScrollSequence({
       <span className="seq__load" data-shown={loaded < total} aria-hidden="true">
         {loaded} / {total}
       </span>
+      </div>
     </section>
   )
 }

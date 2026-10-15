@@ -3148,11 +3148,17 @@ body.has-view-cursor [data-cursor='voir'] {
 
 .vcard {
   position: relative;
+  background: var(--cream);
+  overflow: clip;
+}
+
+/* C'est cette enveloppe que ScrollTrigger epingle, et non la section : voir
+   le commentaire de `VideoCard`. Elle porte donc la mise en page du cadre. */
+.vcard__pin {
+  position: relative;
   min-height: 100svh;
   display: grid;
   place-items: center;
-  background: var(--cream);
-  overflow: clip;
 }
 
 .vcard__frame {
@@ -3180,7 +3186,7 @@ body.has-view-cursor [data-cursor='voir'] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .vcard {
+  .vcard__pin {
     min-height: 0;
     padding-block: var(--section);
   }
@@ -3967,11 +3973,19 @@ body.has-view-cursor [data-cursor='voir'] {
 /* ══ La transition tapee a la machine ═════════════════════════════════════ */
 
 .type {
+  position: relative;
+  background: var(--cream);
+  overflow: clip;
+}
+
+/* C'est cette enveloppe que ScrollTrigger epingle, et non la section : voir
+   le commentaire de `Typewriter`. */
+.type__pin {
+  position: relative;
   min-height: 100svh;
   display: flex;
   align-items: center;
-  background: var(--cream);
-  overflow: clip;
+  width: 100%;
 }
 
 .type__inner {
@@ -4140,11 +4154,19 @@ body.has-view-cursor [data-cursor='voir'] {
 
 .seq {
   position: relative;
+  background: var(--cream);
+  overflow: clip;
+}
+
+/* C'est cette enveloppe que ScrollTrigger epingle, et non la section : voir
+   le commentaire de `ScrollSequence`. Elle porte donc toute la mise en page
+   du cadre, et sert d'ancrage aux elements positionnes au-dessus du canvas. */
+.seq__pin {
+  position: relative;
   min-height: 100svh;
   display: flex;
   align-items: center;
-  background: var(--cream);
-  overflow: clip;
+  width: 100%;
 }
 
 .seq__canvas {
@@ -4205,7 +4227,7 @@ body.has-view-cursor [data-cursor='voir'] {
    le bas de l'ecran pour elle. Un voile radial y recouvrait presque toute la
    vue, et il ne restait plus rien a regarder. */
 @media (max-width: 760px) {
-  .seq {
+  .seq__pin {
     align-items: flex-start;
     padding-top: calc(var(--header-h) + var(--banner-h) + var(--s5));
   }

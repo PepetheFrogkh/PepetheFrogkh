@@ -30,6 +30,18 @@ export default function VideoCard({
   label: string
 }) {
   const section = useRef<HTMLElement>(null)
+  /**
+   * L'enveloppe que ScrollTrigger epingle.
+   *
+   * Jamais la `<section>` elle-meme : epingler un element l'enveloppe dans un
+   * `pin-spacer` insere dans le DOM, et le parent reel de la section cesse
+   * d'etre celui que React avait note. Au demontage, React appelle
+   * `removeChild` sur l'ancien parent et le navigateur repond « The node to be
+   * removed is not a child of this node ». En epinglant un enfant, le
+   * `pin-spacer` reste a l'interieur de la section, que React retire alors
+   * d'un bloc, avec tout ce qu'elle contient.
+   */
+  const pinned = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
   const [near, setNear] = useState(false)
 
@@ -67,7 +79,7 @@ export default function VideoCard({
               trigger: node,
               start: 'top top',
               end: '+=160%',
-              pin: true,
+              pin: pinned.current ?? undefined,
               scrub: 0.4,
               anticipatePin: 1,
               invalidateOnRefresh: true,
@@ -92,29 +104,31 @@ export default function VideoCard({
 
   return (
     <section className="vcard" ref={section}>
-      <div className="vcard__frame">
-        {src ? (
-          near ? (
-            <video
-              ref={video}
-              className="vcard__video"
-              src={src}
-              poster={poster ?? undefined}
-              muted
-              loop
-              playsInline
-              preload="none"
-              aria-label={label}
-            />
-          ) : poster ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img className="vcard__video" src={poster} alt={label} />
-          ) : null
-        ) : (
-          <div className="vcard__empty">
-            <Tbd locale={locale} what={label} />
-          </div>
-        )}
+      <div className="vcard__pin" ref={pinned}>
+        <div className="vcard__frame">
+          {src ? (
+            near ? (
+              <video
+                ref={video}
+                className="vcard__video"
+                src={src}
+                poster={poster ?? undefined}
+                muted
+                loop
+                playsInline
+                preload="none"
+                aria-label={label}
+              />
+            ) : poster ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img className="vcard__video" src={poster} alt={label} />
+            ) : null
+          ) : (
+            <div className="vcard__empty">
+              <Tbd locale={locale} what={label} />
+            </div>
+          )}
+        </div>
       </div>
     </section>
   )

@@ -21,6 +21,18 @@ import { reduced, useGsap } from '@/lib/motion'
  */
 export default function Typewriter({ before, items }: { before: string; items: string[] }) {
   const section = useRef<HTMLElement>(null)
+  /**
+   * L'enveloppe que ScrollTrigger epingle.
+   *
+   * Jamais la `<section>` elle-meme : epingler un element l'enveloppe dans un
+   * `pin-spacer` insere dans le DOM, et le parent reel de la section cesse
+   * d'etre celui que React avait note. Au demontage, React appelle
+   * `removeChild` sur l'ancien parent et le navigateur repond « The node to be
+   * removed is not a child of this node ». En epinglant un enfant, le
+   * `pin-spacer` reste a l'interieur de la section, que React retire alors
+   * d'un bloc, avec tout ce qu'elle contient.
+   */
+  const pinned = useRef<HTMLDivElement>(null)
   const [typed, setTyped] = useState('')
   const [at, setAt] = useState(0)
   const [live, setLive] = useState(false)
@@ -38,7 +50,7 @@ export default function Typewriter({ before, items }: { before: string; items: s
           start: 'top top',
           // une transition, pas un chapitre : 45 % d'ecran par mot
           end: () => `+=${items.length * 45}%`,
-          pin: true,
+          pin: pinned.current ?? undefined,
           scrub: 0.3,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -66,31 +78,33 @@ export default function Typewriter({ before, items }: { before: string; items: s
 
   return (
     <section className="type" ref={section}>
-      <div className="container type__inner">
-        <p className="type__line" aria-hidden={live ? true : undefined}>
-          <span className="type__before">{before}</span>{' '}
-          {live ? (
-            <>
-              <span className="type__word">{typed}</span>
-              <span className="type__caret" />
-            </>
-          ) : (
-            // sans JavaScript, ou en mouvement reduit : la liste en entier
-            <span className="type__word">{items.join(', ')}.</span>
-          )}
-        </p>
+      <div className="type__pin" ref={pinned}>
+        <div className="container type__inner">
+          <p className="type__line" aria-hidden={live ? true : undefined}>
+            <span className="type__before">{before}</span>{' '}
+            {live ? (
+              <>
+                <span className="type__word">{typed}</span>
+                <span className="type__caret" />
+              </>
+            ) : (
+              // sans JavaScript, ou en mouvement reduit : la liste en entier
+              <span className="type__word">{items.join(', ')}.</span>
+            )}
+          </p>
 
-        {/* Les trois mots restent lisibles tout du long, celui en cours
-            marque : la section dit ou elle en est, et elle n'est jamais un
-            ecran vide pendant que le mot s'ecrit. C'est aussi ce que lit un
-            lecteur d'ecran. */}
-        <ol className="type__all">
-          {items.map((item, i) => (
-            <li key={item} data-active={live ? i === at : undefined}>
-              {item}
-            </li>
-          ))}
-        </ol>
+          {/* Les trois mots restent lisibles tout du long, celui en cours
+              marque : la section dit ou elle en est, et elle n'est jamais un
+              ecran vide pendant que le mot s'ecrit. C'est aussi ce que lit un
+              lecteur d'ecran. */}
+          <ol className="type__all">
+            {items.map((item, i) => (
+              <li key={item} data-active={live ? i === at : undefined}>
+                {item}
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   )
