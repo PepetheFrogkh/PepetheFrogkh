@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { dict } from '@/content'
 import type { Locale } from '@/lib/i18n'
 import { track } from '@/lib/analytics'
+import { sendLead } from '@/lib/lead'
 
 type Errors = Partial<Record<'company' | 'city' | 'name' | 'email' | 'consent', string>>
 
@@ -49,26 +50,21 @@ export default function ContactForm({ locale }: { locale: Locale }) {
 
     setState('sending')
     try {
-      const res = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          kind: 'contact',
-          company: get('company'),
-          city: get('city'),
-          need: get('need'),
-          message: get('message'),
-          name: get('name'),
-          email,
-          consent: true,
-          locale,
-          // anti-spam : le leurre doit rester vide, et le formulaire doit
-          // avoir ete ouvert plus de trois secondes
-          trap: get('company_url'),
-          elapsed: Date.now() - openedAt.current,
-        }),
+      await sendLead({
+        kind: 'contact',
+        company: get('company'),
+        city: get('city'),
+        need: get('need'),
+        message: get('message'),
+        name: get('name'),
+        email,
+        consent: true,
+        locale,
+        // anti-spam : le leurre doit rester vide, et le formulaire doit
+        // avoir ete ouvert plus de trois secondes
+        trap: get('company_url'),
+        elapsed: Date.now() - openedAt.current,
       })
-      if (!res.ok) throw new Error(String(res.status))
       track('contact_submit')
       setState('done')
     } catch {

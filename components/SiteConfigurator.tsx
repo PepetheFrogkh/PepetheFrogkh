@@ -19,6 +19,7 @@ import {
 } from '@/lib/prices'
 import { DEFAULT_CURRENCY } from '@/lib/currency'
 import { track } from '@/lib/analytics'
+import { sendLead } from '@/lib/lead'
 import { Tbf } from './Tbd'
 
 /**
@@ -220,21 +221,16 @@ export default function SiteConfigurator({ locale }: { locale: Locale }) {
     const form = new FormData(event.currentTarget)
     setState('sending')
     try {
-      const res = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          kind: 'configurator',
-          locale,
-          email: String(form.get('email') ?? '').trim(),
-          name: String(form.get('name') ?? '').trim(),
-          consent: true,
-          estimate: { pages, pack, options: chosen, delay: effectiveDelay, plan, totals },
-          trap: String(form.get('company_url') ?? ''),
-          elapsed: Date.now() - opened.current,
-        }),
+      await sendLead({
+        kind: 'configurator',
+        locale,
+        email: String(form.get('email') ?? '').trim(),
+        name: String(form.get('name') ?? '').trim(),
+        consent: true,
+        estimate: { pages, pack, options: chosen, delay: effectiveDelay, plan, totals },
+        trap: String(form.get('company_url') ?? ''),
+        elapsed: Date.now() - opened.current,
       })
-      if (!res.ok) throw new Error(String(res.status))
       setState('done')
     } catch {
       setState('error')

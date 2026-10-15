@@ -29,6 +29,7 @@ import {
   walk,
 } from '@/lib/simulator'
 import { track } from '@/lib/analytics'
+import { sendLead } from '@/lib/lead'
 import { Tbf } from './Tbd'
 
 /**
@@ -233,20 +234,15 @@ export default function Simulator({ locale }: { locale: Locale }) {
     const form = new FormData(event.currentTarget)
     setState('sending')
     try {
-      const res = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          kind: 'simulator',
-          locale,
-          email: String(form.get('email') ?? '').trim(),
-          consent: true,
-          estimate: { counts, totals, flows },
-          trap: String(form.get('company_url') ?? ''),
-          elapsed: Date.now() - opened.current,
-        }),
+      await sendLead({
+        kind: 'simulator',
+        locale,
+        email: String(form.get('email') ?? '').trim(),
+        consent: true,
+        estimate: { counts, totals, flows },
+        trap: String(form.get('company_url') ?? ''),
+        elapsed: Date.now() - opened.current,
       })
-      if (!res.ok) throw new Error(String(res.status))
       track('price_shown')
       setState('done')
     } catch {

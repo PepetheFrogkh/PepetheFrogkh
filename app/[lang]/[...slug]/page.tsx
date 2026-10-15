@@ -121,7 +121,15 @@ function match(locale: Locale, slug: string[]): Route | null {
   return null
 }
 
-export function generateStaticParams() {
+/**
+ * Toutes les adresses du site, engendrees au build.
+ *
+ * Elle est asynchrone depuis que les articles en font partie : ils sont lus
+ * sur le disque. L'export statique ne rend que ce qui est liste ici, donc une
+ * page oubliee ne devient pas lente, elle devient un 404 : les deux articles
+ * du blog manquaient, et c'est l'export qui l'a dit.
+ */
+export async function generateStaticParams() {
   const params: { lang: Locale; slug: string[] }[] = []
   for (const lang of LOCALES) {
     const t = dict(lang)
@@ -146,6 +154,9 @@ export function generateStaticParams() {
     }
     for (const study of visibleCases(t.work.cases)) {
       params.push({ lang, slug: [segment(lang, 'work'), study.slug] })
+    }
+    for (const item of await articles(lang)) {
+      params.push({ lang, slug: [segment(lang, 'blog'), item.slug] })
     }
   }
   return params

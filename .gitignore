@@ -11,3 +11,6 @@ __pycache__/
 # copie de travail de Three.js a cote de la scene, voir public/sequence/README.md
 scripts/sequence/three.*.js
 scripts/sequence/tools/
+
+# l'export statique, refait a chaque build
+/out

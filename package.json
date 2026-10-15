@@ -2,13 +2,14 @@
   "name": "kuiper-studio",
   "version": "0.1.0",
   "private": true,
-  "description": "Kuiper Studio — site FR / EN, clair, creme et orange",
+  "description": "Kuiper Studio \u2014 site FR / EN, clair, creme et orange",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/finalize-export.mjs",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:next": "next build"
   },
   "dependencies": {
     "@react-three/fiber": "9.3.0",

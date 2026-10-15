@@ -1,41 +1,29 @@
 import type { NextConfig } from 'next'
 
 /**
- * Les anciennes adresses.
+ * Le site part en export statique.
  *
- * Le plan du site a change : les situations deviennent les expertises, la
- * methode passe dans l'accueil, le diagnostic devient le contact. Les
- * anciennes adresses ont pu etre partagees, indexees, mises en favori : elles
- * repondent donc en 301 vers la page qui les remplace plutot qu'en 404.
+ * L'hebergement de production sert un dossier de fichiers, sans serveur Node :
+ * un workflow construit `out/`, le pousse sur une branche `deploy`, et
+ * l'hebergeur la sert depuis `public_html`. Trois consequences, et elles ne se
+ * contournent pas :
  *
- * Les pages situation ne sont pas redirigees une par une vers une expertise :
- * la correspondance serait devinee. Elles renvoient toutes vers la liste des
- * expertises, ou le visiteur choisit lui-meme.
+ * - pas de route serveur. Le formulaire poste sur `/api/lead`, servi par
+ *   `public/api/lead.php`, que le .htaccess fait pointer sur l'adresse propre.
+ * - pas de middleware. Le choix de la langue a l'arrivee et les redirections
+ *   des anciennes adresses sont dans le .htaccess, engendre au build par
+ *   `app/htaccess/route.ts` depuis les memes tables que les pages.
+ * - pas d'optimiseur d'images. Les images sont deja en WebP, aux tailles
+ *   servies : il n'y avait rien a optimiser a la volee.
+ *
+ * `trailingSlash` parce qu'un export sert `page/index.html` : sans la barre
+ * finale, les adresses relatives d'une page partiraient d'un cran trop haut.
  */
-const redirects = [
-  { from: '/fr/situations', to: '/fr/expertises' },
-  { from: '/fr/situations/:slug', to: '/fr/expertises' },
-  { from: '/en/situations', to: '/en/expertise' },
-  { from: '/en/situations/:slug', to: '/en/expertise' },
-  { from: '/fr/methode', to: '/fr' },
-  { from: '/en/method', to: '/en' },
-  { from: '/fr/diagnostic', to: '/fr/contact' },
-  { from: '/en/diagnostic', to: '/en/contact' },
-]
-
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  images: {
-    // le cahier impose WebP ou AVIF, charges a la demande
-    formats: ['image/avif', 'image/webp'],
-  },
-  async redirects() {
-    return redirects.map(({ from, to }) => ({
-      source: from,
-      destination: to,
-      permanent: true,
-    }))
-  },
+  output: 'export',
+  trailingSlash: true,
+  images: { unoptimized: true },
 }
 
 export default nextConfig
