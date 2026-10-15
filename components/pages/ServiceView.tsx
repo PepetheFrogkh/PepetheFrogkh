@@ -155,7 +155,10 @@ export default function ServiceView({
         )}
 
         <Reveal>
-          <h3 className={`paths__h${estimator ? ' paths__h--grid' : ''}`}>{money.grid}</h3>
+          {/* Le sous-titre « le detail des prix » ne sert que sous un
+              estimateur : sans estimateur, le titre de la section dit deja
+              « le prix », et deux titres pour une ligne de prix font vide. */}
+          {estimator ? <h3 className="paths__h paths__h--grid">{money.grid}</h3> : null}
           <div className="service__prices">{priceGrid(locale, service)}</div>
           {service === 'sites' ? (
             <ul className="stack small muted service__conditions">

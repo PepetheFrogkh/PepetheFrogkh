@@ -4009,6 +4009,13 @@ body.has-view-cursor [data-cursor='voir'] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: start;
   }
+
+  /* Un service qui n'a qu'un tableau n'a pas deux colonnes a remplir : seul,
+     il occupait la moitie gauche et laissait un grand vide a droite. */
+  .service__prices:has(> .prices:only-child) {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 34rem;
+  }
 }
 
 .service__h {

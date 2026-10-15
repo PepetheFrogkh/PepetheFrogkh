@@ -7,10 +7,10 @@ Quatre jeux, deux orientations et deux définitions :
 
 | Dossier | Images | Taille | Poids |
 |---|---|---|---|
-| `desktop` | 144 | 1920 × 1080 | 3,2 Mo |
-| `desktop-2x` | 144 | 3840 × 2160 | 7,8 Mo |
-| `mobile` | 60 | 900 × 1350 | 0,9 Mo |
-| `mobile-2x` | 60 | 1800 × 2700 | 2,2 Mo |
+| `desktop` | 144 | 1920 × 1080 | 4,1 Mo |
+| `desktop-2x` | 144 | 3840 × 2160 | 9,9 Mo |
+| `mobile` | 60 | 900 × 1350 | 1,2 Mo |
+| `mobile-2x` | 60 | 1800 × 2700 | 2,8 Mo |
 
 Le navigateur n'en télécharge qu'un. Il mesure la largeur réelle du canvas,
 en pixels, et prend le premier jeu qui la couvre : un portable rétine de 1440
@@ -24,6 +24,13 @@ Des plaques dispersées, les outils, qui s'assemblent en anneau autour d'une
 planète, puis tournent autour d'elle. C'est le titre de la page, « on construit
 les outils qui font tourner votre entreprise », pris au mot.
 
+**Une plaque sur trois porte un vrai logo** : Excel, Google, Teams, Slack,
+WhatsApp, Telegram, HubSpot, Mailchimp, Odoo, dans cet ordre, donc on les lit
+tous en un tour. Ces plaques-là sont blanches, parce que sur l'ardoise et sur
+l'orange vif un logo de marque ne se lit plus. Les fichiers sont ceux du
+simulateur, dans `public/tools/` : une seule source, donc un logo corrigé l'est
+aux deux endroits, et une marque retirée disparaît des deux.
+
 Fond crème `#FFF8F3`, plaques en blanc et pêche, accents orange `#FF6B00` et
 ardoise `#8A97AB` : la charte, et rien d'autre.
 
@@ -35,6 +42,7 @@ nouveau. Elle vit dans `scripts/sequence/scene.html`, en Three.js.
 ```sh
 # 1. une copie de Three.js à côté de la scène, et un serveur local :
 #    un module ES ne se charge pas depuis file://
+#    (les logos, eux, sont copiés par render.mjs)
 cp node_modules/three/build/three.module.js scripts/sequence/
 cp node_modules/three/build/three.core.js scripts/sequence/
 (cd scripts/sequence && python3 -m http.server 8099 --bind 127.0.0.1 &)
