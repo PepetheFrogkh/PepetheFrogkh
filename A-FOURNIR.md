@@ -1,8 +1,17 @@
 # Ce qu'il nous faut de votre côté
 
-Relevé le 15 octobre 2026, en parcourant les 29 pages du site une par une.
-Chaque trou est **visible à l'écran** sous la forme d'un emplacement
-`[À FOURNIR]`. Rien n'a été inventé pour les combler.
+Relevé le 15 octobre 2026, en parcourant le site page par page.
+
+**Les emplacements `[À FOURNIR]` ont disparu de l'écran.** Un site public qui
+montre ses trous se lit comme un brouillon. Trois règles les remplacent :
+
+- un bloc sans contenu ne s'affiche pas, au lieu d'afficher son emplacement ;
+- une page à qui il manque l'essentiel n'a pas d'adresse du tout : ni menu, ni
+  liste, ni pied de page, ni sitemap, et 404 à son adresse ;
+- ce qui manque reste relevé par `node scripts/trous.mjs`, qui lit les fichiers
+  de contenu et liste les manques un par un, et par ce document.
+
+Rien n'a été inventé pour combler quoi que ce soit.
 
 Quand un élément est fourni, il remplace l'emplacement : aucun autre code n'est
 à écrire.
@@ -50,6 +59,22 @@ ligne. Manquent :
 - **Les captures** de l'application et de son outil de gestion.
 - **Le mot du client**, si vous l'obtenez. Sinon la page reste telle quelle.
 
+### Chaque client n'apparaît plus qu'à un seul endroit
+
+Anakut figurait en preuve sur quatre pages, MP Massage et Wave sur deux
+chacune. Vous avez raison : trois clients répartis sur huit pages, ça se voit.
+
+Un client, un service, plus la page Réalisations :
+
+| Client | Où il apparaît |
+|---|---|
+| Anakut | Services, Sites web |
+| MP Massage | Services, Applications métier |
+| Wave | Services, Projets sur mesure |
+
+**Les pages Expertises ne portent plus de réalisation liée du tout.** Quand
+vous aurez d'autres clients, elles en reprendront.
+
 ### La règle sur les captures
 
 Toute capture qui montre de la donnée réelle passe par
@@ -87,11 +112,17 @@ témoignage réel vaut mieux que trois inventés.
 Elles sont neuf désormais, Automatisation et Intelligence artificielle
 comprises.
 
-### Assurance et courtage : entièrement vide
+### Assurance et courtage : hors du site, faute de contenu
 
-Vous ne m'avez rien donné dessus. Il manque l'accroche, ce que nous comprenons
-du métier, les problèmes typiques, ce que nous proposons, et « Notre
-expérience » si vous en avez une à y mettre.
+Vous ne m'avez rien donné dessus, donc **la page n'existe plus** : elle ne
+figure ni dans le menu, ni dans la liste des expertises, ni dans le pied de
+page, ni dans le sitemap, et son adresse répond 404. Mieux vaut une page de
+moins qu'une page vide.
+
+Il faut l'accroche, ce que nous comprenons du métier, les problèmes typiques,
+ce que nous proposons, et « Notre expérience » si vous en avez une à y mettre.
+Dès que l'accroche et l'un des trois blocs sont là, la page revient toute
+seule.
 
 Si Wave est votre seule entrée dans ce secteur, dites-le et je rédige la page
 autour de ce projet.
@@ -99,12 +130,12 @@ autour de ce projet.
 ### Intelligence artificielle : écrite, sauf « Notre expérience »
 
 La page est rédigée : ce que nous comprenons du métier, les problèmes typiques,
-ce que nous proposons. Deux emplacements restent visibles.
+ce que nous proposons. Deux blocs ne s'affichent pas, faute de contenu.
 
 - **« Notre expérience »**. Vous ne m'avez parlé d'aucun travail d'IA, ni chez
   vous, ni chez Louis, et je n'en ai inventé aucun. Si l'un de vous a mis une
   étape d'IA en production quelque part, dites-le moi et la page le dira.
-- **Une réalisation liée**. Aucune des quatre n'en comporte.
+- **Une réalisation liée**. Voir ci-dessous : les expertises n'en portent plus.
 
 Le reste est écrit sur une ligne de conduite précise, que vous pouvez refuser :
 l'IA y est présentée comme une étape dans un flux, jamais comme un produit, et
@@ -120,7 +151,31 @@ renvoie vers Anakut.
 
 ---
 
-## 4. Les deux photos des fondateurs
+## 4. Des photographies, pour les pages Expertises
+
+Vous m'avez demandé des photos Unsplash. **La politique réseau de cet
+environnement les refuse toutes** : `images.unsplash.com`, `unsplash.com`,
+`pexels.com`, `picsum.photos`, toutes répondent par un refus du proxy avant
+même qu'une requête parte. Je ne peux donc en télécharger aucune d'ici.
+
+Deux façons d'avancer :
+
+1. **Ouvrir le domaine** : ajouter `images.unsplash.com` dans **Network
+   access** des réglages de l'environnement, sous Allowed domains. Les étapes
+   sont sur <https://code.claude.com/docs/en/cloud-environments#network-access>.
+   Je les installe ensuite moi-même.
+2. **Me les envoyer** : neuf images, une par métier, en 1600 px de large au
+   moins. C'est de toute façon mieux : une photo de banque d'images dit « site
+   d'agence » et rien d'autre, alors qu'une photo d'un vrai service, d'un vrai
+   atelier, d'une vraie réception vaut dix fois plus.
+
+En attendant, chaque métier a **son pictogramme**, dessiné au trait dans la
+charte : en grand dans l'en-tête de sa page, en vignette sur les cartes. Ce
+n'est pas un emplacement vide, c'est un parti pris qui tient debout tout seul.
+
+---
+
+## 5. Les deux photos des fondateurs
 
 Les biographies sont écrites. Il manque **votre portrait et celui de Louis**.
 L'emplacement garde déjà sa place dans la mise en page, donc rien ne bougera
@@ -128,7 +183,7 @@ quand elles arriveront.
 
 ---
 
-## 5. Cinq faits légaux
+## 6. Cinq faits légaux
 
 Ils engagent la société : ils ne s'inventent pas. L'introduction de la page dit
 au lecteur que l'enregistrement est en cours.
@@ -154,7 +209,7 @@ réellement, mais ce sont des textes qui engagent.
 
 ---
 
-## 6. Les neuf marques du simulateur
+## 7. Les neuf marques du simulateur
 
 Le simulateur d'automatisation nomme désormais les outils au lieu de citer des
 catégories : Excel, Google Workspace, Teams, Slack, WhatsApp, Telegram,
@@ -172,7 +227,7 @@ retirer une, sont dans `public/tools/README.md`.
 
 ---
 
-## 7. Les réglages du serveur
+## 8. Les réglages du serveur
 
 À poser sur Hostinger avant la mise en ligne. Les valeurs de développement sont
 déjà dans `.env.local`, qui n'est jamais poussé sur GitHub.
@@ -189,7 +244,7 @@ déjà dans `.env.local`, qui n'est jamais poussé sur GitHub.
 
 ---
 
-## 8. Deux décisions qui vous reviennent
+## 9. Deux décisions qui vous reviennent
 
 ### Le taux euro vers dollar
 
@@ -209,7 +264,7 @@ forfait affiché, donnez-le moi.
 
 ---
 
-## 9. La traduction khmère
+## 10. La traduction khmère
 
 Le site parle trois langues et le sélecteur les propose toutes les trois, mais
 **les pages `/km` servent encore le texte anglais**, avec un bandeau qui le dit
@@ -225,7 +280,21 @@ Aucune phrase khmère n'a été écrite de notre propre chef.
 
 ---
 
-## 10. Meshy, et l'animation 3D
+## 11. L'anneau nomme maintenant les outils
+
+Vous m'avez demandé de poser de vrais logos sur les plaques de l'anneau, pour
+montrer qu'on sait faire le lien. C'est fait : une plaque sur trois porte un
+logo, et ces plaques-là sont blanches, parce que sur l'ardoise et sur l'orange
+vif un logo de marque ne se lit plus. Les neuf se suivent dans l'ordre, donc on
+les lit tous en un tour.
+
+Ce sont les **mêmes fichiers que le simulateur**, donc la décision du point 7
+vaut aussi pour l'anneau : si vous retirez une marque, elle disparaît des deux
+endroits d'un coup.
+
+---
+
+## 12. Meshy, et l'animation 3D
 
 Vous m'avez donné deux clés Meshy. **Aucune des deux n'a servi**, et la raison
 n'a rien à voir avec les clés.
