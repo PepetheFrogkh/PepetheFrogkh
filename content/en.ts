@@ -585,8 +585,15 @@ export const en: Dict = {
         logo: '/clients/anakut.png',
         logoBg: '#100e0d',
         result: 'From 5 to 15 regular clients, without a franc of advertising.',
-        shot: null,
+        shot: '/work/anakut/tableau-de-bord.webp',
         video: null,
+        gallery: [
+          { src: '/work/anakut/tableau-de-bord.webp', caption: 'The coach’s dashboard: his clients, his sessions, and the sign-up link he shares.' },
+          { src: '/work/anakut/seances.webp', caption: 'Sessions, with the remaining pack, the status, the rated performance and payment.' },
+          { src: '/work/anakut/progression.webp', caption: 'Physical tracking, client by client, with the change between two measurements.' },
+          { src: '/work/anakut/packs.webp', caption: 'The packages, from a taster session to a pack of ten, which the coach manages himself.' },
+          { src: '/work/anakut/fidelite.webp', caption: 'Loyalty tiers and their benefits, configured by the coach.' },
+        ],
         context:
           'Anakut is an independent personal trainer in Neuchâtel. Before, every new client filled in a paper form, and follow-up lived in spreadsheets and loose sheets that ended up lost. The coach kept his clients’ progress in his head: with five regular clients, that was already a stretch.',
         need:
@@ -640,6 +647,7 @@ export const en: Dict = {
         result: 'Retention up 42%, and no missed appointments left.',
         shot: null,
         video: null,
+        gallery: null,
         context:
           'MP Massage is a massage practice in Neuchâtel. Booking ran through off the shelf tools like OneDoc, and it worked: that was not the problem. The problem was everything around it. Most clients took the standard treatment and nothing else, follow-up was done by hand, and nothing connected one session to the next.',
         need:
@@ -693,6 +701,7 @@ export const en: Dict = {
         result: null,
         shot: null,
         video: null,
+        gallery: null,
         context:
           'OCS cleans an airport. Its managers knew an officer had turned up, but not whether they had actually been through a given zone, or at what time. On an airport site, that question is not a matter of comfort.',
         need:
@@ -720,6 +729,7 @@ export const en: Dict = {
         result: 'An app quoted at 200,000 dollars elsewhere, delivered for 25,000.',
         shot: null,
         video: null,
+        gallery: null,
         context:
           'Wave Network is a Swiss financial advisory firm. Its subscription, the Wave Pass, gives access to a payment card, certified advisors, tax services and a network of partner merchants across Switzerland. On the member side, that access ran on a physical card. It needed an app. The project had been quoted elsewhere, and the quote came back at 200,000 dollars: a figure that closes the subject.',
         need:

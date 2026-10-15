@@ -105,6 +105,16 @@ export interface CaseStudy {
   shot: string | null
   /** La video de la carte plein ecran, ou null. */
   video: string | null
+  /**
+   * Les captures de l'outil livre, legendees.
+   *
+   * Une seule capture ne dit pas grand-chose d'une application a plusieurs
+   * ecrans. Celles qui montrent de la donnee reelle sont caviardees avant
+   * d'entrer ici, par `scripts/redact-shots.py` : ni nom de client, ni
+   * montant, ni donnee de sante ne doivent sortir, et la regle est de couvrir
+   * et non de flouter, un flou sur du texte se remontant.
+   */
+  gallery: { src: string; caption: string }[] | null
   context: string | null
   need: string | null
   built: string[] | null

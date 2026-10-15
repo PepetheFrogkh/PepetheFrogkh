@@ -856,6 +856,48 @@ html[lang='km'] {
   color: var(--terra);
 }
 
+/* ── la galerie de captures d'une realisation ─────────────────────────────
+   Une application a plusieurs ecrans : une seule capture n'en dit rien. Les
+   captures sont legendees, et celles qui montraient de la donnee reelle ont
+   ete caviardees avant d'entrer dans le depot.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.gallery {
+  display: grid;
+  gap: var(--s5);
+  margin-top: var(--s6);
+}
+
+@media (min-width: 900px) {
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s6) var(--s5);
+  }
+
+  /* la premiere capture, le tableau de bord, prend toute la largeur : c'est
+     celle qui demande le plus de place pour rester lisible */
+  .gallery__item:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+.gallery__figure {
+  margin: 0;
+}
+
+.gallery__figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--r-image);
+  border: 1px solid var(--border);
+}
+
+.gallery__caption {
+  margin: var(--s2) 0 0;
+  line-height: 1.55;
+}
+
 /* ── le logo d'un client, a la place d'une capture ────────────────────────
    Un logo n'a ni le cadrage ni le format d'une capture d'ecran : il tient
    dans une tuile a lui, centre, sans etre etire pour remplir le cadre.

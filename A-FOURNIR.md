@@ -34,6 +34,14 @@ Les deux pages n'ont que le nom, la ville et le lien du site.
   pour la carte de la liste. Ou l'autorisation de les prendre nous-mêmes.
 - **L'accord écrit du client** pour apparaître avec son nom.
 
+### Anakut : complète, côté coach
+
+Les cinq captures de l'espace coach sont en ligne, caviardées. Manquent les
+captures de **l'espace client** : vous me les avez montrées, mais elles ne sont
+pas arrivées sous forme de fichiers. Renvoyez-les et je les installe.
+
+### MP Massage : écrite, il manque les captures
+
 ### Wave : écrite, il manque les images et la citation
 
 Le contexte, le besoin, ce qui a été construit et les deux chiffres sont en
@@ -41,6 +49,16 @@ ligne. Manquent :
 
 - **Les captures** de l'application et de son outil de gestion.
 - **Le mot du client**, si vous l'obtenez. Sinon la page reste telle quelle.
+
+### La règle sur les captures
+
+Toute capture qui montre de la donnée réelle passe par
+`scripts/redact-shots.py` avant d'entrer dans le dépôt. On **couvre**, on ne
+floute pas : un flou sur du texte se remonte, un aplat non. Sont couverts sans
+exception les noms de clients, les montants, les coordonnées, et les données de
+santé (poids, IMC). Les zones sont déclarées par image dans le script, donc une
+capture refaite se re-caviarde en une commande au lieu d'être retouchée à la
+main et oubliée la fois suivante.
 
 ### OCS : volontairement éteinte
 

@@ -587,8 +587,15 @@ export const fr: Dict = {
         logo: '/clients/anakut.png',
         logoBg: '#100e0d',
         result: 'De 5 à 15 clients réguliers, sans un franc de publicité.',
-        shot: null,
+        shot: '/work/anakut/tableau-de-bord.webp',
         video: null,
+        gallery: [
+          { src: '/work/anakut/tableau-de-bord.webp', caption: 'Le tableau de bord du coach : ses clients, ses séances, et le lien d’inscription qu’il partage.' },
+          { src: '/work/anakut/seances.webp', caption: 'Les séances, avec le pack restant, le statut, la performance notée et le règlement.' },
+          { src: '/work/anakut/progression.webp', caption: 'Le suivi physique, client par client, avec l’évolution entre deux mesures.' },
+          { src: '/work/anakut/packs.webp', caption: 'Les formules, du cours découverte au pack de dix, que le coach gère lui-même.' },
+          { src: '/work/anakut/fidelite.webp', caption: 'Les niveaux de fidélité et leurs avantages, configurés par le coach.' },
+        ],
         context:
           'Anakut est un coach sportif indépendant à Neuchâtel. Avant, chaque nouveau client remplissait une fiche papier, et le suivi vivait dans des tableurs et des feuilles volantes qui finissaient par se perdre. Le coach tenait la progression de ses clients de mémoire : avec cinq clients réguliers, cela tenait déjà difficilement.',
         need:
@@ -642,6 +649,7 @@ export const fr: Dict = {
         result: 'Rétention en hausse de 42 %, et plus aucun rendez-vous manqué.',
         shot: null,
         video: null,
+        gallery: null,
         context:
           'MP Massage est un cabinet de massage à Neuchâtel. La réservation passait par des outils du marché comme OneDoc, et elle fonctionnait : ce n’était pas le problème. Le problème était tout ce qu’il y avait autour. La plupart des clients prenaient la prestation classique et rien d’autre, le suivi se faisait à la main, et rien ne reliait une séance à la suivante.',
         need:
@@ -696,6 +704,7 @@ export const fr: Dict = {
         result: null,
         shot: null,
         video: null,
+        gallery: null,
         context:
           'OCS fait le nettoyage d’un aéroport. Ses responsables savaient qu’un agent était venu, mais pas s’il était réellement passé dans telle zone, ni à quelle heure. Sur un site aéroportuaire, cette question-là n’est pas une question de confort.',
         need:
@@ -723,6 +732,7 @@ export const fr: Dict = {
         result: 'Une application chiffrée 200 000 dollars ailleurs, livrée pour 25 000.',
         shot: null,
         video: null,
+        gallery: null,
         context:
           'Wave Network est un conseiller financier suisse. Son abonnement, le Wave Pass, donne accès à une carte de paiement, à des conseillers certifiés, à des services fiscaux et à un réseau de commerçants partenaires dans toute la Suisse. Côté membres, cet accès passait par une carte physique. Il fallait une application. Le projet avait été chiffré ailleurs, et le devis reçu était de 200 000 dollars : un montant qui ferme le sujet.',
         need:

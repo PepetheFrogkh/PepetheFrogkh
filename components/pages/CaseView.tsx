@@ -64,6 +64,25 @@ export default function CaseView({ locale, study }: { locale: Locale; study: Cas
               </div>
             </div>
           </Reveal>
+
+          {/* Les autres ecrans de l'outil, legendes. Les captures qui
+              montraient de la donnee reelle ont ete caviardees avant d'entrer
+              dans le depot : aucun nom de client, aucun montant, aucune donnee
+              de sante n'y figure. */}
+          {study.gallery ? (
+            <div className="gallery">
+              {study.gallery.map((frame) => (
+                <Reveal className="gallery__item" key={frame.src}>
+                  <figure className="gallery__figure">
+                    <img src={frame.src} alt="" loading="lazy" />
+                    <figcaption className="gallery__caption small muted">
+                      {frame.caption}
+                    </figcaption>
+                  </figure>
+                </Reveal>
+              ))}
+            </div>
+          ) : null}
         </div>
       </section>
 
