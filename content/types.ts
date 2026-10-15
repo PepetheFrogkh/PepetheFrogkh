@@ -367,6 +367,12 @@ export interface Dict {
     transfer: string
     /** Les conditions generales affichees sous la grille des sites. */
     conditions: string[]
+    /** La question qui ouvre la page : « que voulez-vous construire ». */
+    question: string
+    /** L'intertitre de l'estimateur du chemin choisi. */
+    estimate: string
+    /** L'intertitre du detail des prix, sous l'estimateur. */
+    grid: string
   }
 
   /** Les libelles du configurateur de sites. */

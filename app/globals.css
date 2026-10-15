@@ -4826,3 +4826,113 @@ body.has-view-cursor [data-cursor='voir'] {
     transform: none;
   }
 }
+
+/* ══ La page Tarifs ═══════════════════════════════════════════════════════
+   Elle deversait huit tableaux et trente et une lignes sous un seul
+   intertitre, precedes du canevas d'automatisation. Elle commence maintenant
+   par la seule question qui compte, et ne montre que la reponse.
+   Voir `PricePaths`.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.paths__q {
+  margin: 0;
+  font-size: clamp(26px, 3.4vw, 38px);
+}
+
+.paths__pick {
+  display: grid;
+  gap: var(--s2);
+  grid-template-columns: 1fr;
+  margin-bottom: var(--s8);
+}
+
+@media (min-width: 620px) {
+  .paths__pick {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1000px) {
+  .paths__pick {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.pathcard {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  height: 100%;
+  padding: var(--s3);
+  text-align: left;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  cursor: pointer;
+  transition:
+    transform 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+}
+
+.pathcard:hover {
+  transform: translateY(-4px);
+  border-color: var(--orange);
+  box-shadow: var(--lift);
+}
+
+/* Le chemin ouvert : deux pixels d'orange et un fond peche. Un seul des deux
+   ne suffit pas, parce que la couleur seule ne porte pas l'information. */
+.pathcard[aria-selected='true'] {
+  border-color: var(--orange);
+  border-width: 2px;
+  padding: calc(var(--s3) - 1px);
+  background: var(--peach);
+}
+
+.pathcard__name {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--ink);
+}
+
+.pathcard__desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--slate);
+}
+
+/* Les intertitres d'un panneau : l'estimation, puis le detail. */
+.paths__h {
+  margin: 0 0 var(--s4);
+  font-size: clamp(20px, 2.2vw, 26px);
+}
+
+.paths__h--grid {
+  margin-top: var(--s9);
+  padding-top: var(--s5);
+  border-top: 1px solid var(--border);
+}
+
+/* Avant que la page ne reprenne la main, les six panneaux sont visibles :
+   c'est ce que voit un moteur de recherche, et qui n'a pas de JavaScript. Un
+   filet les separe alors, sinon ils se lisent comme un seul bloc. */
+.paths:not([data-live]) .paths__panel + .paths__panel {
+  margin-top: var(--s9);
+  padding-top: var(--s5);
+  border-top: 1px solid var(--border);
+}
+
+.paths__link {
+  margin-top: var(--s5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pathcard:hover {
+    transform: none;
+  }
+}

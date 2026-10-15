@@ -13,6 +13,13 @@ import { reduced, useGsap } from '@/lib/motion'
  *
  * La section est opaque et son contenu n'est jamais masque : seul le cadre
  * bouge, donc rien ne disparait pendant le geste.
+ *
+ * Le glissement ne depasse jamais le recouvrement des blocs, qui vaut 40 px
+ * (`margin-top: -40px` dans la feuille de style). Il partait de 56 px : les
+ * deux se soustrayaient et il restait 16 px de vide entre deux blocs pendant
+ * toute l'entree, un filet de la couleur de la page qui se voyait a chaque
+ * jointure. Mesure sur les pages Service : la jointure vaut -40 px partout
+ * sauf la, ou elle valait +15.
  */
 export default function SectionBlock({
   children,
@@ -35,7 +42,7 @@ export default function SectionBlock({
     const ctx = gsap.context(() => {
       gsap.fromTo(
         node,
-        { y: 56, borderRadius: 56 },
+        { y: 28, borderRadius: 48 },
         {
           y: 0,
           borderRadius: 40,

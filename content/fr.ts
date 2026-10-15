@@ -941,6 +941,9 @@ export const fr: Dict = {
       'Les contenus, textes, photos et logos, sont fournis par le client.',
       'Les flux d’automatisation sont hébergés sur l’infrastructure n8n de Kuiper Studio et ne sont pas transférables.',
     ],
+    question: 'Que voulez-vous construire ?',
+    estimate: 'Votre estimation',
+    grid: 'Le détail des prix',
   },
 
   configurator: {

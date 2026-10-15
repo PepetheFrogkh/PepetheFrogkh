@@ -938,6 +938,9 @@ export const en: Dict = {
       'Content, copy, photos and logos, is provided by the client.',
       'Automation flows run on Kuiper Studio’s own n8n infrastructure and cannot be moved.',
     ],
+    question: 'What do you want to build?',
+    estimate: 'Your estimate',
+    grid: 'The prices in detail',
   },
 
   configurator: {
