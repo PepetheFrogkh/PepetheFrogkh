@@ -209,7 +209,38 @@ réellement, mais ce sont des textes qui engagent.
 
 ---
 
-## 7. Les neuf marques du simulateur
+## 7. Trois points de votre dictée que je n'ai pas devinés
+
+Tout le reste de ce que vous m'avez donné est en ligne. Ces trois-là ne le sont
+pas, ou pas comme vous l'avez dit, parce que deviner un nom de produit ou une
+durée d'engagement sur un site commercial ne se fait pas.
+
+### L'outil vidéo
+
+Vous avez dit « du **Xfield** pour tout ce qui peut être vidéo ». Je n'ai pas
+trouvé de produit de ce nom, et je ne l'ai donc pas publié. Si c'est
+**Higgsfield**, dites-le et je l'ajoute à la famille 3D de la page, qui devient
+« 3D et vidéo ». Si c'est autre chose, donnez-moi le nom exact.
+
+### Mistral
+
+Vous avez dit « **Nostra** ». J'ai publié **Mistral**, qui est le seul modèle
+connu dont le nom s'en approche, et qui a sa place à côté de Claude, GPT et
+Gemini. Si ce n'était pas lui, c'est un mot à changer.
+
+### Trois mois, ou quatre ?
+
+Vous avez dit trois mois minimum deux fois, puis « voire même pas, c'est au
+minimum sur **quatre** mois d'engagement ». **J'ai publié trois.** C'est le
+chiffre que vous avez donné en premier et le plus souvent, mais votre dernière
+phrase le corrige, et c'est un engagement contractuel : il faut trancher.
+
+C'est une seule valeur à changer, `MIN_MONTHS` dans `lib/prices.ts`, plus la
+phrase correspondante dans les deux fichiers de contenu.
+
+---
+
+## 8. Les neuf marques du simulateur
 
 Le simulateur d'automatisation nomme désormais les outils au lieu de citer des
 catégories : Excel, Google Workspace, Teams, Slack, WhatsApp, Telegram,
@@ -227,7 +258,7 @@ retirer une, sont dans `public/tools/README.md`.
 
 ---
 
-## 8. Les réglages du serveur
+## 9. Les réglages du serveur
 
 À poser sur Hostinger avant la mise en ligne. Les valeurs de développement sont
 déjà dans `.env.local`, qui n'est jamais poussé sur GitHub.
@@ -244,7 +275,7 @@ déjà dans `.env.local`, qui n'est jamais poussé sur GitHub.
 
 ---
 
-## 9. Deux décisions qui vous reviennent
+## 10. Deux décisions qui vous reviennent
 
 ### Le taux euro vers dollar
 
@@ -262,9 +293,13 @@ La page annonce « sur devis ». Vous ne m'avez pas donné de montant, et une
 mission de six mois dépend du nombre d'outils à brancher. Si vous voulez un
 forfait affiché, donnez-le moi.
 
+C'est maintenant le dernier « sur devis » décidé, avec l'écoute client et le
+niveau direction technique. L'ERP en est un aussi, mais par choix : vous avez
+demandé que son prix ne soit plus affiché.
+
 ---
 
-## 10. La traduction khmère
+## 11. La traduction khmère
 
 Le site parle trois langues et le sélecteur les propose toutes les trois, mais
 **les pages `/km` servent encore le texte anglais**, avec un bandeau qui le dit
@@ -280,7 +315,7 @@ Aucune phrase khmère n'a été écrite de notre propre chef.
 
 ---
 
-## 11. L'anneau nomme maintenant les outils
+## 12. L'anneau nomme maintenant les outils
 
 Vous m'avez demandé de poser de vrais logos sur les plaques de l'anneau, pour
 montrer qu'on sait faire le lien. C'est fait : une plaque sur trois porte un
@@ -294,7 +329,7 @@ endroits d'un coup.
 
 ---
 
-## 12. Meshy, et l'animation 3D
+## 13. Meshy, et l'animation 3D
 
 Vous m'avez donné deux clés Meshy. **Aucune des deux n'a servi**, et la raison
 n'a rien à voir avec les clés.
