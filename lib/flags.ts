@@ -1,4 +1,5 @@
-import type { CaseStudy } from '@/content'
+import type { CaseStudy, Dict, ExpertisePage } from '@/content'
+import { EXPERTISES, type ExpertiseKey } from './i18n'
 
 /**
  * Les deux projets sous accord.
@@ -39,4 +40,27 @@ export function allowed(slug: string): boolean {
 /** Une liste de realisations, debarrassee de celles qui restent fermees. */
 export function visibleCases(cases: CaseStudy[]): CaseStudy[] {
   return cases.filter((study) => allowed(study.slug))
+}
+
+
+/**
+ * Vrai quand une page d'expertise a de quoi se lire.
+ *
+ * Une page qui n'a que son titre n'est pas une page : c'est un trou avec une
+ * adresse. Plutot que de la publier en affichant « [À FOURNIR] » sous chaque
+ * intertitre, elle n'existe pas tant que le contenu n'est pas la : ni dans le
+ * menu, ni dans les listes, ni dans le pied de page, ni dans le sitemap, et
+ * son adresse repond 404. C'est la meme regle que pour OCS, pour la meme
+ * raison : mieux vaut une page de moins qu'une page vide.
+ *
+ * Le minimum est l'accroche et l'un des trois blocs. Ce qui manque ensuite
+ * fait disparaitre son bloc, et reste releve par `scripts/trous.mjs`.
+ */
+export function expertiseReady(page: ExpertisePage): boolean {
+  return Boolean(page.lead) && Boolean(page.understand ?? page.problems ?? page.offer)
+}
+
+/** Les expertises qui ont de quoi se lire, dans l'ordre de la table. */
+export function visibleExpertises(t: Dict): ExpertiseKey[] {
+  return EXPERTISES.filter((key) => expertiseReady(t.expertises[key]))
 }

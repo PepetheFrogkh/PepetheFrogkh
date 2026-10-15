@@ -237,7 +237,7 @@ export const en: Dict = {
         'Monthly supervision, based on how many flows you run.',
       ],
       delays: null,
-      proof: 'anakut',
+      proof: null,
       faq: [
         {
           question: 'Where do the flows run?',
@@ -518,7 +518,7 @@ export const en: Dict = {
         'A clock in system for field teams, security included, runs today for our clients.',
         'The need came from them, not from a catalogue: several asked us the same question at the same time.',
       ],
-      proof: ['ocs'],
+      proof: null,
     },
     crm: {
       title: 'CRM',
@@ -546,7 +546,7 @@ export const en: Dict = {
       experience: [
         'Arnaud spent three years at a data management and automated flow company, moving data between tools that were never designed for it.',
       ],
-      proof: ['anakut', 'mp-massage'],
+      proof: null,
     },
     insurance: {
       title: 'Insurance and brokerage',
@@ -555,7 +555,7 @@ export const en: Dict = {
       problems: null,
       offer: null,
       experience: null,
-      proof: ['wave'],
+      proof: null,
     },
     automation: {
       title: 'Automation',
@@ -586,7 +586,7 @@ export const en: Dict = {
         'Arnaud spent three years at a data management and automated flow company, moving data between tools that were never meant to talk to each other.',
         'At a till vendor, then at another one in Cambodia, we saw up close what a figure entered twice costs: never the typing, always the gap you find three months later.',
       ],
-      proof: ['anakut'],
+      proof: null,
     },
     ai: {
       title: 'Artificial intelligence',

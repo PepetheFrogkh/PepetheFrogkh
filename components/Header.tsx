@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { dict } from '@/content'
 import {
-  EXPERTISES,
   SERVICES,
   expertisePath,
   path,
@@ -15,6 +14,7 @@ import {
   type ServiceKey,
   servicePath,
 } from '@/lib/i18n'
+import { visibleExpertises } from '@/lib/flags'
 import { resolve } from '@/lib/links'
 import { track } from '@/lib/analytics'
 import CurrencySwitch from './CurrencySwitch'
@@ -51,7 +51,7 @@ function entries(locale: Locale, group: Group) {
       desc: t.menu.services[key],
     }))
   }
-  return EXPERTISES.map((key) => ({
+  return visibleExpertises(t).map((key) => ({
     key,
     href: expertisePath(locale, key),
     name: t.map.expertises.children[key],

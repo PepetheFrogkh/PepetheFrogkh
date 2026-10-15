@@ -2,14 +2,13 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { dict } from '@/content'
 import {
-  EXPERTISES,
   SERVICES,
   expertisePath,
   isLocale,
   path,
   servicePath,
 } from '@/lib/i18n'
-import { visibleCases } from '@/lib/flags'
+import { visibleCases, visibleExpertises } from '@/lib/flags'
 import { PACKS, AUTOMATION } from '@/lib/prices'
 import CaseCard from '@/components/CaseCard'
 import Cta from '@/components/Cta'
@@ -114,7 +113,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           </div>
         </Reveal>
         <div className="grid grid--3">
-          {EXPERTISES.map((key) => (
+          {visibleExpertises(t).map((key) => (
             <Reveal key={key}>
               <Link className="card card--link" href={expertisePath(lang, key)}>
                 <h3 className="card__title">{t.map.expertises.children[key]}</h3>

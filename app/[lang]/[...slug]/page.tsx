@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { dict } from '@/content'
 import {
-  EXPERTISES,
   LOCALES,
   OG_LOCALE,
   SERVICES,
@@ -22,7 +21,7 @@ import {
   type ServiceKey,
 } from '@/lib/i18n'
 import { alternates } from '@/lib/routes'
-import { visibleCases } from '@/lib/flags'
+import { expertiseReady, visibleCases, visibleExpertises } from '@/lib/flags'
 import { article, articles, topics } from '@/lib/blog'
 import ArticleView from '@/components/pages/ArticleView'
 import BlogList from '@/components/pages/BlogList'
@@ -94,7 +93,8 @@ function match(locale: Locale, slug: string[]): Route | null {
   if (is('expertises')) {
     if (!next) return { kind: 'expertises' }
     const key = expertiseOf(locale, next)
-    return key ? { kind: 'expertise', key } : null
+    // Une expertise sans contenu n'a pas d'adresse : voir `expertiseReady`.
+    return key && expertiseReady(t.expertises[key]) ? { kind: 'expertise', key } : null
   }
 
   if (is('work')) {
@@ -136,7 +136,7 @@ export function generateStaticParams() {
     for (const key of SERVICES) {
       params.push({ lang, slug: [segment(lang, 'services'), serviceSlug(lang, key)] })
     }
-    for (const key of EXPERTISES) {
+    for (const key of visibleExpertises(t)) {
       params.push({ lang, slug: [segment(lang, 'expertises'), expertiseSlug(lang, key)] })
     }
     for (const study of visibleCases(t.work.cases)) {
@@ -479,7 +479,7 @@ export default async function Page({
 /** La liste des services, ou celle des expertises. */
 function Index({ locale, kind }: { locale: Locale; kind: 'services' | 'expertises' }) {
   const t = dict(locale)
-  const keys = kind === 'services' ? SERVICES : EXPERTISES
+  const keys = kind === 'services' ? SERVICES : visibleExpertises(t)
   const children = t.map[kind].children as Record<string, string>
   const slugOf = (key: string) =>
     kind === 'services'

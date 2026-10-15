@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import { dict } from '@/content'
 import {
-  EXPERTISES,
   SERVICES,
   expertisePath,
   path,
   servicePath,
   type Locale,
 } from '@/lib/i18n'
+import { visibleExpertises } from '@/lib/flags'
 import { resolve } from '@/lib/links'
 
 /**
@@ -32,7 +32,7 @@ export default function Footer({ locale }: { locale: Locale }) {
     },
     {
       title: t.map.expertises.title,
-      links: EXPERTISES.map((key) => ({
+      links: visibleExpertises(t).map((key) => ({
         label: t.map.expertises.children[key],
         href: expertisePath(locale, key),
       })),

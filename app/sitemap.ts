@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { dict } from '@/content'
 import {
-  EXPERTISES,
   PAGES,
   PUBLISHED_LOCALES,
   SERVICES,
@@ -10,7 +9,7 @@ import {
   path,
   servicePath,
 } from '@/lib/i18n'
-import { visibleCases } from '@/lib/flags'
+import { visibleCases, visibleExpertises } from '@/lib/flags'
 import { articles } from '@/lib/blog'
 
 /**
@@ -39,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       urls.push({ url: SITE_URL + servicePath(locale, key), lastModified: now, priority: 0.8 })
     }
 
-    for (const key of EXPERTISES) {
+    for (const key of visibleExpertises(t)) {
       urls.push({ url: SITE_URL + expertisePath(locale, key), lastModified: now, priority: 0.8 })
     }
 

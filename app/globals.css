@@ -542,9 +542,22 @@ p:last-child {
   flex: none;
 }
 
+/* Les entrees de la barre tiennent sur une ligne : en francais elles
+   demandaient 1121 px dans un conteneur de 1120, et « À propos » passait a la
+   ligne a toutes les largeurs. */
 .header__nav a,
 .header__nav .menu__trigger {
   white-space: nowrap;
+}
+
+/* Mais pas dans les menus deroulants, qui sont aussi des `a` de `.header__nav`.
+   Sans cette exception, une description de menu ne se coupait jamais et
+   depassait sa colonne : « Your tools talk to each other, and double entry
+   goes away. » recouvrait l'entree d'a cote. */
+.menu__panel a,
+.menu__panel .menu__name,
+.menu__panel .menu__desc {
+  white-space: normal;
 }
 
 .header__nav a {
@@ -672,6 +685,19 @@ p:last-child {
 .menu__panel--two .menu__list {
   grid-template-columns: 1fr 1fr;
   gap: 2px var(--s2);
+}
+
+/* Une piste `1fr` ne descend pas sous la largeur minimale de son contenu, et
+   une description de 26rem dans une colonne de 22rem elargissait donc la
+   piste : les entrees de droite depassaient le panneau blanc de 135 px. Les
+   deux lignes ci-dessous sont le correctif, et elles vont ensemble : la piste
+   doit pouvoir retrecir, et la description ne doit pas imposer sa largeur. */
+.menu__list > li {
+  min-width: 0;
+}
+
+.menu__panel--two .menu__desc {
+  max-width: none;
 }
 
 .menu__all {
@@ -4518,4 +4544,285 @@ body.has-view-cursor [data-cursor='voir'] {
 .lab__readout b {
   color: var(--ink);
   font-variant-numeric: tabular-nums;
+}
+
+/* ══ Les pages Expertises ═════════════════════════════════════════════════
+   Quatre blocs, quatre mises en page. La page empilait quatre listes a puces
+   identiques sur des fonds qui alternaient : on la lisait comme un formulaire
+   rempli. Voir le commentaire de `ExpertiseView`.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.xhero {
+  padding-top: calc(var(--header-h) + var(--banner-h) + var(--s9));
+  padding-bottom: var(--section);
+  background: var(--cream);
+  overflow: clip;
+}
+
+.xhero__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--s6);
+}
+
+.xhero__text {
+  flex: 1;
+  min-width: 0;
+  max-width: 48rem;
+}
+
+.xhero__title {
+  margin: var(--s3) 0 var(--s3);
+}
+
+.xhero__lead {
+  max-width: 38rem;
+}
+
+/* Le pictogramme du metier, en grand, dans la moitie droite. Il tient lieu de
+   photographie : les banques d'images ne sont pas accessibles depuis cet
+   environnement, et une photographie de banque d'images dit « site d'agence »
+   et rien d'autre. Sous 900 px il disparait : la colonne de texte prend toute
+   la largeur, et un pictogramme pose au-dessus du titre ne dit rien de plus
+   que le titre. */
+.xhero__mark {
+  flex: none;
+  display: none;
+  width: 208px;
+  height: 208px;
+  border-radius: var(--r-card);
+  background: var(--white);
+  border: 1px solid var(--border);
+  place-items: center;
+  color: var(--ink);
+  box-shadow: var(--lift);
+}
+
+.xhero__mark .mark {
+  width: 112px;
+  height: 112px;
+}
+
+@media (min-width: 900px) {
+  .xhero__mark {
+    display: grid;
+  }
+}
+
+/* Le trait de couleur du pictogramme : la structure a l'encre, le detail qui
+   nomme le metier a l'orange. */
+.mark__accent {
+  stroke: var(--orange);
+}
+
+/* ── les constats numerotes ───────────────────────────────────────────────
+   Deux colonnes, chacune avec son numero en gros : on les lit un par un, pas
+   comme une enumeration. */
+.facts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s3);
+}
+
+@media (min-width: 820px) {
+  .facts {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s3) var(--s6);
+  }
+}
+
+.fact {
+  display: flex;
+  gap: var(--s3);
+  align-items: flex-start;
+  padding-top: var(--s3);
+  border-top: 1px solid var(--border);
+}
+
+.fact__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--peach);
+  /* une peche seule sur du creme passe inapercue : le filet la rattrape */
+  -webkit-text-stroke: 0.5px var(--orange);
+}
+
+.fact__text {
+  margin: 0;
+  color: var(--slate);
+}
+
+/* ── les problemes typiques ───────────────────────────────────────────────
+   Les phrases dans lesquelles le visiteur doit se reconnaitre. Cartes
+   blanches sur peche, filet orange a gauche : c'est le bloc qui se detache le
+   plus de la page, et c'est voulu. */
+.pains {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s2);
+}
+
+@media (min-width: 820px) {
+  .pains {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pain {
+  position: relative;
+  padding: var(--s3) var(--s3) var(--s3) var(--s4);
+  background: var(--white);
+  border-radius: var(--r-card);
+  color: var(--ink);
+  box-shadow: 0 1px 0 rgba(20, 22, 31, 0.04);
+}
+
+.pain::before {
+  content: '';
+  position: absolute;
+  left: var(--s2);
+  top: var(--s3);
+  bottom: var(--s3);
+  width: 3px;
+  border-radius: 2px;
+  background: var(--orange);
+}
+
+/* ── ce que nous proposons ────────────────────────────────────────────────
+   La reponse, cochee, en une colonne lisible. */
+.offers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s2);
+  max-width: 46rem;
+}
+
+.offer {
+  display: flex;
+  gap: var(--s2);
+  align-items: flex-start;
+  color: var(--slate);
+}
+
+.offer__tick {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+  color: var(--orange);
+}
+
+.offers__cta {
+  margin-top: var(--s6);
+}
+
+/* ── « Notre experience » ─────────────────────────────────────────────────
+   Une citation, parce que c'en est une : ce sont les fondateurs qui parlent,
+   avant Kuiper Studio. Le filet a gauche le dit sans l'ecrire. */
+.said-block {
+  max-width: 46rem;
+  padding-left: var(--s4);
+  border-left: 3px solid var(--orange);
+}
+
+.said-block__line {
+  margin: var(--s3) 0 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(19px, 2.2vw, 24px);
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.said-block__note {
+  margin-top: var(--s4);
+}
+
+/* ── la grille des autres metiers ─────────────────────────────────────────
+   Chaque carte porte son pictogramme : la liste se parcourt a l'oeil au lieu
+   de se lire. */
+.xgrid {
+  display: grid;
+  gap: var(--s3);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 620px) {
+  .xgrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 980px) {
+  .xgrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.xcard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s1);
+  height: 100%;
+  padding: var(--s3);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease),
+    border-color 0.25s var(--ease);
+}
+
+.xcard:hover {
+  transform: translateY(-6px);
+  border-color: var(--orange);
+  box-shadow: var(--lift);
+}
+
+.xcard__mark {
+  width: 36px;
+  height: 36px;
+  margin-bottom: var(--s2);
+  color: var(--ink);
+}
+
+.xcard__title {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.xcard__desc {
+  margin: 0;
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--slate);
+}
+
+.xcard .link-more {
+  margin-top: var(--s2);
+}
+
+.xgrid__all {
+  margin-top: var(--s5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xcard:hover {
+    transform: none;
+  }
 }

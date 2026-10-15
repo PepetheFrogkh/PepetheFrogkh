@@ -239,7 +239,7 @@ export const fr: Dict = {
         'Une supervision mensuelle, selon le nombre de flux.',
       ],
       delays: null,
-      proof: 'anakut',
+      proof: null,
       faq: [
         {
           question: 'Où tournent les flux ?',
@@ -520,7 +520,7 @@ export const fr: Dict = {
         'Un système de pointage pour des équipes de terrain, gardiennage compris, tourne aujourd’hui pour nos clients.',
         'Le besoin nous est venu d’eux, pas d’un catalogue : plusieurs nous ont posé la même question au même moment.',
       ],
-      proof: ['ocs'],
+      proof: null,
     },
     crm: {
       title: 'CRM',
@@ -548,7 +548,7 @@ export const fr: Dict = {
       experience: [
         'Arnaud a passé trois ans dans une société de gestion de données et de flux automatisés, à faire circuler la donnée entre des outils qui n’étaient pas prévus pour.',
       ],
-      proof: ['anakut', 'mp-massage'],
+      proof: null,
     },
     insurance: {
       title: 'Assurance et courtage',
@@ -557,7 +557,7 @@ export const fr: Dict = {
       problems: null,
       offer: null,
       experience: null,
-      proof: ['wave'],
+      proof: null,
     },
     automation: {
       title: 'Automatisation',
@@ -588,7 +588,7 @@ export const fr: Dict = {
         'Arnaud a passé trois ans dans une société de gestion de données et de flux automatisés, à faire circuler la donnée entre des outils qui n’étaient pas prévus pour se parler.',
         'Chez un éditeur de caisses, puis chez un autre au Cambodge, nous avons vu de près ce que coûte une donnée saisie deux fois : ce n’est jamais la saisie, c’est l’écart qu’on découvre trois mois plus tard.',
       ],
-      proof: ['anakut'],
+      proof: null,
     },
     ai: {
       title: 'Intelligence artificielle',
