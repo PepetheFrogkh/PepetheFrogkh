@@ -3,7 +3,7 @@ import CurrencySwitch from '@/components/CurrencySwitch'
 import {
   AUTOMATION,
   BUSINESS_APPS,
-  CUSTOM_TEAM,
+  CUSTOM_START,
   DELAYS,
   FEEDBACK,
   OPTIONS,
@@ -34,7 +34,7 @@ export default function Page() {
       label: `supervision · ${s.id}`,
       price: s.price,
     })),
-    { label: 'projet sur mesure · équipe au mois', price: CUSTOM_TEAM },
+    { label: 'projet sur mesure · équipe au mois', price: CUSTOM_START },
     { label: 'application métier · de base', price: BUSINESS_APPS.base },
     { label: 'application métier · ERP complet', price: BUSINESS_APPS.erp },
     { label: 'écoute client', price: FEEDBACK },

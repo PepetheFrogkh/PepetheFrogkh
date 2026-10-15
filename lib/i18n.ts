@@ -62,6 +62,7 @@ export type PageKey =
   | 'pricing'
   | 'blog'
   | 'about'
+  | 'stack'
   | 'contact'
   | 'legal'
   | 'privacy'
@@ -87,6 +88,7 @@ const SEGMENTS: Record<PageKey, Record<Locale, string>> = {
   pricing: { fr: 'tarifs', en: 'pricing', km: 'pricing' },
   blog: { fr: 'blog', en: 'blog', km: 'blog' },
   about: { fr: 'a-propos', en: 'about', km: 'about' },
+  stack: { fr: 'notre-stack', en: 'our-stack', km: 'our-stack' },
   contact: { fr: 'contact', en: 'contact', km: 'contact' },
   legal: { fr: 'mentions-legales', en: 'legal-notice', km: 'legal-notice' },
   privacy: { fr: 'confidentialite', en: 'privacy', km: 'privacy' },
@@ -202,6 +204,7 @@ export const PAGES: PageKey[] = [
   'pricing',
   'blog',
   'about',
+  'stack',
   'contact',
   'legal',
   'privacy',

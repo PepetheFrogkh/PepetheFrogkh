@@ -12,6 +12,7 @@ import { priceGrid } from '@/components/PriceGrid'
 import Reveal from '@/components/Reveal'
 import SectionBlock from '@/components/SectionBlock'
 import SplitHeading from '@/components/SplitHeading'
+import TeamTerms from '@/components/TeamTerms'
 
 /**
  * Le gabarit d'une page de service.
@@ -171,6 +172,10 @@ export default function ServiceView({
             {money.disclaimer}
           </p>
         </Reveal>
+
+        {/* Les engagements et les deux facons d'acheter : ils ne valent que
+            pour une equipe dediee, donc ils ne s'affichent que la. */}
+        {service === 'custom' ? <TeamTerms locale={locale} /> : null}
       </SectionBlock>
 
       {/* ── une realisation liee, s'il y en a une ──────────────────────── */}

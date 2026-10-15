@@ -3,10 +3,12 @@ import type { ActionId, ToolId, TriggerId } from '@/lib/simulator'
 import type {
   AppId,
   AutomationId,
+  CareId,
   DelayId,
   OptionId,
   PackId,
   PlanId,
+  ProfileId,
   SupervisionId,
 } from '@/lib/prices'
 
@@ -203,9 +205,33 @@ export interface Dict {
     pricing: { title: string; description: string }
     blog: { title: string; description: string }
     about: { title: string; description: string }
+    stack: { title: string; description: string }
     contact: { title: string; description: string }
     legal: { title: string; description: string }
     privacy: { title: string; description: string }
+  }
+
+  /**
+   * La page « Notre stack ».
+   *
+   * Ce que nous savons construire, et ce que nous pouvons encaisser. Les deux
+   * questions arrivent toujours ensemble dans un premier echange : avec quoi
+   * vous travaillez, et combien vous etes. La seconde a une meilleure reponse
+   * que le nombre, et c'est `capacity`.
+   */
+  stack: {
+    title: string
+    lead: string
+    groups: {
+      title: string
+      note: string
+      /** `logo` est le fichier dans `public/stack/`, `null` s'il n'y en a pas. */
+      items: { name: string; logo: string | null }[]
+    }[]
+    /** La reponse a « combien etes-vous ». */
+    capacity: { title: string; lead: string; items: string[] }
+    /** Ce que l'equipe a sous la main, et ses horaires. */
+    kit: { title: string; items: { label: string; value: string }[] }
   }
 
   /**
@@ -380,6 +406,31 @@ export interface Dict {
     supervision: { title: string; rows: Record<SupervisionId, string> }
     apps: { title: string; rows: Record<AppId, string> }
     team: { title: string; row: string }
+    /**
+     * L'equipe dediee : le depart, les profils qui s'ajoutent, et ce qui va
+     * avec. Les identifiants sont ceux de `PROFILES`, dans `lib/prices.ts`.
+     */
+    profiles: {
+      title: string
+      note: string
+      start: string
+      rows: Record<ProfileId, { name: string; detail: string }>
+      /** Les trois engagements qui encadrent la grille. */
+      terms: { title: string; items: string[] }
+      /** A l'heure ou au resultat : la difference, et quand choisir quoi. */
+      billing: {
+        title: string
+        lead: string
+        hourly: { name: string; body: string[] }
+        fixed: { name: string; body: string[] }
+      }
+    }
+    /** Le support apres la livraison. Identifiants de `CARE`. */
+    care: {
+      title: string
+      note: string
+      rows: Record<CareId, { name: string; detail: string }>
+    }
     transfer: string
     /** Les conditions generales affichees sous la grille des sites. */
     conditions: string[]

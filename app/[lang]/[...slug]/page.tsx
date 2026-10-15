@@ -29,7 +29,6 @@ import BlogList from '@/components/pages/BlogList'
 import {
   AUTOMATION,
   BUSINESS_APPS,
-  CUSTOM_TEAM,
   DELAYS,
   OPTIONS,
   PACKS,
@@ -50,6 +49,7 @@ import ExpertiseView from '@/components/pages/ExpertiseView'
 import ServiceView from '@/components/pages/ServiceView'
 import SiteConfigurator from '@/components/SiteConfigurator'
 import PricePaths from '@/components/PricePaths'
+import TeamTerms from '@/components/TeamTerms'
 import { priceGrid } from '@/components/PriceGrid'
 import Simulator from '@/components/Simulator'
 import { Tbd, TbdBlock } from '@/components/Tbd'
@@ -77,7 +77,7 @@ type Route =
   | { kind: 'case'; slug: string }
   | { kind: 'blog' }
   | { kind: 'article'; slug: string }
-  | { kind: 'page'; page: 'pricing' | 'about' | 'contact' }
+  | { kind: 'page'; page: 'pricing' | 'about' | 'stack' | 'contact' }
   | { kind: 'text'; page: 'legal' | 'privacy' }
 
 function match(locale: Locale, slug: string[]): Route | null {
@@ -114,6 +114,7 @@ function match(locale: Locale, slug: string[]): Route | null {
   if (next) return null
   if (is('pricing')) return { kind: 'page', page: 'pricing' }
   if (is('about')) return { kind: 'page', page: 'about' }
+  if (is('stack')) return { kind: 'page', page: 'stack' }
   if (is('contact')) return { kind: 'page', page: 'contact' }
   if (is('legal')) return { kind: 'text', page: 'legal' }
   if (is('privacy')) return { kind: 'text', page: 'privacy' }
@@ -131,6 +132,7 @@ export function generateStaticParams() {
       'pricing',
       'blog',
       'about',
+      'stack',
       'contact',
       'legal',
       'privacy',
@@ -381,6 +383,10 @@ export default async function Page({
           </p>
         </Reveal>
 
+        {/* Les engagements et les deux facons d'acheter : ils ne valent que
+            pour une equipe dediee, donc ils ne s'affichent que la. */}
+        {key === 'custom' ? <TeamTerms locale={lang} /> : null}
+
         <Reveal>
           <p className="paths__link small">
             <Link className="link-more" href={servicePath(lang, key)}>
@@ -406,6 +412,89 @@ export default async function Page({
             }))}
             panels={Object.fromEntries(SERVICES.map((key) => [key, panel(key)]))}
           />
+        </SectionBlock>
+
+        <FinalCta locale={lang} />
+      </>
+    )
+  }
+
+  if (route.kind === 'page' && route.page === 'stack') {
+    const stack = t.stack
+    return (
+      <>
+        <Head locale={lang} title={stack.title} lead={stack.lead} />
+
+        {/* ── ce que nous savons construire ─────────────────────────────── */}
+        <SectionBlock tone="cream">
+          <div className="stack">
+            {stack.groups.map((group, i) => (
+              <Reveal key={group.title} delay={i * 50}>
+                <div className="stack__group">
+                  <h2 className="stack__title">{group.title}</h2>
+                  <p className="stack__note">{group.note}</p>
+                  <ul className="stack__items">
+                    {group.items.map((item) => (
+                      <li className="tool" key={item.name}>
+                        {item.logo ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            className="tool__logo"
+                            src={item.logo}
+                            alt=""
+                            width={18}
+                            height={18}
+                          />
+                        ) : null}
+                        {item.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </SectionBlock>
+
+        {/* ── combien sommes-nous : la mauvaise question ────────────────── */}
+        <SectionBlock>
+          <Reveal>
+            <div className="section__head">
+              <SplitHeading text={stack.capacity.title} />
+              <p className="lead">{stack.capacity.lead}</p>
+            </div>
+          </Reveal>
+          <ol className="facts">
+            {stack.capacity.items.map((line, i) => (
+              <Reveal key={line} delay={i * 60}>
+                <li className="fact">
+                  <span className="fact__n" aria-hidden="true">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <p className="fact__text">{line}</p>
+                </li>
+              </Reveal>
+            ))}
+          </ol>
+        </SectionBlock>
+
+        {/* ── ce que l'equipe a sous la main ────────────────────────────── */}
+        <SectionBlock tone="peach">
+          <Reveal>
+            <div className="section__head">
+              <SplitHeading text={stack.kit.title} />
+            </div>
+          </Reveal>
+          <dl className="kit">
+            {stack.kit.items.map((item, i) => (
+              <Reveal key={item.label} delay={i * 50}>
+                <div className="kit__row">
+                  <dt className="kit__label">{item.label}</dt>
+                  <dd className="kit__value">{item.value}</dd>
+                </div>
+              </Reveal>
+            ))}
+          </dl>
         </SectionBlock>
 
         <FinalCta locale={lang} />

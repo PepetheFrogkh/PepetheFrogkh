@@ -3,13 +3,15 @@ import type { Locale, ServiceKey } from '@/lib/i18n'
 import {
   AUTOMATION,
   BUSINESS_APPS,
+  CARE,
   CONSULTING,
-  CUSTOM_TEAM,
+  CUSTOM_START,
   DELAYS,
   FEEDBACK,
   OPTIONS,
   PACKS,
   PLANS,
+  PROFILES,
   TRANSFER,
 } from '@/lib/prices'
 import PriceTable, { type Row } from './PriceTable'
@@ -103,26 +105,67 @@ export function priceGrid(locale: Locale, service: ServiceKey) {
     )
   }
 
-  if (service === 'apps') {
+  if (service === 'custom') {
     return (
-      <PriceTable
-        locale={locale}
-        caption={money.apps.title}
-        rows={[
-          { id: 'base', name: money.apps.rows.base, price: BUSINESS_APPS.base },
-          { id: 'erp', name: money.apps.rows.erp, price: BUSINESS_APPS.erp },
-        ]}
-      />
+      <>
+        <PriceTable
+          locale={locale}
+          caption={money.profiles.title}
+          note={money.profiles.note}
+          rows={[
+            {
+              id: 'start',
+              name: money.team.row,
+              detail: money.profiles.start,
+              price: CUSTOM_START,
+              featured: true,
+            },
+            ...PROFILES.map((profile) => ({
+              id: profile.id,
+              name: money.profiles.rows[profile.id].name,
+              detail: money.profiles.rows[profile.id].detail,
+              price: profile.price,
+            })),
+          ]}
+        />
+        <PriceTable
+          locale={locale}
+          caption={money.care.title}
+          note={money.care.note}
+          rows={CARE.map((plan) => ({
+            id: plan.id,
+            name: money.care.rows[plan.id].name,
+            detail: money.care.rows[plan.id].detail,
+            price: plan.price,
+          }))}
+        />
+      </>
     )
   }
 
-  if (service === 'custom') {
+  if (service === 'apps') {
     return (
-      <PriceTable
-        locale={locale}
-        caption={money.team.title}
-        rows={[{ id: 'team', name: money.team.row, price: CUSTOM_TEAM }]}
-      />
+      <>
+        <PriceTable
+          locale={locale}
+          caption={money.apps.title}
+          rows={[
+            { id: 'base', name: money.apps.rows.base, price: BUSINESS_APPS.base },
+            { id: 'erp', name: money.apps.rows.erp, price: BUSINESS_APPS.erp },
+          ]}
+        />
+        <PriceTable
+          locale={locale}
+          caption={money.care.title}
+          note={money.care.note}
+          rows={CARE.map((plan) => ({
+            id: plan.id,
+            name: money.care.rows[plan.id].name,
+            detail: money.care.rows[plan.id].detail,
+            price: plan.price,
+          }))}
+        />
+      </>
     )
   }
 

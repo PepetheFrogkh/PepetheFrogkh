@@ -223,15 +223,88 @@ export type AppId = 'base' | 'erp'
 
 // ── Projets sur mesure, applications metier, ecoute client ──────────────────
 
-/** Un developpeur et un chef de projet, au mois. */
-export const CUSTOM_TEAM: Price = fixed(usd(5000), 'month')
-
 export const BUSINESS_APPS = {
   /** Caisse, inventaire, MRP, CRM : un paiement unique. */
   base: { kind: 'range', from: usd(25000), to: usd(30000) } as Price,
-  /** Un ERP complet ne se lance pas en dessous. */
-  erp: { kind: 'range', from: usd(100000), to: usd(150000) } as Price,
+  /**
+   * L'ERP complet se chiffre apres un echange, et son prix n'est pas affiche.
+   *
+   * Il l'etait, de cent a cent cinquante mille dollars. Un montant pareil
+   * affiche sans contexte fait fuir avant la premiere question, alors qu'un
+   * ERP se dimensionne : ce n'est pas le meme chantier selon le nombre de
+   * sites, de magasins et d'annees de donnee a reprendre. Il se dit en
+   * conversation, pas sur une page.
+   */
+  erp: { kind: 'quote' } as Price,
 }
+
+// ── Une equipe dediee ───────────────────────────────────────────────────────
+
+/**
+ * Le depart d'un projet sur mesure : un developpeur et un chef de projet.
+ *
+ * Le developpeur est de niveau intermediaire a confirme, et le chef de projet
+ * va avec : c'est le plus petit attelage qui tient une livraison. Tout le
+ * reste s'ajoute par profil, ci-dessous.
+ */
+export const CUSTOM_START: Price = fixed(usd(5000), 'month')
+
+export const PROFILES = [
+  { id: 'junior', price: fixed(usd(1000), 'month') },
+  {
+    id: 'mid',
+    price: { kind: 'range', from: usd(2000), to: usd(2500), per: 'month' } as Price,
+  },
+  { id: 'senior', price: fixed(usd(5000), 'month') },
+  {
+    id: 'architect',
+    price: { kind: 'range', from: usd(8000), to: usd(10000), per: 'month' } as Price,
+  },
+  /** Un niveau direction technique se discute, il ne se tarife pas. */
+  { id: 'cto', price: { kind: 'quote' } as Price },
+] as const
+
+export type ProfileId = (typeof PROFILES)[number]['id']
+
+/**
+ * Le coefficient applique a la facturation a l'heure.
+ *
+ * Les prix de la grille sont ceux d'un engagement au mois, ou la charge se
+ * repartit. A l'heure, chaque heure est relevee et justifiee a chaque etape,
+ * et le travail se concentre sur la periode demandee : c'est ce que paie le
+ * coefficient.
+ */
+export const HOURLY_UPLIFT = 1.5
+
+/**
+ * L'engagement minimum pour un profil dedie, en mois.
+ *
+ * En dessous, nous ne detachons pas quelqu'un : un developpeur qui change de
+ * projet tous les mois ne connait aucun des projets qu'il touche. Un chantier
+ * plus court reste possible, mais sans profil dedie.
+ */
+export const MIN_MONTHS = 3
+
+/** A partir de combien de profils un UI/UX est compris, a notre charge. */
+export const UX_FROM_PROFILES = 3
+
+// ── Support et maintenance ──────────────────────────────────────────────────
+
+/**
+ * Ce qui se passe apres la livraison, au mois.
+ *
+ * Quatre forfaits, du plus simple au plus engageant. Le dernier, la nuit, ne
+ * concerne que les projets sur mesure et les CRM ou ERP : c'est la que le
+ * decalage horaire coute vraiment quelque chose.
+ */
+export const CARE = [
+  { id: 'basic', price: fixed(usd(350), 'month') },
+  { id: 'changes', price: fixed(usd(550), 'month') },
+  { id: 'retained', price: fixed(usd(1500), 'month') },
+  { id: 'night', price: fixed(usd(5500), 'month') },
+] as const
+
+export type CareId = (typeof CARE)[number]['id']
 
 export const FEEDBACK: Price = { kind: 'quote' }
 

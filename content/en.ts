@@ -41,6 +41,11 @@ export const en: Dict = {
       title: 'About · Kuiper Studio',
       description: 'Two founders, one point of contact. Kuiper Studio is based in Phnom Penh.',
     },
+    stack: {
+      title: 'Our stack · Kuiper Studio',
+      description:
+        'The technologies we commit to, and the load we can absorb.',
+    },
     contact: {
       title: 'Contact · Kuiper Studio',
       description: 'Let’s talk about your project.',
@@ -52,6 +57,95 @@ export const en: Dict = {
     privacy: {
       title: 'Privacy · Kuiper Studio',
       description: 'How Kuiper Studio handles your data.',
+    },
+  },
+
+  stack: {
+    title: 'Our stack',
+    lead: 'What we know how to build, and what we commit to. If your project runs on something else, say so: we will tell you straight whether we can take it over or not.',
+    groups: [
+      {
+        title: 'Mobile',
+        note: 'One app on both stores, or a native app when the platform demands it.',
+        items: [
+          { name: 'Flutter', logo: '/stack/flutter.svg' },
+          { name: 'React Native', logo: '/stack/react.svg' },
+          { name: 'Kotlin', logo: '/stack/kotlin.svg' },
+          { name: 'Swift', logo: '/stack/swift.svg' },
+        ],
+      },
+      {
+        title: 'Web',
+        note: 'From a brochure site to a business app that runs in the browser.',
+        items: [
+          { name: 'Next.js', logo: '/stack/nextjs.svg' },
+          { name: 'React', logo: '/stack/react.svg' },
+          { name: 'TypeScript', logo: '/stack/typescript.svg' },
+          { name: 'WebGL', logo: '/stack/webgl.svg' },
+        ],
+      },
+      {
+        title: 'Server',
+        note: 'The API, the processing, the background jobs.',
+        items: [
+          { name: 'Laravel', logo: '/stack/laravel.svg' },
+          { name: 'PHP', logo: '/stack/php.svg' },
+          { name: 'Node.js', logo: '/stack/node.svg' },
+          { name: 'Python', logo: '/stack/python.svg' },
+        ],
+      },
+      {
+        title: 'Databases',
+        note: 'Relational, all three. Your data stays yours, and it exports.',
+        items: [
+          { name: 'PostgreSQL', logo: '/stack/postgresql.svg' },
+          { name: 'MySQL', logo: '/stack/mysql.svg' },
+          { name: 'MariaDB', logo: '/stack/mariadb.svg' },
+        ],
+      },
+      {
+        title: 'Automation',
+        note: 'To make your tools talk to each other. Which one depends on who needs to be able to change the flow after we leave.',
+        items: [
+          { name: 'n8n', logo: '/stack/n8n.svg' },
+          { name: 'Make', logo: '/stack/make.svg' },
+          { name: 'Zapier', logo: '/stack/zapier.svg' },
+        ],
+      },
+      {
+        title: 'Artificial intelligence',
+        note: 'As a step in a flow, on a named task. The provider and where your data travels are written down before we start.',
+        items: [
+          { name: 'Claude', logo: '/stack/claude.svg' },
+          { name: 'GPT', logo: '/stack/openai.svg' },
+          { name: 'Gemini', logo: '/stack/gemini.svg' },
+          { name: 'Mistral', logo: '/stack/mistral.svg' },
+        ],
+      },
+      {
+        title: '3D',
+        note: 'To produce a visual, not to put it everywhere: the animation on this site is rendered offline, and the visitor only receives images.',
+        items: [{ name: 'Meshy', logo: null }],
+      },
+    ],
+    capacity: {
+      title: 'How many are we?',
+      lead: 'That is not the right question. The right one is what load we can absorb, and how fast.',
+      items: [
+        'We have one of the largest developer networks in Cambodia. More than five hundred CVs of developers we know personally.',
+        'One week after signature and the first payment, the profiles are in place. Not a month of recruiting, a week.',
+        'Ten, twenty, fifty developers on a project is not a problem of numbers. The question is who, and we know where to find them.',
+        'We recruit, we supervise, we replace. You have no interviews to sit.',
+      ],
+    },
+    kit: {
+      title: 'What the team has at hand',
+      items: [
+        { label: 'The offices', value: 'A floor in Phnom Penh, up to sixty desks.' },
+        { label: 'The hardware', value: 'A Mac M5 and a 27-inch screen each, plus the desk and the chair. You buy nothing.' },
+        { label: 'The hours', value: '8am to 7pm, Phnom Penh time. The Night support plan covers your hours instead.' },
+        { label: 'Cover', value: 'Someone falls ill, someone picks up. Everything is documented here: one or two hours to get going instead of three days. On a firm date, that detail is what makes the difference.' },
+      ],
     },
   },
 
@@ -944,6 +1038,86 @@ export const en: Dict = {
       title: 'Custom projects',
       row: 'One developer and one project manager, per month',
     },
+    profiles: {
+      title: 'A dedicated team',
+      note: 'The profiles are the same whatever the technology. It is the level that changes the price, not the language.',
+      start: 'The smallest pairing that holds a delivery. The developer is mid to senior level.',
+      rows: {
+        junior: {
+          name: 'One junior profile, added',
+          detail: 'Supervised by a more experienced member of the team.',
+        },
+        mid: {
+          name: 'One mid-level profile, added',
+          detail: 'Owns a feature from start to finish.',
+        },
+        senior: {
+          name: 'One senior profile, added',
+          detail: 'Owns a part of the product, and reviews the others’ work.',
+        },
+        architect: {
+          name: 'One architect profile, added',
+          detail: 'Decides how the system is built, and why.',
+        },
+        cto: {
+          name: 'A technical director level',
+          detail: 'On request only. It is discussed, not priced.',
+        },
+      },
+      terms: {
+        title: 'What this commits to',
+        items: [
+          'A dedicated profile is assigned for three months at least. Below that we assign nobody: somebody who changes project every month knows none of the projects they touch. A shorter job is still possible, but without a dedicated profile.',
+          'From three profiles, a UI/UX designer is included, at our cost. One mid and two juniors, for instance: the design is covered and you do not pay for it.',
+          'You compose the team as you want. We propose a shape, you decide.',
+          'We do the recruiting. One week after signature and the first payment, the profiles are in place.',
+        ],
+      },
+      billing: {
+        title: 'By the hour, or by the result',
+        lead: 'Two ways to buy, and they are not bought for the same reasons. This is the most important thing on this page.',
+        hourly: {
+          name: 'By the hour',
+          body: [
+            'Every hour is logged, recorded and justified at each step. You know at any moment where we are and what the time went into.',
+            'The work is concentrated into the period you asked for, so delivery is faster.',
+            'This is the choice when the date is tight and cannot move.',
+            'The prices on this page are those of a monthly commitment: by the hour, count fifty per cent more.',
+          ],
+        },
+        fixed: {
+          name: 'By the result',
+          body: [
+            'We look at the project, we spread the load across our schedule, and we give you a date.',
+            'If we are late, the overrun is on us, not on you.',
+            'It is slower, and we say so: the load is spread, a developer may only spend part of their day on it. Three months straight can become four and a half.',
+            'This is the choice when the budget is counted and the date has room.',
+          ],
+        },
+      },
+    },
+    care: {
+      title: 'After delivery',
+      note: 'Four monthly plans, from the simplest to the most committed. None is compulsory.',
+      rows: {
+        basic: {
+          name: 'Maintenance',
+          detail: 'We watch it, we keep it updated, we make sure it runs.',
+        },
+        changes: {
+          name: 'Maintenance and small changes',
+          detail: 'Maintenance, plus changes to fields, text and settings. A one-hour call every month.',
+        },
+        retained: {
+          name: 'Team on retainer',
+          detail: 'Four development days a month, one day a week: exports, imports, a button, a small feature. A call and a report.',
+        },
+        night: {
+          name: 'Night support',
+          detail: 'Support reachable during your hours, not ours. Reserved for custom projects and CRM or ERP work.',
+        },
+      },
+    },
     transfer: 'Moving the site to another host',
     conditions: [
       'Payment: 50% on order, 50% on delivery.',
@@ -1173,6 +1347,7 @@ export const en: Dict = {
           { label: 'Work', href: 'work' },
           { label: 'Pricing', href: 'pricing' },
           { label: 'Blog', href: 'blog' },
+          { label: 'Our stack', href: 'stack' },
           { label: 'About', href: 'about' },
           { label: 'Contact', href: 'contact' },
         ],

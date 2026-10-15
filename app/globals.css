@@ -5100,3 +5100,167 @@ body.has-view-cursor [data-cursor='voir'] {
   margin-top: var(--s1);
   font-size: 12px;
 }
+
+/* ══ Une equipe dediee : les engagements, et les deux facons d'acheter ═════
+   Voir `TeamTerms`. Deux colonnes de meme poids : aucune des deux n'est le bon
+   choix dans l'absolu, et la page ne doit pas en pousser une.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.terms__head {
+  margin-top: var(--s9);
+  padding-top: var(--s5);
+  border-top: 1px solid var(--border);
+}
+
+.terms__list {
+  max-width: 52rem;
+}
+
+.ways {
+  display: grid;
+  gap: var(--s3);
+}
+
+@media (min-width: 820px) {
+  .ways {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.way {
+  height: 100%;
+  padding: var(--s4);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+}
+
+.way__name {
+  margin: 0 0 var(--s3);
+  font-size: 20px;
+}
+
+.way__list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.way__list li {
+  margin-bottom: var(--s2);
+  color: var(--slate);
+}
+
+.way__list li:last-child {
+  margin-bottom: 0;
+}
+
+/* ══ La page Notre stack ══════════════════════════════════════════════════
+   Ce que nous savons construire, par famille, et la charge que nous pouvons
+   encaisser. Les deux questions arrivent toujours ensemble.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.stack {
+  display: grid;
+  gap: var(--s4);
+}
+
+@media (min-width: 760px) {
+  .stack {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1100px) {
+  .stack {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.stack__group {
+  height: 100%;
+  padding: var(--s4);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+}
+
+.stack__title {
+  margin: 0 0 var(--s1);
+  font-size: 20px;
+}
+
+.stack__note {
+  margin: 0 0 var(--s3);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--slate);
+}
+
+.stack__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Une technologie : son logo a la couleur de sa marque, et son nom. Le logo
+   double le nom, qui reste ecrit a cote : il decore, donc `alt` est vide. */
+.tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.tool__logo {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* ── ce que l'equipe a sous la main ───────────────────────────────────────
+   Une liste de definitions : un libelle se cherche a l'oeil, il ne se lit pas
+   dans une phrase. */
+.kit {
+  margin: 0;
+  display: grid;
+  gap: 0;
+}
+
+.kit__row {
+  display: grid;
+  gap: var(--s1) var(--s4);
+  padding: var(--s3) 0;
+  border-top: 1px solid rgba(20, 22, 31, 0.08);
+}
+
+@media (min-width: 760px) {
+  .kit__row {
+    grid-template-columns: 14rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
+.kit__label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.kit__value {
+  margin: 0;
+  color: var(--ink);
+  opacity: 0.78;
+}

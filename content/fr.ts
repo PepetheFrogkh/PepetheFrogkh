@@ -42,6 +42,11 @@ export const fr: Dict = {
       title: 'À propos · Kuiper Studio',
       description: 'Deux fondateurs, un seul interlocuteur. Kuiper Studio est basé à Phnom Penh.',
     },
+    stack: {
+      title: 'Notre stack · Kuiper Studio',
+      description:
+        'Les technologies sur lesquelles nous nous engageons, et la charge que nous pouvons encaisser.',
+    },
     contact: {
       title: 'Contact · Kuiper Studio',
       description: 'Parlons de votre projet.',
@@ -53,6 +58,95 @@ export const fr: Dict = {
     privacy: {
       title: 'Confidentialité · Kuiper Studio',
       description: 'Comment Kuiper Studio traite vos données.',
+    },
+  },
+
+  stack: {
+    title: 'Notre stack',
+    lead: 'Ce que nous savons construire, et sur quoi nous nous engageons. Si votre projet tourne sur autre chose, dites-le : nous dirons franchement si nous savons le reprendre ou non.',
+    groups: [
+      {
+        title: 'Mobile',
+        note: 'Une application sur les deux magasins, ou une application native quand la plateforme l’exige.',
+        items: [
+          { name: 'Flutter', logo: '/stack/flutter.svg' },
+          { name: 'React Native', logo: '/stack/react.svg' },
+          { name: 'Kotlin', logo: '/stack/kotlin.svg' },
+          { name: 'Swift', logo: '/stack/swift.svg' },
+        ],
+      },
+      {
+        title: 'Web',
+        note: 'Du site vitrine à l’application métier qui tourne dans le navigateur.',
+        items: [
+          { name: 'Next.js', logo: '/stack/nextjs.svg' },
+          { name: 'React', logo: '/stack/react.svg' },
+          { name: 'TypeScript', logo: '/stack/typescript.svg' },
+          { name: 'WebGL', logo: '/stack/webgl.svg' },
+        ],
+      },
+      {
+        title: 'Serveur',
+        note: 'L’API, les traitements, les tâches de fond.',
+        items: [
+          { name: 'Laravel', logo: '/stack/laravel.svg' },
+          { name: 'PHP', logo: '/stack/php.svg' },
+          { name: 'Node.js', logo: '/stack/node.svg' },
+          { name: 'Python', logo: '/stack/python.svg' },
+        ],
+      },
+      {
+        title: 'Bases de données',
+        note: 'Relationnelles, les trois. Votre donnée reste la vôtre, et elle s’exporte.',
+        items: [
+          { name: 'PostgreSQL', logo: '/stack/postgresql.svg' },
+          { name: 'MySQL', logo: '/stack/mysql.svg' },
+          { name: 'MariaDB', logo: '/stack/mariadb.svg' },
+        ],
+      },
+      {
+        title: 'Automatisation',
+        note: 'Pour faire parler vos outils entre eux. Le choix dépend de qui doit pouvoir modifier le flux après nous.',
+        items: [
+          { name: 'n8n', logo: '/stack/n8n.svg' },
+          { name: 'Make', logo: '/stack/make.svg' },
+          { name: 'Zapier', logo: '/stack/zapier.svg' },
+        ],
+      },
+      {
+        title: 'Intelligence artificielle',
+        note: 'Comme étape dans un flux, sur une tâche nommée. Le fournisseur et l’endroit où transite votre donnée sont écrits avant de commencer.',
+        items: [
+          { name: 'Claude', logo: '/stack/claude.svg' },
+          { name: 'GPT', logo: '/stack/openai.svg' },
+          { name: 'Gemini', logo: '/stack/gemini.svg' },
+          { name: 'Mistral', logo: '/stack/mistral.svg' },
+        ],
+      },
+      {
+        title: '3D',
+        note: 'Pour produire un visuel, pas pour en mettre partout : l’animation de ce site est rendue hors ligne, et le visiteur ne reçoit que des images.',
+        items: [{ name: 'Meshy', logo: null }],
+      },
+    ],
+    capacity: {
+      title: 'Combien sommes-nous ?',
+      lead: 'Ce n’est pas la bonne question. La bonne, c’est quelle charge nous pouvons encaisser, et à quelle vitesse.',
+      items: [
+        'Nous avons l’un des plus gros réseaux de développeurs du Cambodge. Plus de cinq cents CV de développeurs que nous connaissons personnellement.',
+        'Une semaine après la signature et le premier règlement, les profils sont en poste. Pas un mois de recrutement, une semaine.',
+        'Dix, vingt, cinquante développeurs sur un projet ne posent pas de problème de nombre. La question est de savoir qui, et nous savons où les trouver.',
+        'Nous recrutons, nous encadrons, nous remplaçons. Vous n’avez pas d’entretien à passer.',
+      ],
+    },
+    kit: {
+      title: 'Ce que l’équipe a sous la main',
+      items: [
+        { label: 'Les bureaux', value: 'Une surface à Phnom Penh, jusqu’à soixante postes.' },
+        { label: 'Le matériel', value: 'Un Mac M5 et un écran 27 pouces par personne, plus le bureau et la chaise. Vous n’achetez rien.' },
+        { label: 'Les horaires', value: 'De 8 h à 19 h, heure de Phnom Penh. Le pack Support de nuit couvre vos heures à vous.' },
+        { label: 'Le remplacement', value: 'Quelqu’un tombe malade, quelqu’un reprend. Tout est documenté chez nous : une à deux heures de reprise au lieu de trois jours. Sur une date ferme, c’est ce détail qui fait la différence.' },
+      ],
     },
   },
 
@@ -947,6 +1041,86 @@ export const fr: Dict = {
       title: 'Les projets sur mesure',
       row: 'Un développeur et un chef de projet, au mois',
     },
+    profiles: {
+      title: 'Une équipe dédiée',
+      note: 'Les profils sont les mêmes quelle que soit la technologie. C’est le niveau qui change le prix, pas le langage.',
+      start: 'Le plus petit attelage qui tient une livraison. Le développeur est de niveau intermédiaire à confirmé.',
+      rows: {
+        junior: {
+          name: 'Un profil junior, en plus',
+          detail: 'Encadré par un profil plus expérimenté de l’équipe.',
+        },
+        mid: {
+          name: 'Un profil intermédiaire, en plus',
+          detail: 'Autonome sur une fonctionnalité du début à la fin.',
+        },
+        senior: {
+          name: 'Un profil confirmé, en plus',
+          detail: 'Tient une partie du produit, et relit le travail des autres.',
+        },
+        architect: {
+          name: 'Un profil architecte, en plus',
+          detail: 'Décide comment le système est construit, et pourquoi.',
+        },
+        cto: {
+          name: 'Un niveau direction technique',
+          detail: 'Sur demande seulement. Cela se discute, cela ne se tarife pas.',
+        },
+      },
+      terms: {
+        title: 'Ce que cela engage',
+        items: [
+          'Un profil dédié est détaché pour trois mois au minimum. En dessous, nous ne détachons personne : quelqu’un qui change de projet tous les mois ne connaît aucun des projets qu’il touche. Un chantier plus court reste possible, mais sans profil dédié.',
+          'À partir de trois profils, un UI/UX est compris, à notre charge. Un mid et deux juniors, par exemple : le design est assuré, vous ne le payez pas.',
+          'Vous composez l’équipe comme vous voulez. Nous proposons un assemblage, vous tranchez.',
+          'Nous recrutons. Une semaine après la signature et le premier règlement, les profils sont en poste.',
+        ],
+      },
+      billing: {
+        title: 'À l’heure, ou au résultat',
+        lead: 'Deux façons d’acheter, et elles ne s’achètent pas pour les mêmes raisons. C’est le point le plus important de cette page.',
+        hourly: {
+          name: 'À l’heure',
+          body: [
+            'Chaque heure est relevée, notée et justifiée à chaque étape. Vous savez à tout moment où nous en sommes et sur quoi est passé le temps.',
+            'Le travail se concentre sur la période demandée, donc la livraison est plus rapide.',
+            'C’est le choix quand la date est serrée et qu’elle ne peut pas bouger.',
+            'Les prix de cette page sont ceux d’un engagement au mois : à l’heure, comptez cinquante pour cent de plus.',
+          ],
+        },
+        fixed: {
+          name: 'Au résultat',
+          body: [
+            'Nous regardons le projet, nous répartissons la charge sur notre planning, et nous vous donnons une date.',
+            'Si nous sommes en retard, le dépassement est à notre charge, pas à la vôtre.',
+            'C’est plus lent, et nous le disons : la charge est répartie, un développeur peut n’y passer qu’une partie de sa journée. Trois mois en continu peuvent devenir quatre et demi.',
+            'C’est le choix quand le budget est compté et que la date a de la marge.',
+          ],
+        },
+      },
+    },
+    care: {
+      title: 'Après la livraison',
+      note: 'Quatre forfaits, au mois, du plus simple au plus engageant. Aucun n’est obligatoire.',
+      rows: {
+        basic: {
+          name: 'Maintenance',
+          detail: 'Nous surveillons, nous mettons à jour, nous nous assurons que cela tourne.',
+        },
+        changes: {
+          name: 'Maintenance et petites modifications',
+          detail: 'La maintenance, plus les changements de champ, de texte et de réglage. Un appel d’une heure par mois.',
+        },
+        retained: {
+          name: 'Équipe en réserve',
+          detail: 'Quatre jours de développement par mois, soit un jour par semaine : exports, imports, un bouton, une petite fonctionnalité. Un appel et un rapport.',
+        },
+        night: {
+          name: 'Support de nuit',
+          detail: 'Un support joignable pendant vos heures à vous, pas les nôtres. Réservé aux projets sur mesure et aux CRM ou ERP.',
+        },
+      },
+    },
     transfer: 'Transfert du site vers un autre hébergeur',
     conditions: [
       'Paiement : 50 % à la commande, 50 % à la livraison.',
@@ -1176,6 +1350,7 @@ export const fr: Dict = {
           { label: 'Réalisations', href: 'work' },
           { label: 'Tarifs', href: 'pricing' },
           { label: 'Blog', href: 'blog' },
+          { label: 'Notre stack', href: 'stack' },
           { label: 'À propos', href: 'about' },
           { label: 'Contact', href: 'contact' },
         ],
