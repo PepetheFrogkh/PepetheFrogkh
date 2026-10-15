@@ -10,6 +10,8 @@ import {
   PROVIDED,
   type SequenceSet,
   frameUrl,
+  density,
+  pick,
 } from './sequence'
 
 /**
@@ -63,14 +65,26 @@ export default function ScrollSequence({
   const canvas = useRef<HTMLCanvasElement>(null)
   const [ready, setReady] = useState(false)
   const [loaded, setLoaded] = useState(0)
-  const [total, setTotal] = useState(DESKTOP.frames)
+  const [total, setTotal] = useState(DESKTOP[0].frames)
 
   useEffect(() => {
     const node = section.current
     const surface = canvas.current
     if (!node || !surface) return
 
-    const set: SequenceSet = small() ? MOBILE : DESKTOP
+    /**
+     * La definition se decide ici, une fois, sur la taille reelle du canvas.
+     *
+     * Un portable retine de 1440 points fait un canvas de 2880 pixels : les
+     * images de 1920 y etaient etirees d'un tiers, et c'est ce flou que l'on
+     * voyait. Le choix ne se refait pas au redimensionnement : changer de jeu
+     * en cours de route rechargerait la sequence entiere pour un gain que
+     * personne ne reclame.
+     */
+    const narrow = small()
+    const box = surface.getBoundingClientRect()
+    const ratio = density(narrow, window.devicePixelRatio)
+    const set: SequenceSet = pick(narrow ? MOBILE : DESKTOP, Math.round(box.width * ratio))
     setTotal(set.frames)
     const still = reduced()
 
@@ -84,10 +98,9 @@ export default function ScrollSequence({
 
     /** Le canvas suit la taille de son cadre, a deux pixels par point au plus. */
     const resize = () => {
-      const box = surface.getBoundingClientRect()
-      const ratio = Math.min(2, window.devicePixelRatio || 1)
-      surface.width = Math.round(box.width * ratio)
-      surface.height = Math.round(box.height * ratio)
+      const now = surface.getBoundingClientRect()
+      surface.width = Math.round(now.width * ratio)
+      surface.height = Math.round(now.height * ratio)
       const redraw = current
       current = -1
       if (redraw >= 0) paint(redraw)
