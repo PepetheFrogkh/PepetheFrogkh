@@ -1,5 +1,5 @@
 import { chromium } from '/opt/node-tools/node_modules/playwright/index.mjs'
-import { mkdir, rm } from 'node:fs/promises'
+import { cp, mkdir, rm } from 'node:fs/promises'
 
 /**
  * Rend la sequence de l'accueil, image par image, en PNG.
@@ -20,6 +20,20 @@ import { mkdir, rm } from 'node:fs/promises'
 const START = 0.12
 const dir = process.argv[2]
 if (!dir) throw new Error('usage: node render.mjs <dossier de travail>')
+
+/**
+ * Les logos des outils, a cote de la scene.
+ *
+ * Elle les charge en `./tools/<nom>.svg` pour les poser sur les plaques de
+ * l'anneau. Ce sont les memes fichiers que ceux du simulateur : une seule
+ * source, donc un logo corrige l'est aux deux endroits. Le dossier est une
+ * copie de travail, il n'est pas versionne.
+ */
+await cp(
+  new URL('../../public/tools', import.meta.url),
+  new URL('./tools', import.meta.url),
+  { recursive: true },
+)
 
 const SETS = [
   { folder: 'desktop', frames: 144, w: 1920, h: 1080 },

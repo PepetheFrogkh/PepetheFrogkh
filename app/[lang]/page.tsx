@@ -23,7 +23,6 @@ import { accent } from '@/components/accent'
 import SectionBlock from '@/components/SectionBlock'
 import Testimonials from '@/components/Testimonials'
 import SplitHeading from '@/components/SplitHeading'
-import Typewriter from '@/components/Typewriter'
 import { Tbd } from '@/components/Tbd'
 
 /**
@@ -47,7 +46,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
   return (
     <>
-      <HeroType eyebrow={t.hero.eyebrow} lines={t.hero.titleLines}>
+      <HeroType eyebrow={t.hero.eyebrow} lines={t.hero.titleLines} rotate={t.hero.rotate}>
         <p className="lead typo__sub">{t.hero.sub}</p>
         <div className="typo__actions">
           <div className="row">
@@ -100,9 +99,6 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         title={accent(t.home.sequence.title)}
         lead={t.home.sequence.lead}
       />
-
-      {/* la transition tapee a la machine */}
-      <Typewriter before={t.home.transition.before} items={t.home.transition.items} />
 
       {/* les six expertises */}
       <SectionBlock id="expertises">

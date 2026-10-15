@@ -1,4 +1,5 @@
 import { type CSSProperties, type ReactNode } from 'react'
+import HeroRotate from './HeroRotate'
 import HeroWave from './hero/HeroWave'
 import { accent } from './accent'
 
@@ -26,11 +27,19 @@ function longest(lines: string[]): number {
 export default function HeroType({
   eyebrow,
   lines,
+  rotate,
   children,
 }: {
   eyebrow: string
-  /** Le titre ligne par ligne ; la derniere porte les asterisques. */
+  /** Le titre ligne par ligne ; la derniere est le mot qui tourne. */
   lines: string[]
+  /**
+   * Les propositions qui se relaient sur la derniere ligne.
+   *
+   * La premiere est celle du HTML : elle s'affiche avant tout JavaScript, et
+   * elle reste seule en mouvement reduit.
+   */
+  rotate: string[]
   /** Le sous-titre, les boutons et la note. */
   children: ReactNode
 }) {
@@ -42,8 +51,14 @@ export default function HeroType({
         {/* La taille du titre se calcule sur la ligne la plus longue, et non
             sur la seule largeur de la fenetre : « We build the tools » et
             « On construit » n'ont pas la meme longueur, et un titre qui ne se
-            coupe pas doit tenir dans sa colonne dans les deux langues. */}
-        <div className="typo__text" style={{ '--chars': longest(lines) } as CSSProperties}>
+            coupe pas doit tenir dans sa colonne dans les deux langues.
+            Les propositions qui tournent comptent : la plus longue prend la
+            place de la derniere ligne, et sans elle « des outils qui se
+            parlent. » sortait de la colonne. */}
+        <div
+          className="typo__text"
+          style={{ '--chars': longest([...lines, ...rotate]) } as CSSProperties}
+        >
           <span className="eyebrow typo__eyebrow">{eyebrow}</span>
 
           <h1 className="typo__title">
@@ -52,7 +67,14 @@ export default function HeroType({
                 {/* le mot entre par un masque, du bas vers le haut : c'est le
                     cadre qui s'ouvre, le texte lui-meme est deja la */}
                 <span className="typo__word" style={{ animationDelay: `${i * 90}ms` }}>
-                  {accent(line, 'typo__accent')}
+                  {/* La derniere ligne est celle qui tourne : « On construit »
+                      reste, et ce qui suit change. Le premier mot est dans le
+                      HTML, donc la ligne n'est jamais vide. */}
+                  {i === lines.length - 1 ? (
+                    <HeroRotate words={rotate} />
+                  ) : (
+                    accent(line, 'typo__accent')
+                  )}
                 </span>
               </span>
             ))}

@@ -87,6 +87,53 @@
         small: plate(0.78, 0.78, 0.14, 0.09),
       }
       const KINDS = ['wide', 'tall', 'small']
+      /** Les dimensions utiles de chaque plaque, pour y poser un logo. */
+      const SIZE = {
+        wide: [1.5, 0.95],
+        tall: [0.95, 1.4],
+        small: [0.78, 0.78],
+      }
+
+      /**
+       * Les outils, poses sur les plaques.
+       *
+       * L'anneau etait fait de plaques nues : il disait « des outils » sans
+       * dire lesquels. Il nomme maintenant ce que nous savons brancher, ce
+       * qui est tout l'interet de la scene. Les fichiers sont ceux du
+       * simulateur, dans public/tools/, copies a cote de la scene par
+       * scripts/sequence/render.mjs.
+       *
+       * Un SVG ne se pose pas directement sur un materiau Three.js : il est
+       * dessine dans un canvas, qui devient la texture. Le canvas est
+       * transparent, donc la couleur de la plaque reste visible derriere.
+       */
+      const TOOLS = [
+        'excel', 'google', 'teams', 'slack', 'whatsapp',
+        'telegram', 'hubspot', 'mailchimp', 'odoo',
+      ]
+
+      const LOGO_PX = 256
+
+      async function logoTexture(name) {
+        const image = new Image()
+        image.src = `./tools/${name}.svg`
+        await image.decode()
+        const canvas = document.createElement('canvas')
+        canvas.width = LOGO_PX
+        canvas.height = LOGO_PX
+        const ctx = canvas.getContext('2d')
+        // le logo occupe 74 % du carre, centre : il lui faut une marge, sinon
+        // il touche le bord arrondi de la plaque
+        const side = LOGO_PX * 0.74
+        const at = (LOGO_PX - side) / 2
+        ctx.drawImage(image, at, at, side, side)
+        const texture = new THREE.CanvasTexture(canvas)
+        texture.colorSpace = THREE.SRGBColorSpace
+        texture.anisotropy = 4
+        return texture
+      }
+
+      const LOGOS = await Promise.all(TOOLS.map(logoTexture))
 
       const MATS = [
         new THREE.MeshStandardMaterial({ color: WHITE, roughness: 0.52, metalness: 0 }),
@@ -119,8 +166,53 @@
 
       const pieces = []
       const rand = rng(20261014)
+      /**
+       * Une plaque sur trois porte un logo, et les neuf se suivent dans
+       * l'ordre : sur un anneau de 38 plaques, chaque outil apparait une fois
+       * et un peu plus, assez pour qu'on les lise tous en un tour.
+       */
+      let logoAt = 0
       for (let i = 0; i < COUNT; i++) {
-        const mesh = new THREE.Mesh(GEO[KINDS[i % KINDS.length]], materialFor(i))
+        const kind = KINDS[i % KINDS.length]
+        const porteLogo = i % 3 === 0
+        // Une plaque qui porte un logo est blanche, toujours : sur l'ardoise
+        // et sur l'orange vif, un logo de marque ne se lit plus.
+        const mesh = new THREE.Mesh(GEO[kind], porteLogo ? MATS[0] : materialFor(i))
+
+        if (porteLogo) {
+          const texture = LOGOS[logoAt % LOGOS.length]
+          logoAt++
+          // Le logo tient dans le plus petit cote de la plaque, et se pose
+          // juste devant sa face : la plaque fait 0,09 d'epaisseur, centree,
+          // donc sa face avant est a 0,045.
+          const [w, h] = SIZE[kind]
+          const side = Math.min(w, h) * 0.86
+          const skin = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            depthWrite: false,
+          })
+          /**
+           * Un logo de chaque cote, et non un seul en double face.
+           *
+           * La plaque fait 0,09 d'epaisseur, plus 0,015 de biseau de chaque
+           * cote : sa face avant est a 0,06 du centre, pas a 0,045. Un badge
+           * pose a 0,047 se retrouvait dans la plaque et le test de profondeur
+           * le rejetait : les plaques sortaient nues. Et comme l'anneau
+           * tourne, la moitie des plaques montre sa face arriere : il en faut
+           * un derriere, retourne, sinon le logo n'est lisible qu'un demi-tour
+           * sur deux.
+           */
+          const geo = new THREE.PlaneGeometry(side, side)
+          const devant = new THREE.Mesh(geo, skin)
+          devant.position.z = 0.072
+          mesh.add(devant)
+
+          const derriere = new THREE.Mesh(geo, skin)
+          derriere.position.z = -0.072
+          derriere.rotation.y = Math.PI
+          mesh.add(derriere)
+        }
         // la place d'arrivee : sur l'anneau, legerement epaissi
         const angle = (i / COUNT) * Math.PI * 2
         const wobble = (rand() - 0.5) * 0.5

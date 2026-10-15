@@ -142,9 +142,16 @@ export const fr: Dict = {
 
   hero: {
     eyebrow: 'Agence web, pour toute entreprise',
-    title: 'On construit les outils qui font *tourner* votre entreprise.',
-    titleLines: ['On construit', 'les outils', 'qui font *tourner*', 'votre entreprise.'],
-    sub: 'Sites web, automatisations, applications métier : livrés vite, à prix affichés, par une équipe qui connaît votre métier.',
+    title: 'On construit des sites web, des automatisations, des applications métier.',
+    titleLines: ['On construit', 'des sites web.'],
+    rotate: [
+      'des sites web.',
+      'des automatisations.',
+      'des applications métier.',
+      'les ponts qui manquent.',
+      'ce qui vous manque.',
+    ],
+    sub: 'Les outils qui font tourner votre entreprise, livrés vite et à prix affichés, par une équipe qui connaît votre métier.',
     primary: { label: 'Estimer mon projet', href: 'pricing' },
     secondary: { label: 'Voir nos expertises', href: 'expertises' },
     note: 'Prix affichés, hors taxes. Estimation en deux minutes.',
@@ -154,10 +161,6 @@ export const fr: Dict = {
     services: {
       title: 'Ce que nous faisons',
       lead: 'Cinq services, et un prix affiché pour chacun.',
-    },
-    transition: {
-      before: 'On construit',
-      items: ['des sites web', 'des automatisations', 'des applications métier'],
     },
     sequence: {
       eyebrow: 'Comment ça s’assemble',

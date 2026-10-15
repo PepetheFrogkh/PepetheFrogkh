@@ -4965,3 +4965,93 @@ body.has-view-cursor [data-cursor='voir'] {
     transform: none;
   }
 }
+
+/* ══ Le mot qui tourne dans le titre ══════════════════════════════════════
+   « On construit » reste, et ce qui suit change. Voir `HeroRotate`.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.rot {
+  position: relative;
+  display: inline-grid;
+  /* une seule case : les propositions se superposent, et la plus longue tient
+     la largeur */
+  grid-template-areas: 'word';
+  vertical-align: top;
+}
+
+.rot > * {
+  grid-area: word;
+}
+
+/* La jauge : la plus longue des propositions, invisible, qui garde la largeur
+   de la ligne. Sans elle, la ligne se retrecit et s'elargit a chaque relais,
+   et le sous-titre pose en dessous sautille. */
+.rot__gauge {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Avant que la page ne reprenne la main, seule la premiere proposition est
+   visible : c'est ce que lit un moteur de recherche, et ce que voit qui n'a
+   pas de JavaScript. Les autres sont dans le HTML, sans etre affichees. */
+.rot:not([data-live]) .rot__word:not(:first-of-type) {
+  display: none;
+}
+
+.rot__word {
+  color: var(--terra);
+}
+
+.rot[data-live] .rot__word {
+  will-change: transform, opacity;
+}
+
+/* Le relais : le sortant monte et s'efface pendant que l'entrant arrive par le
+   bas. Les deux se croisent, donc la ligne n'est jamais vide : le cahier
+   interdit qu'une animation cache un texte plus de 300 ms, et ici elle n'en
+   cache aucun. */
+.rot[data-live] .rot__word[data-state='off'] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Le sortant part vite, l'entrant arrive derriere : les deux se croisent sur
+   un dixieme de seconde, assez pour que la ligne ne soit jamais vide, trop peu
+   pour qu'on lise les deux mots en meme temps. A duree egale, on lisait « des
+   applications metier » par-dessus « des outils qui se parlent ». */
+.rot[data-live] .rot__word[data-state='in'] {
+  animation: rot-in 0.34s var(--ease) 0.14s both;
+}
+
+.rot[data-live] .rot__word[data-state='out'] {
+  animation: rot-out 0.24s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+@keyframes rot-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.42em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rot-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-0.42em);
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rot__word:not(:first-of-type) {
+    display: none;
+  }
+}

@@ -264,8 +264,21 @@ export interface Dict {
     /**
      * Le titre decoupe en lignes. Les retours sont un choix de composition,
      * pas un hasard de largeur : ils changent d'une langue a l'autre.
+     *
+     * La derniere ligne est le mot qui tourne : `rotate` la remplace a
+     * l'affichage, un mot apres l'autre. Elle reste ecrite ici parce qu'elle
+     * est ce que lit un moteur de recherche et ce que voit un visiteur sans
+     * JavaScript.
      */
     titleLines: string[]
+    /**
+     * Les propositions qui se relaient sur la derniere ligne du titre.
+     *
+     * La premiere est celle du HTML, donc elle doit etre identique a la
+     * derniere ligne de `titleLines`. Trois au minimum, sinon le relais ne
+     * vaut pas son animation.
+     */
+    rotate: string[]
     sub: string
     primary: Cta
     secondary: Cta
@@ -275,11 +288,6 @@ export interface Dict {
   /** Les en-tetes des sections de l'accueil. */
   home: {
     services: { title: string; lead: string }
-    /**
-     * La transition tapee a la machine : « On construit » suivi de chaque mot
-     * qui s'ecrit puis s'efface.
-     */
-    transition: { before: string; items: string[] }
     /**
      * La section epinglee de la sequence 3D. Elle a son propre titre : sur
      * l'accueil elle n'est pas le premier ecran, c'est une section parmi les

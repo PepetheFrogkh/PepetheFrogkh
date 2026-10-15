@@ -141,9 +141,16 @@ export const en: Dict = {
 
   hero: {
     eyebrow: 'A web agency, for any company',
-    title: 'We build the tools that keep your company *running*.',
-    titleLines: ['We build the tools', 'that keep your', 'company *running*.'],
-    sub: 'Websites, automations, business apps: delivered fast, at listed prices, by a team that knows your trade.',
+    title: 'We build websites, automations, business apps.',
+    titleLines: ['We build', 'websites.'],
+    rotate: [
+      'websites.',
+      'automations.',
+      'business apps.',
+      'the missing bridges.',
+      'what you are missing.',
+    ],
+    sub: 'The tools that keep your company running, delivered fast and at listed prices, by a team that knows your trade.',
     primary: { label: 'Estimate my project', href: 'pricing' },
     secondary: { label: 'See our expertise', href: 'expertises' },
     note: 'Listed prices, excluding tax. A two-minute estimate.',
@@ -153,10 +160,6 @@ export const en: Dict = {
     services: {
       title: 'What we do',
       lead: 'Five services, each with a listed price.',
-    },
-    transition: {
-      before: 'We build',
-      items: ['websites', 'automations', 'business apps'],
     },
     sequence: {
       eyebrow: 'How it comes together',
