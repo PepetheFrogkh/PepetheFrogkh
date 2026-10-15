@@ -14,6 +14,19 @@ export const vertexShader = /* glsl */ `
   uniform float uPixelRatio;
   // une onde par ligne : x, z, age en secondes, force
   uniform vec4 uRipples[${RIPPLES}];
+  /**
+   * Le fondu qui degage le texte, en fraction d'ecran.
+   *
+   * x et y : debut et fin du degrade. z : 0 pour un fondu horizontal, de la
+   * gauche vers la droite, 1 pour un fondu vertical, du haut vers le bas.
+   * w : l'opacite generale de la nappe.
+   *
+   * Il etait fait en CSS, par un "mask-image" sur la couche. Un masque plein
+   * ecran force une passe de composition a chaque image : la nappe en
+   * devenait saccadee au defilement et au survol. Ici il ne coute rien, c'est
+   * une interpolation de plus sur un sommet.
+   */
+  uniform vec4 uMask;
 
   varying float vHeight;
   varying float vFade;
@@ -38,7 +51,9 @@ export const vertexShader = /* glsl */ `
       if (r.w <= 0.0) continue;
       float d = distance(p, r.xy);
       float ring = sin(d * 2.1 - r.z * 4.6);
-      float decay = exp(-d * 0.42) * exp(-r.z * 1.25);
+      // Une seule exponentielle : exp(-a) * exp(-b) vaut exp(-(a + b)), et une
+      // exponentielle par onde et par sommet, c'est 87 000 de moins par image.
+      float decay = exp(-(d * 0.42 + r.z * 1.25));
       h += ring * decay * r.w * 1.15;
     }
 
@@ -50,12 +65,20 @@ export const vertexShader = /* glsl */ `
     vec4 mv = modelViewMatrix * vec4(pos, 1.0);
     gl_Position = projectionMatrix * mv;
 
+    // La place du point a l'ecran, de 0 a 1. "gl_Position.w" peut etre nul ou
+    // negatif derriere la camera : on le borne, sinon la division explose et
+    // le point part a l'infini.
+    float w = max(0.0001, gl_Position.w);
+    vec2 screen = (gl_Position.xy / w + 1.0) * 0.5;
+    float along = mix(screen.x, 1.0 - screen.y, step(0.5, uMask.z));
+    float clear = smoothstep(uMask.x, uMask.y, along);
+
     // La nappe s'eteint deux fois : au loin, pour qu'elle ne soit pas coupee
     // net a l'horizon, et tout pres de la camera, pour qu'elle ne devienne
     // pas un tapis qui couvre le bas de l'ecran et passe sous le texte.
     float far = 1.0 - smoothstep(5.2, 8.1, length(p));
     float near = smoothstep(1.8, 4.6, -mv.z);
-    vFade = far * near;
+    vFade = far * near * clear * uMask.w;
 
     // la taille suit la perspective, mais plafonnee : sans cela les points du
     // premier rang deviennent des taches
@@ -73,9 +96,11 @@ export const fragmentShader = /* glsl */ `
   varying float vFade;
 
   void main() {
-    // un point rond, aux bords adoucis : un carre se verrait a cette taille
+    // Un point rond, aux bords adoucis : un carre se verrait a cette taille.
+    // Pas de "discard" : il desactive le test de profondeur anticipe sur
+    // beaucoup de cartes, et le materiau n'ecrit de toute facon pas dans la
+    // profondeur. L'alpha fait le meme travail pour moins cher.
     float d = length(gl_PointCoord - 0.5);
-    if (d > 0.5) discard;
     float edge = smoothstep(0.5, 0.16, d);
 
     // du peche dans les creux, de l'orange vif sur les cretes

@@ -7,9 +7,17 @@
  * de tenir 34 000 points sans que la page ne bronche.
  */
 
-/** Le cote de la grille. 184 x 184 = 33 856 points, 142 x 142 = 20 164. */
-export const DESKTOP_SIDE = 184
-export const MOBILE_SIDE = 142
+/**
+ * Le cote de la grille. 148 x 148 = 21 904 points, 116 x 116 = 13 456.
+ *
+ * Il valait 184 et 142, soit 33 856 points sur un bureau. Un point fait au
+ * plus quatre pixels de cote : en enlever un tiers ne se voit pas, et le
+ * nuanceur de sommets tourne un tiers de fois en moins par image, boucle sur
+ * les ondes du curseur comprise. C'est la, et dans le masque passe du CSS au
+ * nuanceur, que se jouait la saccade.
+ */
+export const DESKTOP_SIDE = 148
+export const MOBILE_SIDE = 116
 
 export const DESKTOP_COUNT = DESKTOP_SIDE * DESKTOP_SIDE
 export const MOBILE_COUNT = MOBILE_SIDE * MOBILE_SIDE

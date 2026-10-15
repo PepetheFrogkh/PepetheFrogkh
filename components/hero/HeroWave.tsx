@@ -25,6 +25,19 @@ import WaveStill from './WaveStill'
 
 const Scene = dynamic(() => import('./WaveScene'), { ssr: false })
 
+/**
+ * Le fondu qui degage le texte, passe au nuanceur.
+ *
+ * Debut, fin, sens (0 horizontal, 1 vertical), opacite. La colonne de titre
+ * s'arrete autour de 53 % de la fenetre a toutes les largeurs : le degre part
+ * donc de 44 %. Sous 1 100 px le texte prend toute la largeur, il n'y a plus
+ * de colonne libre a cote de lui : le fondu devient vertical et la nappe passe
+ * a demi-opacite, parce que sur un telephone le bloc de texte descend jusqu'au
+ * bas de l'ecran et la nappe doit y rester une texture.
+ */
+const WIDE: [number, number, number, number] = [0.44, 0.76, 0, 1]
+const NARROW: [number, number, number, number] = [0.7, 0.94, 1, 0.5]
+
 /** Vrai quand le navigateur sait ouvrir un contexte WebGL. */
 function hasWebGL(): boolean {
   try {
@@ -52,12 +65,21 @@ export default function HeroWave() {
   const [still, setStill] = useState(false)
   const [paused, setPaused] = useState(false)
   const [out, setOut] = useState(false)
+  const [narrow, setNarrow] = useState(false)
 
   const onPainted = useCallback(() => setPainted(true), [])
 
   useEffect(() => {
     setMobile(window.matchMedia('(max-width: 720px)').matches)
     setStill(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+
+    // Le sens du fondu suit la largeur, et suit un redimensionnement : la
+    // nappe ne doit pas rester en travers du texte parce que la fenetre a
+    // retreci apres le chargement.
+    const span = window.matchMedia('(max-width: 1100px)')
+    const onSpan = () => setNarrow(span.matches)
+    onSpan()
+    span.addEventListener('change', onSpan)
 
     // Un visiteur qui demande l'economie de donnees ne recoit pas une scene :
     // ce n'est pas le poids qui pese ici, c'est la batterie, et les deux vont
@@ -112,6 +134,7 @@ export default function HeroWave() {
     })
 
     return () => {
+      span.removeEventListener('change', onSpan)
       window.removeEventListener('scroll', onScroll)
       observer?.disconnect()
       cancelAnimationFrame(raf)
@@ -139,6 +162,7 @@ export default function HeroWave() {
           mobile={mobile}
           still={still}
           paused={paused}
+          mask={narrow ? NARROW : WIDE}
           onPainted={onPainted}
         />
       ) : null}

@@ -2467,16 +2467,26 @@ body.has-view-cursor [data-cursor='voir'] {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  /* La nappe remonte jusqu'au milieu du cadre, donc derriere le sous-titre et
-     les deux boutons. Plutot que de poser un voile de creme par-dessus, qui
-     laissait toujours un filet de points depasser au bord de la fenetre, on
-     efface la nappe la ou le texte se lit : elle s'eteint sur la gauche et
-     garde toute son intensite sur la droite, dans la moitie restee libre. */
-  /* La colonne de titre s'arrete autour de 53 % de la fenetre, a toutes les
-     largeurs : elle est plafonnee a 600 px dans un conteneur centre. Le
-     degrade part donc de 44 %, pour qu'il ne reste qu'un voile de points
-     derriere la fin de la ligne la plus longue, et monte en pleine intensite
-     dans le dernier quart. */
+}
+
+.typo__wave canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+}
+
+/* Le fondu qui degage le texte n'est plus ici. Il etait fait par un
+   `mask-image` sur cette couche, et un masque plein ecran force une passe de
+   composition a chaque image : la nappe en devenait saccadee au defilement et
+   au survol. Il est maintenant calcule dans le nuanceur de sommets, voir
+   `uMask` dans `components/hero/waveShaders.ts`. L'image fixe en CSS, elle,
+   garde le sien : elle ne bouge pas, donc il ne coute rien. */
+.typo__still {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0 44%,
@@ -2491,15 +2501,13 @@ body.has-view-cursor [data-cursor='voir'] {
   );
 }
 
-/* Sous 1 100 px le texte occupe toute la largeur : il n'y a pas de colonne
-   libre a cote de lui. La nappe s'eteint alors vers le haut, et garde le bas
-   du cadre pour elle. */
+.typo__still[data-shown='true'] {
+  opacity: 1;
+}
+
 @media (max-width: 1100px) {
-  .typo__wave {
-    /* Et a moitie effacee, parce que sur un telephone le bloc de texte
-       descend jusqu'au bas de l'ecran : la nappe y passe forcement sous la
-       note du bas, et elle doit rester une texture, pas une concurrente. */
-    opacity: 0.5;
+  .typo__still {
+    opacity: 0;
     -webkit-mask-image: linear-gradient(
       to bottom,
       transparent 0 70%,
@@ -2513,27 +2521,10 @@ body.has-view-cursor [data-cursor='voir'] {
       #000 94%
     );
   }
-}
 
-.typo__wave canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  pointer-events: auto;
-}
-
-/* L'image fixe, en CSS : elle tient la place tant que la scene n'a rien
-   dessine, et reprend la main sans WebGL, sous 30 i/s, en mouvement reduit et
-   en economie de donnees. */
-.typo__still {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.3s var(--ease);
-}
-
-.typo__still[data-shown='true'] {
-  opacity: 1;
+  .typo__still[data-shown='true'] {
+    opacity: 0.5;
+  }
 }
 
 .typo__inner {

@@ -50,6 +50,12 @@ interface SceneProps {
   still: boolean
   /** Les ondes du curseur, coupees la ou il n'y a pas de souris. */
   ripples: boolean
+  /**
+   * Le fondu qui degage le texte : debut, fin, sens, opacite. Voir `uMask`
+   * dans les nuanceurs. Il etait fait par un `mask-image` en CSS, qui coutait
+   * une passe de composition plein ecran a chaque image.
+   */
+  mask: [number, number, number, number]
 }
 
 const GROUND = new Plane(new Vector3(0, 1, 0), 0)
@@ -57,7 +63,7 @@ const raycaster = new Raycaster()
 const hit = new Vector3()
 const ndc = new Vector2()
 
-function Wave({ progress, side, still, ripples: ripplesOn }: SceneProps) {
+function Wave({ progress, side, still, ripples: ripplesOn, mask }: SceneProps) {
   const material = useRef<ShaderMaterial>(null)
   const geometry = useRef<BufferGeometry>(null)
   const positions = useMemo(() => buildGrid(side), [side])
@@ -76,6 +82,7 @@ function Wave({ progress, side, still, ripples: ripplesOn }: SceneProps) {
       uSize: { value: 0 },
       uPixelRatio: { value: 1 },
       uRipples: { value: live },
+      uMask: { value: new Vector4(...mask) },
       uLow: { value: PEACH },
       uHigh: { value: ORANGE },
     }),
@@ -84,9 +91,15 @@ function Wave({ progress, side, still, ripples: ripplesOn }: SceneProps) {
 
   const { camera, gl, size } = useThree()
 
+  // Le fondu change avec la largeur de la fenetre : horizontal quand il reste
+  // une colonne libre a cote du texte, vertical quand le texte prend tout.
+  useEffect(() => {
+    uniforms.uMask.value.set(...mask)
+  }, [mask, uniforms])
+
   // la taille d'un point suit la densite d'affichage et la hauteur du cadre
   useEffect(() => {
-    uniforms.uPixelRatio.value = Math.min(2, gl.getPixelRatio())
+    uniforms.uPixelRatio.value = gl.getPixelRatio()
     uniforms.uSize.value = Math.max(16, Math.min(34, size.height / 24))
   }, [gl, size.height, uniforms])
 
@@ -191,6 +204,7 @@ export default function WaveScene({
   mobile = false,
   still = false,
   paused = false,
+  mask = [0, 0, 0, 1],
   onPainted,
 }: {
   progress: () => number
@@ -198,13 +212,22 @@ export default function WaveScene({
   still?: boolean
   /** Hors de l'ecran : la boucle s'arrete, la carte graphique se repose. */
   paused?: boolean
+  mask?: [number, number, number, number]
   onPainted?: () => void
 }) {
   const side = mobile ? MOBILE_SIDE : DESKTOP_SIDE
 
   return (
     <Canvas
-      dpr={[1, 2]}
+      /**
+       * Un pixel et demi par point au plus, et non deux.
+       *
+       * Un ecran retine de 1440 points demandait un cadre de 2880 : a 1,5 il
+       * en demande 2160, soit 44 % de fragments en moins. Sur une nappe de
+       * points ronds aux bords adoucis, la difference ne se voit pas ; la
+       * difference de fluidite, elle, se voyait.
+       */
+      dpr={[1, 1.5]}
       camera={{ position: [0, CAMERA.from.y, CAMERA.from.z], fov: CAMERA.fov, near: 0.1, far: 60 }}
       // Sans cette ligne, le tone mapping par defaut delave le peche et
       // l'orange : la charte ne serait plus respectee a l'ecran.
@@ -213,7 +236,7 @@ export default function WaveScene({
       style={{ pointerEvents: 'none' }}
     >
       {onPainted ? <FirstFrame onPainted={onPainted} /> : null}
-      <Wave progress={progress} side={side} still={still} ripples={!mobile} />
+      <Wave progress={progress} side={side} still={still} ripples={!mobile} mask={mask} />
     </Canvas>
   )
 }
