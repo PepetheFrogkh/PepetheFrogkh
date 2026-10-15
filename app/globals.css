@@ -2417,6 +2417,7 @@ body.has-view-cursor [data-cursor='voir'] {
    ═════════════════════════════════════════════════════════════════════════ */
 
 .typo {
+  position: relative;
   min-height: 100svh;
   display: flex;
   align-items: stretch;
@@ -2429,10 +2430,104 @@ body.has-view-cursor [data-cursor='voir'] {
   overflow: clip;
 }
 
+/* ── la nappe de particules, derriere l'en-tete ──────────────────────────
+   Decorative, et sous tout le reste : le texte est au-dessus, dans le flux,
+   et reste lisible avant qu'un seul point ne soit dessine. `pointer-events`
+   reste actif sur le canvas, parce que les ondes du curseur en dependent ;
+   la couche, elle, ne prend aucun clic, donc rien ne gene les deux boutons.
+   ───────────────────────────────────────────────────────────────────────── */
+.typo__wave {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* La nappe remonte jusqu'au milieu du cadre, donc derriere le sous-titre et
+     les deux boutons. Plutot que de poser un voile de creme par-dessus, qui
+     laissait toujours un filet de points depasser au bord de la fenetre, on
+     efface la nappe la ou le texte se lit : elle s'eteint sur la gauche et
+     garde toute son intensite sur la droite, dans la moitie restee libre. */
+  /* La colonne de titre s'arrete autour de 53 % de la fenetre, a toutes les
+     largeurs : elle est plafonnee a 600 px dans un conteneur centre. Le
+     degrade part donc de 44 %, pour qu'il ne reste qu'un voile de points
+     derriere la fin de la ligne la plus longue, et monte en pleine intensite
+     dans le dernier quart. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0 44%,
+    rgba(0, 0, 0, 0.25) 58%,
+    #000 76%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0 44%,
+    rgba(0, 0, 0, 0.25) 58%,
+    #000 76%
+  );
+}
+
+/* Sous 1 100 px le texte occupe toute la largeur : il n'y a pas de colonne
+   libre a cote de lui. La nappe s'eteint alors vers le haut, et garde le bas
+   du cadre pour elle. */
+@media (max-width: 1100px) {
+  .typo__wave {
+    /* Et a moitie effacee, parce que sur un telephone le bloc de texte
+       descend jusqu'au bas de l'ecran : la nappe y passe forcement sous la
+       note du bas, et elle doit rester une texture, pas une concurrente. */
+    opacity: 0.5;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0 70%,
+      rgba(0, 0, 0, 0.3) 82%,
+      #000 94%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0 70%,
+      rgba(0, 0, 0, 0.3) 82%,
+      #000 94%
+    );
+  }
+}
+
+.typo__wave canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+}
+
+/* L'image fixe, en CSS : elle tient la place tant que la scene n'a rien
+   dessine, et reprend la main sans WebGL, sous 30 i/s, en mouvement reduit et
+   en economie de donnees. */
+.typo__still {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+
+.typo__still[data-shown='true'] {
+  opacity: 1;
+}
+
 .typo__inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   width: 100%;
+  /* La colonne de texte ne doit pas prendre les clics destines au canvas :
+     seuls ses enfants reels le font, pour que les ondes du curseur suivent la
+     souris partout ailleurs sur l'en-tete. */
+  pointer-events: none;
+}
+
+.typo__inner a,
+.typo__inner button,
+.typo__inner .eyebrow,
+.typo__inner h1,
+.typo__inner p {
+  pointer-events: auto;
 }
 
 .typo__text {
@@ -2575,104 +2670,6 @@ body.has-view-cursor [data-cursor='voir'] {
   .typo__actions .hero__note {
     text-align: right;
   }
-}
-
-/* ── le visuel de droite ───────────────────────────────────────────────────
-   Trois cartes posees en escalier, et rien d'autre : aucune etiquette, aucun
-   chiffre, aucun nom. La composition est decorative, donc elle n'a rien a
-   dire ; elle occupe la moitie droite et donne du poids a la page.
-   ───────────────────────────────────────────────────────────────────────── */
-
-.typo__visual {
-  display: none;
-}
-
-@media (min-width: 1200px) {
-  .typo__visual {
-    display: block;
-    position: relative;
-    min-height: 0;
-  }
-}
-
-.panel {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-}
-
-/* la tache claire derriere les cartes : elle arrondit le bloc et evite que la
-   moitie droite ne soit qu'un aplat de creme */
-.panel::before {
-  content: '';
-  position: absolute;
-  inset: 6% -8% 10% 2%;
-  background: radial-gradient(
-    120% 90% at 65% 35%,
-    var(--peach) 0%,
-    rgba(255, 227, 207, 0.45) 46%,
-    rgba(255, 227, 207, 0) 72%
-  );
-  border-radius: 50%;
-}
-
-.panel__card {
-  position: absolute;
-  width: 56%;
-  min-width: 190px;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(10px, 1.1vh, 16px);
-  padding: clamp(14px, 1.6vh, 22px);
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--r-card);
-  box-shadow: var(--lift);
-}
-
-.panel__card--1 {
-  left: 2%;
-  top: 6%;
-  transform: rotate(-4deg);
-}
-
-.panel__card--2 {
-  left: 22%;
-  top: 33%;
-  transform: rotate(1.5deg);
-  z-index: 1;
-}
-
-.panel__card--3 {
-  left: 8%;
-  top: 61%;
-  transform: rotate(-1.5deg);
-  z-index: 2;
-}
-
-.panel__head {
-  height: clamp(8px, 1vh, 12px);
-  width: 46%;
-  border-radius: var(--r-pill);
-  background: var(--orange);
-}
-
-.panel__bars {
-  display: grid;
-  gap: clamp(7px, 0.8vh, 11px);
-}
-
-.panel__bar {
-  height: clamp(6px, 0.7vh, 9px);
-  border-radius: var(--r-pill);
-  background: var(--peach);
-}
-
-/* une ligne sur deux reste a peine marquee : la carte se lit comme un corps de
-   texte, pas comme une suite de bandes */
-.panel__bar--faint {
-  background: var(--border);
 }
 
 @media (prefers-reduced-motion: reduce) {

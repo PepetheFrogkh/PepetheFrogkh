@@ -267,6 +267,25 @@ navigateur ne télécharge que celui qui correspond à l'écran.
 **Rien à fournir.** Si l'animation ne vous plaît pas, dites ce qui ne va pas :
 c'est une scène, elle se modifie.
 
+### Et l'en-tête a maintenant sa vague WebGL
+
+C'est une seconde animation, distincte de la séquence, et celle-là tourne
+vraiment dans le navigateur : une nappe de 34 000 points dont la hauteur est
+calculée par la carte graphique à chaque image. Elle réagit au curseur et au
+défilement.
+
+Elle occupe la moitié droite du premier écran et s'éteint en dégradé là où le
+titre se lit : le texte est posé sur du crème pur à toutes les largeurs, dans
+les deux langues, et c'est mesuré, pas estimé. C'était le défaut qui l'avait
+fait retirer la première fois.
+
+Quatre cas la remplacent par une image fixe en CSS, sans jamais laisser de zone
+blanche : pas de WebGL, machine qui tient moins de 30 images par seconde,
+visiteur qui demande moins d'animation, visiteur en économie de données. Hors
+de l'écran, la boucle s'arrête.
+
+Elle vit dans `components/hero/`, et sa route de test est `/lab/vague`.
+
 ---
 
 ## Par quoi commencer

@@ -1,5 +1,5 @@
 import { type CSSProperties, type ReactNode } from 'react'
-import HeroPanel from './HeroPanel'
+import HeroWave from './hero/HeroWave'
 import { accent } from './accent'
 
 /** Le nombre de caracteres de la ligne la plus longue, asterisques exclues. */
@@ -15,12 +15,13 @@ function longest(lines: string[]): number {
  * a sa place, donc deux lignes ne peuvent pas se chevaucher, a aucun moment
  * du defilement.
  *
- * Sur grand ecran la composition tient en deux colonnes : le texte a gauche,
- * du premier mot jusqu'aux deux boutons, et a droite une composition de
- * cartes qui occupe la moitie restante. Cette composition est decorative, donc
- * `aria-hidden` et sans texte : elle ne porte aucune information, aucun chiffre
- * et aucun nom. Sous 1 200 px elle disparait, pour que l'etiquette, le titre,
- * le sous-titre et les deux boutons gardent le premier ecran pour eux.
+ * Derriere, une nappe de particules calculee par la carte graphique occupe la
+ * bande basse du cadre. Elle est decorative, donc `aria-hidden` et sans texte,
+ * et elle ne passe jamais derriere le bloc de texte : le titre ne depend pas
+ * d'elle pour se lire, a aucun moment du defilement. Quand WebGL manque, que
+ * la machine n'arrive pas a suivre, que le visiteur demande moins
+ * d'animation ou qu'il economise ses donnees, une image fixe en CSS tient la
+ * place. Voir `components/hero/HeroWave`.
  */
 export default function HeroType({
   eyebrow,
@@ -35,6 +36,8 @@ export default function HeroType({
 }) {
   return (
     <section className="typo">
+      <HeroWave />
+
       <div className="container typo__inner">
         {/* La taille du titre se calcule sur la ligne la plus longue, et non
             sur la seule largeur de la fenetre : « We build the tools » et
@@ -56,10 +59,6 @@ export default function HeroType({
           </h1>
 
           <div className="typo__foot">{children}</div>
-        </div>
-
-        <div className="typo__visual">
-          <HeroPanel />
         </div>
       </div>
     </section>
