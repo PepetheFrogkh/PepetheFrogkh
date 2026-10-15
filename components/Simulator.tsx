@@ -151,6 +151,23 @@ export default function Simulator({ locale }: { locale: Locale }) {
       ),
     )
 
+  /**
+   * Change le declencheur d'un noeud.
+   *
+   * Le premier noeud n'etait pas modifiable : le flux commencait toujours par
+   * un formulaire, et le `×` lui etait refuse puisqu'un flux sans declencheur
+   * n'a pas de sens. On ne le supprime donc toujours pas, on l'echange, ce qui
+   * est ce que le visiteur voulait faire.
+   */
+  const setTrigger = (flowKey: string, nodeKey: string, id: TriggerId) =>
+    change((list) =>
+      list.map((flow) =>
+        flow.key !== flowKey
+          ? flow
+          : { ...flow, root: update(flow.root, nodeKey, (node) => ({ ...node, id })) },
+      ),
+    )
+
   const setApi = (flowKey: string, nodeKey: string, open: boolean | 'unknown') =>
     change((list) =>
       list.map((flow) =>
@@ -279,6 +296,30 @@ export default function Simulator({ locale }: { locale: Locale }) {
         ) : (
           <span className="fnode__price fnode__price--none">{t.includedInFlow}</span>
         )}
+
+        {/* Le declencheur s'echange sur place : c'est la premiere chose qu'un
+            visiteur veut changer, et il n'y avait aucun moyen de le faire.
+            Une liste deroulante et non cinq pastilles : cinq pastilles
+            debordaient la carte, qui ne fait que 188 px de large sur le
+            canevas, et la carte sortait du cadre. */}
+        {node.family === 'trigger' ? (
+          <label className="fnode__swap">
+            <span className="fnode__api-q">{t.triggerQuestion}</span>
+            <select
+              className="fnode__select"
+              value={node.id}
+              onChange={(event) =>
+                setTrigger(flow.key, node.key, event.target.value as TriggerId)
+              }
+            >
+              {TRIGGERS.map((id) => (
+                <option value={id} key={id}>
+                  {t.triggers[id]}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
 
         {node.family === 'tool' && TOOL_INFO[node.id as ToolId].api === null ? (
           <div className="fnode__api">
@@ -412,19 +453,15 @@ export default function Simulator({ locale }: { locale: Locale }) {
                 ))}
               </ol>
 
-              {/* ── le catalogue : il n'agit que sur la sortie visee ──────── */}
+              {/* ── le catalogue : il n'agit que sur la sortie visee ────────
+                  Pas de declencheur ici : un flux en a exactement un, et il
+                  s'echange sur sa propre carte. On pouvait en ajouter un
+                  second au milieu d'un flux, ce qui ne veut rien dire. */}
               <div className="sim__add" data-armed={target?.flow === flow.key || undefined}>
                 <p className="sim__hint">
                   {target?.flow === flow.key ? t.addHere : t.pickSlot}
                 </p>
                 <div className="sim__groups">
-                  <Group title={t.trigger}>
-                    {TRIGGERS.map((id) => (
-                      <Chip key={id} disabled={target?.flow !== flow.key} onClick={() => add('trigger', id)}>
-                        {t.triggers[id]}
-                      </Chip>
-                    ))}
-                  </Group>
                   <Group title={t.tool}>
                     {TOOLS.map((id) => (
                       <Chip

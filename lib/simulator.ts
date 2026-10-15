@@ -11,7 +11,15 @@
  * jamais ce qu'il coute.
  */
 
-export const TRIGGERS = ['form', 'email', 'schedule'] as const
+/**
+ * Les declencheurs.
+ *
+ * Trois ne suffisaient pas, et surtout le premier noeud n'etait pas
+ * modifiable : le flux commencait toujours par un formulaire, et le visiteur
+ * dont les commandes arrivent par email n'avait aucun moyen de le dire. Les
+ * cinq couvrent ce qui declenche vraiment un flux chez nos clients.
+ */
+export const TRIGGERS = ['form', 'email', 'schedule', 'webhook', 'manual'] as const
 
 /**
  * Les outils, nommes.

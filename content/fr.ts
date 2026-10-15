@@ -1028,6 +1028,7 @@ export const fr: Dict = {
     addHere: 'Choisissez l’étape à ajouter à cet endroit.',
     pickSlot: 'Cliquez un « + » sur le canevas pour choisir où ajouter une étape.',
     apiQuestion: 'Cet outil a-t-il une API ouverte ?',
+    triggerQuestion: 'Qu’est-ce qui déclenche ce flux ?',
     apiYes: 'Oui',
     apiNo: 'Non',
     apiUnknown: 'Je ne sais pas',
@@ -1039,7 +1040,13 @@ export const fr: Dict = {
     timeValue: 'À confirmer après un échange',
     empty: 'Commencez par ajouter un déclencheur.',
     steps: 'Les étapes de votre flux',
-    triggers: { form: 'Un formulaire', email: 'Un email', schedule: 'Un horaire' },
+    triggers: {
+      form: 'Un formulaire',
+      email: 'Un email',
+      schedule: 'Un horaire',
+      webhook: 'Un autre outil',
+      manual: 'Un clic',
+    },
     tools: {
       excel: 'Excel',
       google: 'Google Workspace',

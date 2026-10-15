@@ -1025,6 +1025,7 @@ export const en: Dict = {
     addHere: 'Pick the step to add at that point.',
     pickSlot: 'Click a “+” on the canvas to choose where to add a step.',
     apiQuestion: 'Does this tool have an open API?',
+    triggerQuestion: 'What starts this flow?',
     apiYes: 'Yes',
     apiNo: 'No',
     apiUnknown: 'Not sure',
@@ -1036,7 +1037,13 @@ export const en: Dict = {
     timeValue: 'To confirm after a conversation',
     empty: 'Start by adding a trigger.',
     steps: 'The steps in your flow',
-    triggers: { form: 'A form', email: 'An email', schedule: 'A schedule' },
+    triggers: {
+      form: 'A form',
+      email: 'An email',
+      schedule: 'A schedule',
+      webhook: 'Another tool',
+      manual: 'A click',
+    },
     tools: {
       excel: 'Excel',
       google: 'Google Workspace',

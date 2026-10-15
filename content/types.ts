@@ -436,6 +436,8 @@ export interface Dict {
     addHere: string
     pickSlot: string
     apiQuestion: string
+    /** Ce qui est demande sur la carte du declencheur. */
+    triggerQuestion: string
     apiYes: string
     apiNo: string
     apiUnknown: string
