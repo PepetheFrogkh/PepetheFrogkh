@@ -9,6 +9,7 @@ import {
   ACTIONS,
   CANVAS,
   TOOLS,
+  TOOL_INFO,
   TRIGGERS,
   type ActionId,
   type Family,
@@ -114,9 +115,12 @@ export default function Simulator({ locale }: { locale: Locale }) {
       key: nextKey('n'),
       family,
       id,
-      // `null` veut dire : la question n'a pas encore ete posee. « Je ne sais
-      // pas » est une reponse a part, et elle n'ajoute rien au prix.
-      ...(family === 'tool' ? { openApi: null } : {}),
+      // Pour un outil nomme, la reponse est connue : son editeur documente une
+      // API publique, et on ne pose pas une question dont on a la reponse.
+      // Pour un outil generique, `null` veut dire que la question n'a pas
+      // encore ete posee. « Je ne sais pas » est une reponse a part, et elle
+      // n'ajoute rien au prix.
+      ...(family === 'tool' ? { openApi: TOOL_INFO[id as ToolId].api } : {}),
     }
     change((list) =>
       list.map((flow) =>
@@ -253,7 +257,19 @@ export default function Simulator({ locale }: { locale: Locale }) {
           ) : null}
         </div>
 
-        <span className="fnode__name">{label(node)}</span>
+        <span className="fnode__name">
+          {node.family === 'tool' && TOOL_INFO[node.id as ToolId].logo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              className="fnode__logo"
+              src={TOOL_INFO[node.id as ToolId].logo as string}
+              alt=""
+              width={18}
+              height={18}
+            />
+          ) : null}
+          {label(node)}
+        </span>
 
         {price ? (
           <span className="fnode__price price">
@@ -264,7 +280,7 @@ export default function Simulator({ locale }: { locale: Locale }) {
           <span className="fnode__price fnode__price--none">{t.includedInFlow}</span>
         )}
 
-        {node.family === 'tool' ? (
+        {node.family === 'tool' && TOOL_INFO[node.id as ToolId].api === null ? (
           <div className="fnode__api">
             <span className="fnode__api-q">{t.apiQuestion}</span>
             <span className="fnode__api-row">
@@ -285,6 +301,8 @@ export default function Simulator({ locale }: { locale: Locale }) {
               ))}
             </span>
           </div>
+        ) : node.family === 'tool' ? (
+          <span className="fnode__api-known">{t.apiKnown}</span>
         ) : null}
 
         <span className="fnode__outs">
@@ -409,7 +427,12 @@ export default function Simulator({ locale }: { locale: Locale }) {
                   </Group>
                   <Group title={t.tool}>
                     {TOOLS.map((id) => (
-                      <Chip key={id} disabled={target?.flow !== flow.key} onClick={() => add('tool', id)}>
+                      <Chip
+                        key={id}
+                        logo={TOOL_INFO[id].logo}
+                        disabled={target?.flow !== flow.key}
+                        onClick={() => add('tool', id)}
+                      >
                         {t.tools[id]}
                       </Chip>
                     ))}
@@ -523,15 +546,24 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
 
 function Chip({
   children,
+  logo,
   disabled,
   onClick,
 }: {
   children: React.ReactNode
+  /** Le logo de la marque, pour un outil nomme. */
+  logo?: string | null
   disabled?: boolean
   onClick: () => void
 }) {
   return (
     <button className="sim__chip" type="button" disabled={disabled} onClick={onClick}>
+      {logo ? (
+        // Le logo double le nom, qui reste ecrit a cote : il decore, donc
+        // `alt` est vide. Un lecteur d'ecran lit « Slack », une fois.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="sim__chip-logo" src={logo} alt="" width={16} height={16} />
+      ) : null}
       {children}
     </button>
   )

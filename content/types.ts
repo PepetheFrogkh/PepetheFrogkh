@@ -434,6 +434,8 @@ export interface Dict {
     apiNo: string
     apiUnknown: string
     apiWarning: string
+    /** Ce que l'on dit d'un outil dont on sait qu'il a une API publique. */
+    apiKnown: string
     setup: string
     monthly: string
     time: string

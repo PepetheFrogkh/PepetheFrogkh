@@ -12,13 +12,71 @@
  */
 
 export const TRIGGERS = ['form', 'email', 'schedule'] as const
-export const TOOLS = ['sheet', 'crm', 'accounting', 'pos', 'pms', 'inhouse'] as const
+
+/**
+ * Les outils, nommes.
+ *
+ * Le catalogue listait des categories : « un tableur », « un CRM ». Personne
+ * ne branche une categorie. En nommant les outils on dit a la fois ce que
+ * l'on sait brancher et, pour chacun, si son editeur documente une API
+ * publique : c'est la question qui pese le plus lourd sur le prix, et le
+ * visiteur n'a pas a y repondre quand la reponse est connue.
+ *
+ * Les quatre derniers restent generiques a dessein : une caisse, un PMS et un
+ * outil maison se declinent en des centaines de produits, et c'est justement
+ * la que la question se pose.
+ */
+export const TOOLS = [
+  'excel',
+  'google',
+  'teams',
+  'slack',
+  'whatsapp',
+  'telegram',
+  'hubspot',
+  'mailchimp',
+  'odoo',
+  'pos',
+  'pms',
+  'inhouse',
+] as const
+
 export const ACTIONS = ['invoice', 'followup', 'inventory', 'report', 'ai'] as const
 
 export type TriggerId = (typeof TRIGGERS)[number]
 export type ToolId = (typeof TOOLS)[number]
 export type ActionId = (typeof ACTIONS)[number]
 export type NodeId = TriggerId | ToolId | ActionId | 'condition'
+
+/**
+ * Ce que l'on sait d'un outil du catalogue.
+ *
+ * `logo` est le fichier dans `public/tools/`, `null` pour un outil generique,
+ * qui n'a pas de marque. `api` vaut vrai quand l'editeur documente une API
+ * publique : la question n'est alors pas posee au visiteur, elle est
+ * repondue. `null` la laisse ouverte.
+ */
+export interface ToolInfo {
+  logo: string | null
+  api: boolean | null
+}
+
+export const TOOL_INFO: Record<ToolId, ToolInfo> = {
+  excel: { logo: '/tools/excel.svg', api: true },
+  google: { logo: '/tools/google.svg', api: true },
+  teams: { logo: '/tools/teams.svg', api: true },
+  slack: { logo: '/tools/slack.svg', api: true },
+  // l'API WhatsApp Business existe et est documentee, mais son acces passe par
+  // une verification de Meta : ouverte, pas immediate
+  whatsapp: { logo: '/tools/whatsapp.svg', api: true },
+  telegram: { logo: '/tools/telegram.svg', api: true },
+  hubspot: { logo: '/tools/hubspot.svg', api: true },
+  mailchimp: { logo: '/tools/mailchimp.svg', api: true },
+  odoo: { logo: '/tools/odoo.svg', api: true },
+  pos: { logo: null, api: null },
+  pms: { logo: null, api: null },
+  inhouse: { logo: null, api: null },
+}
 
 /** La famille d'un noeud, qui decide de sa forme, de sa couleur et de son cout. */
 export type Family = 'trigger' | 'tool' | 'condition' | 'action'
