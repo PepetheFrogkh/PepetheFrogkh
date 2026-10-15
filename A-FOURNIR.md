@@ -1,6 +1,6 @@
 # Ce qu'il nous faut de votre côté
 
-Relevé le 14 octobre 2026, en parcourant les 27 pages du site une par une.
+Relevé le 15 octobre 2026, en parcourant les 29 pages du site une par une.
 Chaque trou est **visible à l'écran** sous la forme d'un emplacement
 `[À FOURNIR]`. Rien n'a été inventé pour les combler.
 
@@ -82,16 +82,41 @@ témoignage réel vaut mieux que trois inventés.
 
 ---
 
-## 3. L'expertise Assurance et courtage
+## 3. Deux expertises incomplètes
 
-La seule des sept qui reste vide : vous ne m'avez rien donné dessus. Les six
-autres sont écrites.
+Elles sont neuf désormais, Automatisation et Intelligence artificielle
+comprises.
 
-Il manque l'accroche, ce que nous comprenons du métier, les problèmes typiques,
-ce que nous proposons, et « Notre expérience » si vous en avez une à y mettre.
+### Assurance et courtage : entièrement vide
+
+Vous ne m'avez rien donné dessus. Il manque l'accroche, ce que nous comprenons
+du métier, les problèmes typiques, ce que nous proposons, et « Notre
+expérience » si vous en avez une à y mettre.
 
 Si Wave est votre seule entrée dans ce secteur, dites-le et je rédige la page
 autour de ce projet.
+
+### Intelligence artificielle : écrite, sauf « Notre expérience »
+
+La page est rédigée : ce que nous comprenons du métier, les problèmes typiques,
+ce que nous proposons. Deux emplacements restent visibles.
+
+- **« Notre expérience »**. Vous ne m'avez parlé d'aucun travail d'IA, ni chez
+  vous, ni chez Louis, et je n'en ai inventé aucun. Si l'un de vous a mis une
+  étape d'IA en production quelque part, dites-le moi et la page le dira.
+- **Une réalisation liée**. Aucune des quatre n'en comporte.
+
+Le reste est écrit sur une ligne de conduite précise, que vous pouvez refuser :
+l'IA y est présentée comme une étape dans un flux, jamais comme un produit, et
+la page dit franchement là où elle est mauvaise. Si vous voulez un discours
+plus vendeur, c'est à vous de le dire, mais je vous le déconseille : sur ce
+sujet précis, tous vos concurrents promettent la lune.
+
+### Automatisation : complète
+
+Rien à fournir. « Notre expérience » s'appuie sur vos trois ans en gestion de
+données et de flux automatisés, et sur les deux éditeurs de caisses. La page
+renvoie vers Anakut.
 
 ---
 
@@ -129,7 +154,25 @@ réellement, mais ce sont des textes qui engagent.
 
 ---
 
-## 6. Les réglages du serveur
+## 6. Les neuf marques du simulateur
+
+Le simulateur d'automatisation nomme désormais les outils au lieu de citer des
+catégories : Excel, Google Workspace, Teams, Slack, WhatsApp, Telegram,
+HubSpot, Mailchimp et Odoo, chacun avec son logo.
+
+C'est un usage référentiel, celui qui consiste à nommer un produit que l'on
+sait brancher, sans prétendre ni partenariat ni agrément. C'est courant et
+généralement admis, mais chaque marque publie ses propres règles, et
+**Microsoft et Slack sont parmi les plus strictes**.
+
+**Une décision vous revient, et elle n'est pas technique** : garder ces neuf
+marques après lecture de leurs chartes, n'en garder que certaines, ou revenir
+à des catégories sans marque. Le détail, et ce qu'il faut toucher pour en
+retirer une, sont dans `public/tools/README.md`.
+
+---
+
+## 7. Les réglages du serveur
 
 À poser sur Hostinger avant la mise en ligne. Les valeurs de développement sont
 déjà dans `.env.local`, qui n'est jamais poussé sur GitHub.
@@ -146,7 +189,7 @@ déjà dans `.env.local`, qui n'est jamais poussé sur GitHub.
 
 ---
 
-## 7. Deux décisions qui vous reviennent
+## 8. Deux décisions qui vous reviennent
 
 ### Le taux euro vers dollar
 
@@ -166,7 +209,7 @@ forfait affiché, donnez-le moi.
 
 ---
 
-## 8. La traduction khmère
+## 9. La traduction khmère
 
 Le site parle trois langues et le sélecteur les propose toutes les trois, mais
 **les pages `/km` servent encore le texte anglais**, avec un bandeau qui le dit
@@ -182,23 +225,44 @@ Aucune phrase khmère n'a été écrite de notre propre chef.
 
 ---
 
-## 9. Meshy, et l'animation 3D
+## 10. Meshy, et l'animation 3D
 
-Vous m'avez donné une clé Meshy. **Elle n'a pas servi**, pour deux raisons.
+Vous m'avez donné deux clés Meshy. **Aucune des deux n'a servi**, et la raison
+n'a rien à voir avec les clés.
 
-La première est technique : la politique réseau de cet environnement refuse
-`api.meshy.ai`. Pour l'autoriser, il faut ajouter ce domaine dans **Network
-access** des réglages de l'environnement (le menu de l'environnement dans la
-barre de titre, puis Edit), sous Allowed domains, en laissant la case des
-gestionnaires de paquets cochée. Les étapes sont sur
+### Le réseau refuse le domaine
+
+La politique réseau de cet environnement refuse `api.meshy.ai` : la connexion
+est coupée par le proxy avant même qu'une requête parte, donc la clé ne quitte
+jamais la machine. C'est pour cela que la seconde clé a donné exactement le
+même résultat que la première.
+
+Pour l'autoriser, il faut ajouter ce domaine dans **Network access** des
+réglages de l'environnement (le menu de l'environnement dans la barre de titre,
+puis Edit), sous Allowed domains, en laissant la case des gestionnaires de
+paquets cochée. Les étapes sont sur
 <https://code.claude.com/docs/en/cloud-environments#network-access>.
 
-La seconde est qu'elle n'était de toute façon pas le bon outil : Meshy fabrique
-des **modèles** 3D, alors que l'accueil a besoin d'une **séquence d'images
-rendue**. Je l'ai donc produite ici, en Three.js : des plaques dispersées, les
-outils, qui s'assemblent en anneau autour d'une planète, puis tournent. 144
-images en paysage, 60 en portrait. La scène est du code, dans
-`scripts/sequence/scene.html`, et se refabrique en trois commandes.
+**Les deux clés sont à régénérer.** Elles ont circulé dans une conversation,
+et la seconde en clair. Elles ne sont dans aucun fichier du dépôt.
+
+### Et ce n'est de toute façon pas le bon outil
+
+Meshy fabrique des **modèles** 3D, alors que l'accueil a besoin d'une
+**séquence d'images rendue**. Un modèle Meshy ne se pose pas sur une page : il
+faut encore une scène, des lumières, une caméra, une animation et un rendu
+image par image. C'est exactement ce travail-là qui fait l'animation, et le
+modèle n'en est qu'une pièce.
+
+Elle est donc produite ici, en Three.js : des plaques dispersées, les outils,
+qui s'assemblent en anneau autour d'une planète, puis tournent. La scène est du
+code, dans `scripts/sequence/scene.html`, et se refabrique en deux commandes.
+
+**Elle est maintenant rendue en 4K.** Elle était à 1600 pixels de large, ce qui
+était trop peu : un canvas plein écran sur un portable rétine en fait 2880, et
+l'image y était étirée d'un tiers. D'où le flou que vous avez vu. Quatre jeux
+existent désormais, 1920 et 3840 en paysage, 900 et 1800 en portrait, et le
+navigateur ne télécharge que celui qui correspond à l'écran.
 
 **Rien à fournir.** Si l'animation ne vous plaît pas, dites ce qui ne va pas :
 c'est une scène, elle se modifie.

@@ -93,7 +93,7 @@ const SEGMENTS: Record<PageKey, Record<Locale, string>> = {
 }
 
 /**
- * Les six services, et les sept expertises.
+ * Les six services, et les neuf expertises.
  *
  * Leurs adresses enfants sont declarees ici, langue par langue, et non
  * deduites d'une position dans une liste de contenu : une page de service
@@ -126,6 +126,8 @@ export const EXPERTISES = [
   'teams',
   'crm',
   'insurance',
+  'automation',
+  'ai',
 ] as const
 export type ExpertiseKey = (typeof EXPERTISES)[number]
 
@@ -141,6 +143,8 @@ const EXPERTISE_SLUGS: Record<ExpertiseKey, Record<Locale, string>> = {
     en: 'insurance-and-brokerage',
     km: 'insurance-and-brokerage',
   },
+  automation: { fr: 'automatisation', en: 'automation', km: 'automation' },
+  ai: { fr: 'intelligence-artificielle', en: 'artificial-intelligence', km: 'artificial-intelligence' },
 }
 
 /** L'adresse d'une page de service. */
