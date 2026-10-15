@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { CSSProperties } from 'react'
 import { dict, type CaseStudy } from '@/content'
 import { path, type Locale } from '@/lib/i18n'
 import { Tbd, TbdBlock } from './Tbd'
@@ -7,6 +8,11 @@ import { Tbd, TbdBlock } from './Tbd'
  * Une carte d'etude de cas : la capture, le secteur, le pays, le nom, une
  * phrase, et le resultat verifie. Le resultat absent reste un emplacement
  * visible, jamais un chiffre de remplissage.
+ *
+ * Quand la capture manque mais que le client nous a donne son logo, la carte
+ * montre le logo : il dit de qui il s'agit, ce qu'un rectangle vide ne fait
+ * pas. L'emplacement [À FOURNIR] ne revient que lorsqu'il n'y a ni l'un ni
+ * l'autre, parce qu'un logo n'est pas une preuve de ce qui a ete construit.
  */
 export default function CaseCard({ locale, study }: { locale: Locale; study: CaseStudy }) {
   const t = dict(locale).work
@@ -25,9 +31,17 @@ export default function CaseCard({ locale, study }: { locale: Locale; study: Cas
           loading="lazy"
           style={{ borderRadius: 'var(--r-image)', marginBottom: 'var(--s3)' }}
         />
+      ) : study.logo ? (
+        <div
+          className="case__logo"
+          data-own-bg={study.logoBg ? '' : undefined}
+          style={study.logoBg ? ({ '--logo-bg': study.logoBg } as CSSProperties) : undefined}
+        >
+          <img src={study.logo} alt={study.name} loading="lazy" />
+        </div>
       ) : (
         <div style={{ marginBottom: 'var(--s3)' }}>
-          <TbdBlock locale={locale} what="capture" />
+          <TbdBlock locale={locale} what={dict(locale).words.shot} />
         </div>
       )}
 

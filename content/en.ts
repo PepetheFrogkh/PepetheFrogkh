@@ -132,6 +132,7 @@ export const en: Dict = {
     figures: 'verified figures',
     updatedOn: 'last updated',
     photo: 'photo',
+    shot: 'screenshot',
   },
 
   hero: {
@@ -581,6 +582,8 @@ export const en: Dict = {
         coords: { lat: 46.99, lon: 6.93 },
         summary: 'A custom coaching management app, and a WordPress site.',
         site: 'anakut.ch',
+        logo: '/clients/anakut.png',
+        logoBg: '#100e0d',
         result: 'From 5 to 15 regular clients, without a franc of advertising.',
         shot: null,
         video: null,
@@ -620,7 +623,7 @@ export const en: Dict = {
         ],
         quote: {
           text: 'With this tool I can see the performance, and above all I know where to put the effort. Before, I had to remember everything. Today I know a client started at three push-ups, was doing fifteen two months later and seventeen last week. He sees his own progress, and I see what matters to him.',
-          author: 'Sarim Preap, founder, Anakut',
+          author: 'Sarin Preap, founder, Anakut',
         },
       },
       {
@@ -632,6 +635,8 @@ export const en: Dict = {
         coords: { lat: 46.99, lon: 6.93 },
         summary: 'A booking and follow-up app, company accounts, and a site.',
         site: 'mpmassage.ch',
+        logo: '/clients/mp-massage.png',
+        logoBg: null,
         result: 'Retention up 42%, and no missed appointments left.',
         shot: null,
         video: null,
@@ -671,7 +676,7 @@ export const en: Dict = {
         ],
         quote: {
           text: 'I was won over by how well this app works. I did not believe in it at first: people had come to sell me similar tools several times, and I had never really believed them. I let Kuiper Studio tempt me, mostly for how flexible they were on budget. I did not have a big budget, and they simply said they could stretch the development time while cutting the cost, delivering in stages. Saving 30 to 35% against two months of extra lead time was all upside. We agreed on that, we built it, we followed it through, and it is exactly what I needed.',
-          author: 'The founder, MP Massage',
+          author: 'Mydai Pongsanith, founder, MP Massage',
         },
       },
       {
@@ -683,6 +688,8 @@ export const en: Dict = {
         coords: null,
         summary: 'Cleaning team tracking in an airport, with clock in and billing.',
         site: null,
+        logo: null,
+        logoBg: null,
         result: null,
         shot: null,
         video: null,
@@ -705,18 +712,21 @@ export const en: Dict = {
         country: 'Switzerland',
         city: null,
         coords: null,
-        summary: 'A loyalty programme: two mobile apps, and their back office.',
-        site: null,
+        summary:
+          'The Wave Pass: the member app, the partner merchant app, and their back office.',
+        site: 'wavenetwork.ch',
+        logo: '/clients/wave-network.svg',
+        logoBg: null,
         result: 'An app quoted at 200,000 dollars elsewhere, delivered for 25,000.',
         shot: null,
         video: null,
         context:
-          'Wave Network wanted to replace the loyalty card their clients carried with an app. The project had been quoted elsewhere, and the quote came back at 200,000 dollars: a figure that closes the subject.',
+          'Wave Network is a Swiss financial advisory firm. Its subscription, the Wave Pass, gives access to a payment card, certified advisors, tax services and a network of partner merchants across Switzerland. On the member side, that access ran on a physical card. It needed an app. The project had been quoted elsewhere, and the quote came back at 200,000 dollars: a figure that closes the subject.',
         need:
           'To get the same thing for what they could actually put in. That meant going through the scope point by point, separating what the app needed in order to exist from what could come later, and building the first version on that sort.',
         built: [
-          'A mobile app for clients: they scan a QR code at a partner, and see what they have saved.',
-          'A mobile app for partner merchants, which records the visit.',
+          'The member app: at a partner, the member has their code scanned, and sees what the subscription has saved them.',
+          'The partner merchant app, which records the visit from behind the counter.',
           'The web back office that drives both, on Wave Network’s side.',
           'A scope cut for a first launch, with the rest held back rather than sold as options paid for upfront.',
         ],
@@ -756,17 +766,17 @@ export const en: Dict = {
     items: [
       {
         company: 'Anakut',
-        author: 'Sarim Preap',
+        author: 'Sarin Preap',
         role: 'Founder',
         text: 'With this tool I can see the performance, and above all I know where to put the effort. Before, I had to remember everything.',
-        photo: null,
+        photo: '/people/sarin-preap.webp',
       },
       {
         company: 'MP Massage',
-        author: null,
-        role: 'The founder',
+        author: 'Mydai Pongsanith',
+        role: 'Founder',
         text: 'I did not believe in it at first: people had come to sell me similar tools several times. What decided me was how flexible they were on budget.',
-        photo: null,
+        photo: '/people/mydai-pongsanith.webp',
       },
       // The third waits on Wave Network's testimonial, which has not been
       // given yet. Two real ones beat three with one made up.

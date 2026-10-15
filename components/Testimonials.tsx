@@ -39,9 +39,14 @@ export default function Testimonials({ locale }: { locale: Locale }) {
               {item.text ? (
                 <>
                   <p className="card__quote">« {item.text} »</p>
-                  <p className="muted small" style={{ marginBottom: 0 }}>
-                    {signature(item)}
-                  </p>
+                  <div className="said">
+                    {/* La photo n'est pas obligatoire : un client peut
+                        autoriser sa citation sans autoriser son portrait. */}
+                    {item.photo ? (
+                      <img className="said__photo" src={item.photo} alt="" loading="lazy" />
+                    ) : null}
+                    <p className="muted small said__who">{signature(item)}</p>
+                  </div>
                 </>
               ) : (
                 <Tbd locale={locale} what={t.words.testimonial} />

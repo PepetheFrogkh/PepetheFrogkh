@@ -856,6 +856,75 @@ html[lang='km'] {
   color: var(--terra);
 }
 
+/* ── le logo d'un client, a la place d'une capture ────────────────────────
+   Un logo n'a ni le cadrage ni le format d'une capture d'ecran : il tient
+   dans une tuile a lui, centre, sans etre etire pour remplir le cadre.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.case__logo {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  margin-bottom: var(--s3);
+  padding: var(--s4);
+  border-radius: var(--r-image);
+  background: var(--logo-bg, var(--cream));
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* Un logo livre sur son propre fond remplit la tuile au lieu d'y flotter :
+   sinon son rectangle se detache du creme, et on voit la capture plutot que
+   la marque. */
+.case__logo[data-own-bg] {
+  padding: 0;
+  border-color: var(--logo-bg, var(--border));
+}
+
+.case__logo[data-own-bg] img {
+  width: 100%;
+  height: auto;
+  max-width: none;
+  max-height: 100%;
+  /* `contain` et non `cover` : le logo d'Anakut est trois fois plus large que
+     haut, et `cover` lui coupait le A et le T. La tuile portant deja la
+     couleur du logo, rien ne trahit la difference de format. */
+  object-fit: contain;
+}
+
+.case__logo img {
+  max-width: min(100%, 15rem);
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ── la signature d'un temoignage ─────────────────────────────────────────
+   Le portrait a gauche, le nom a droite. Sans portrait, le nom reprend
+   toute la ligne : rien ne tient une place vide.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.said {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: var(--s3);
+}
+
+.said__photo {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--peach);
+}
+
+.said__who {
+  margin: 0;
+}
+
 /* ── les fondateurs ───────────────────────────────────────────────────────
    Une photo a gauche, le nom, le role et la biographie a droite. Sous 560 px
    la photo passe au-dessus : une colonne de 160 px ne laisse pas de quoi lire

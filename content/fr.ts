@@ -133,6 +133,7 @@ export const fr: Dict = {
     figures: 'chiffres vérifiés',
     updatedOn: 'date de mise à jour',
     photo: 'photo',
+    shot: 'capture',
   },
 
   hero: {
@@ -583,6 +584,8 @@ export const fr: Dict = {
         coords: { lat: 46.99, lon: 6.93 },
         summary: 'Application sur mesure de gestion du coaching, et site WordPress.',
         site: 'anakut.ch',
+        logo: '/clients/anakut.png',
+        logoBg: '#100e0d',
         result: 'De 5 à 15 clients réguliers, sans un franc de publicité.',
         shot: null,
         video: null,
@@ -622,7 +625,7 @@ export const fr: Dict = {
         ],
         quote: {
           text: 'Grâce à cet outil, je vois les performances, et surtout je sais où mettre l’effort. Avant, je devais me souvenir de tout. Aujourd’hui je sais qu’un client a commencé à trois pompes, qu’il en faisait quinze deux mois plus tard et dix-sept la semaine dernière. Lui voit sa progression, et moi je vois ce qui compte pour lui.',
-          author: 'Sarim Preap, fondateur, Anakut',
+          author: 'Sarin Preap, fondateur, Anakut',
         },
       },
       {
@@ -634,6 +637,8 @@ export const fr: Dict = {
         coords: { lat: 46.99, lon: 6.93 },
         summary: 'Application de réservation et de suivi, espaces entreprises, et site.',
         site: 'mpmassage.ch',
+        logo: '/clients/mp-massage.png',
+        logoBg: null,
         result: 'Rétention en hausse de 42 %, et plus aucun rendez-vous manqué.',
         shot: null,
         video: null,
@@ -673,7 +678,7 @@ export const fr: Dict = {
         ],
         quote: {
           text: 'J’ai été subjuguée par l’efficacité de cette application. Je n’y croyais pas au début : on était déjà venu me vendre des outils similaires plusieurs fois, et je n’y avais jamais vraiment cru. Je me suis laissé tenter par Kuiper Studio, surtout pour leur souplesse sur le budget. Je n’avais pas un gros budget, et ils m’ont simplement dit qu’ils pouvaient allonger le temps de développement en le réduisant, en livrant au fur et à mesure. Économiser 30 à 35 % contre deux mois de délai, c’était tout bénéfice. On s’est mis d’accord là-dessus, on a développé, on a suivi, et c’est exactement ce qu’il me fallait.',
-          author: 'La fondatrice, MP Massage',
+          author: 'Mydai Pongsanith, fondatrice, MP Massage',
         },
       },
       {
@@ -686,6 +691,8 @@ export const fr: Dict = {
         summary:
           'Suivi des équipes de nettoyage dans un aéroport, avec pointage et facturation.',
         site: null,
+        logo: null,
+        logoBg: null,
         result: null,
         shot: null,
         video: null,
@@ -708,18 +715,21 @@ export const fr: Dict = {
         country: 'Suisse',
         city: null,
         coords: null,
-        summary: 'Programme de fidélité : deux applications mobiles, et leur back-office.',
-        site: null,
+        summary:
+          'Le Wave Pass : l’application des membres, celle des commerçants partenaires, et leur back-office.',
+        site: 'wavenetwork.ch',
+        logo: '/clients/wave-network.svg',
+        logoBg: null,
         result: 'Une application chiffrée 200 000 dollars ailleurs, livrée pour 25 000.',
         shot: null,
         video: null,
         context:
-          'Wave Network voulait remplacer la carte de fidélité que portaient ses clients par une application. Le projet avait été chiffré ailleurs, et le devis reçu était de 200 000 dollars : un montant qui ferme le sujet.',
+          'Wave Network est un conseiller financier suisse. Son abonnement, le Wave Pass, donne accès à une carte de paiement, à des conseillers certifiés, à des services fiscaux et à un réseau de commerçants partenaires dans toute la Suisse. Côté membres, cet accès passait par une carte physique. Il fallait une application. Le projet avait été chiffré ailleurs, et le devis reçu était de 200 000 dollars : un montant qui ferme le sujet.',
         need:
           'Obtenir la même chose pour ce qu’ils pouvaient réellement y mettre. Cela a voulu dire reprendre le périmètre point par point, séparer ce dont l’application avait besoin pour exister de ce qui pouvait venir plus tard, et construire la première version sur ce tri.',
         built: [
-          'Une application mobile pour les clients : ils scannent un QR code chez un partenaire, et voient ce qu’ils ont économisé.',
-          'Une application mobile pour les commerçants partenaires, qui enregistre le passage.',
+          'L’application mobile des membres : chez un partenaire, le membre fait scanner son code, et voit ce que son abonnement lui a fait économiser.',
+          'L’application mobile des commerçants partenaires, qui enregistre le passage côté comptoir.',
           'Le back-office web qui pilote les deux, côté Wave Network.',
           'Un périmètre taillé pour un premier lancement, le reste en attente plutôt qu’en option payée d’avance.',
         ],
@@ -759,17 +769,17 @@ export const fr: Dict = {
     items: [
       {
         company: 'Anakut',
-        author: 'Sarim Preap',
+        author: 'Sarin Preap',
         role: 'Fondateur',
         text: 'Grâce à cet outil, je vois les performances, et surtout je sais où mettre l’effort. Avant, je devais me souvenir de tout.',
-        photo: null,
+        photo: '/people/sarin-preap.webp',
       },
       {
         company: 'MP Massage',
-        author: null,
-        role: 'La fondatrice',
+        author: 'Mydai Pongsanith',
+        role: 'Fondatrice',
         text: 'Je n’y croyais pas au début : on était déjà venu me vendre des outils similaires plusieurs fois. Ce qui m’a décidée, c’est leur souplesse sur le budget.',
-        photo: null,
+        photo: '/people/mydai-pongsanith.webp',
       },
       // Le troisieme attend le temoignage de Wave Network, qui n'a pas encore
       // ete donne. Deux vrais valent mieux que trois dont un invente.

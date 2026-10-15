@@ -81,6 +81,24 @@ export interface CaseStudy {
   summary: string
   /** Le site du projet, affiche sous sa capture. */
   site: string | null
+  /**
+   * Le logo du client, quand il nous l'a donne.
+   *
+   * Distinct de `shot` : un logo est une marque, une capture est une preuve de
+   * ce qui a ete construit. L'un ne remplace pas l'autre, et la carte montre le
+   * logo en attendant la capture plutot qu'un rectangle vide.
+   */
+  logo: string | null
+  /**
+   * La couleur de fond sur laquelle le logo a ete livre, quand il n'est pas
+   * detoure.
+   *
+   * Le logo d'Anakut nous est arrive en or sur noir, et pose sur le creme du
+   * site il dessinait un rectangle sombre au milieu de la carte. La tuile
+   * prend donc la couleur du logo plutot que l'inverse. `null` quand le fond
+   * est transparent, et c'est le creme du site qui sert.
+   */
+  logoBg: string | null
   /** Le resultat verifie, ou null : la carte affiche alors [À FOURNIR]. */
   result: string | null
   /** La capture du projet, ou null. */
@@ -226,6 +244,8 @@ export interface Dict {
     updatedOn: string
     /** « photo », pour l'emplacement d'un portrait non fourni. */
     photo: string
+    /** « capture », pour l'emplacement d'une capture d'ecran non fournie. */
+    shot: string
   }
 
   hero: {
