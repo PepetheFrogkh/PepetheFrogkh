@@ -181,6 +181,14 @@ export interface ExpertisePage {
   experience: string[] | null
   /** Les slugs des realisations liees. */
   proof: string[] | null
+  /**
+   * La photographie du metier, posee dans l'en-tete de la page.
+   *
+   * `null` tant qu'il n'y en a pas : le pictogramme tient alors la place, et
+   * c'est un parti pris, pas un emplacement vide. Les fichiers sont installes
+   * par `scripts/photos.mjs`, qui ecrit les deux tailles et le credit.
+   */
+  photo: { src: string; alt: string; credit: string } | null
 }
 
 export interface Dict {

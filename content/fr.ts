@@ -407,6 +407,7 @@ export const fr: Dict = {
         'Caisses et caisses mobiles, bornes de commande, menus par QR code : nous les avons installés, cassés et réparés avant de les proposer.',
       ],
       proof: null,
+      photo: null,
     },
     retail: {
       title: 'Commerce de détail',
@@ -436,6 +437,7 @@ export const fr: Dict = {
         'La mise en place des recettes, des coûts matière et des calculs de marge fait partie de son travail courant depuis des années.',
       ],
       proof: null,
+      photo: null,
     },
     hotels: {
       title: 'Hôtellerie',
@@ -466,6 +468,7 @@ export const fr: Dict = {
         'PMS et systèmes hérités du marché : nous savons à quoi nous attendre en ouvrant le capot.',
       ],
       proof: null,
+      photo: null,
     },
     manufacturing: {
       title: 'Production et manufacturing',
@@ -495,6 +498,7 @@ export const fr: Dict = {
         'Les coûts matière et les calculs de marge sont pour lui un travail courant, pas une découverte.',
       ],
       proof: null,
+      photo: null,
     },
     teams: {
       title: 'Gestion des équipes',
@@ -524,6 +528,7 @@ export const fr: Dict = {
         'Le besoin nous est venu d’eux, pas d’un catalogue : plusieurs nous ont posé la même question au même moment.',
       ],
       proof: null,
+      photo: null,
     },
     crm: {
       title: 'CRM',
@@ -552,6 +557,7 @@ export const fr: Dict = {
         'Arnaud a passé trois ans dans une société de gestion de données et de flux automatisés, à faire circuler la donnée entre des outils qui n’étaient pas prévus pour.',
       ],
       proof: null,
+      photo: null,
     },
     insurance: {
       title: 'Assurance et courtage',
@@ -561,6 +567,7 @@ export const fr: Dict = {
       offer: null,
       experience: null,
       proof: null,
+      photo: null,
     },
     automation: {
       title: 'Automatisation',
@@ -592,6 +599,7 @@ export const fr: Dict = {
         'Chez un éditeur de caisses, puis chez un autre au Cambodge, nous avons vu de près ce que coûte une donnée saisie deux fois : ce n’est jamais la saisie, c’est l’écart qu’on découvre trois mois plus tard.',
       ],
       proof: null,
+      photo: null,
     },
     ai: {
       title: 'Intelligence artificielle',
@@ -620,6 +628,7 @@ export const fr: Dict = {
       ],
       experience: null,
       proof: null,
+      photo: null,
     },
   },
 

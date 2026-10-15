@@ -405,6 +405,7 @@ export const en: Dict = {
         'Tills and mobile tills, order kiosks, QR code menus: we installed them, broke them and fixed them before offering them.',
       ],
       proof: null,
+      photo: null,
     },
     retail: {
       title: 'Retail',
@@ -434,6 +435,7 @@ export const en: Dict = {
         'Setting up recipes, material costs and margin calculations has been part of his daily work for years.',
       ],
       proof: null,
+      photo: null,
     },
     hotels: {
       title: 'Hotels',
@@ -464,6 +466,7 @@ export const en: Dict = {
         'PMS and systems inherited from the market: we know what to expect when we open them up.',
       ],
       proof: null,
+      photo: null,
     },
     manufacturing: {
       title: 'Manufacturing',
@@ -493,6 +496,7 @@ export const en: Dict = {
         'Material costs and margin calculations are routine work for him, not a discovery.',
       ],
       proof: null,
+      photo: null,
     },
     teams: {
       title: 'Team management',
@@ -522,6 +526,7 @@ export const en: Dict = {
         'The need came from them, not from a catalogue: several asked us the same question at the same time.',
       ],
       proof: null,
+      photo: null,
     },
     crm: {
       title: 'CRM',
@@ -550,6 +555,7 @@ export const en: Dict = {
         'Arnaud spent three years at a data management and automated flow company, moving data between tools that were never designed for it.',
       ],
       proof: null,
+      photo: null,
     },
     insurance: {
       title: 'Insurance and brokerage',
@@ -559,6 +565,7 @@ export const en: Dict = {
       offer: null,
       experience: null,
       proof: null,
+      photo: null,
     },
     automation: {
       title: 'Automation',
@@ -590,6 +597,7 @@ export const en: Dict = {
         'At a till vendor, then at another one in Cambodia, we saw up close what a figure entered twice costs: never the typing, always the gap you find three months later.',
       ],
       proof: null,
+      photo: null,
     },
     ai: {
       title: 'Artificial intelligence',
@@ -618,6 +626,7 @@ export const en: Dict = {
       ],
       experience: null,
       proof: null,
+      photo: null,
     },
   },
 

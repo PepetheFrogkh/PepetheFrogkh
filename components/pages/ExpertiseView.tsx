@@ -61,9 +61,20 @@ export default function ExpertiseView({
             <SplitHeading text={page.title} as="h1" className="xhero__title" />
             {page.lead ? <p className="lead xhero__lead">{page.lead}</p> : null}
           </div>
-          <div className="xhero__mark">
-            <ExpertiseMark expertise={expertise} />
-          </div>
+          {/* La photographie du metier quand il y en a une, son pictogramme
+              sinon. Pas d'emplacement vide : le pictogramme est dessine pour
+              tenir cette place, ce n'est pas un pis-aller. */}
+          {page.photo ? (
+            <figure className="xhero__photo">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={page.photo.src} alt={page.photo.alt} width={416} height={416} />
+              <figcaption className="xhero__credit small muted">{page.photo.credit}</figcaption>
+            </figure>
+          ) : (
+            <div className="xhero__mark">
+              <ExpertiseMark expertise={expertise} />
+            </div>
+          )}
         </div>
       </section>
 
