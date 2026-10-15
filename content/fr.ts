@@ -234,7 +234,7 @@ export const fr: Dict = {
         'Une supervision mensuelle, selon le nombre de flux.',
       ],
       delays: null,
-      proof: null,
+      proof: 'anakut',
       faq: [
         {
           question: 'Où tournent les flux ?',
@@ -264,7 +264,7 @@ export const fr: Dict = {
         'Une proposition calée sur votre budget, qui dit ce qui rentre dedans et ce qui n’y rentre pas.',
       ],
       delays: null,
-      proof: null,
+      proof: 'wave',
       faq: [
         {
           question: 'Et si mon budget est petit ?',
@@ -292,7 +292,7 @@ export const fr: Dict = {
         'Un ERP complet, seulement à partir d’un certain périmètre, et sur devis.',
       ],
       delays: null,
-      proof: null,
+      proof: 'mp-massage',
       faq: null,
     },
     consulting: {
@@ -543,7 +543,7 @@ export const fr: Dict = {
       experience: [
         'Arnaud a passé trois ans dans une société de gestion de données et de flux automatisés, à faire circuler la donnée entre des outils qui n’étaient pas prévus pour.',
       ],
-      proof: null,
+      proof: ['anakut', 'mp-massage'],
     },
     insurance: {
       title: 'Assurance et courtage',
@@ -583,14 +583,47 @@ export const fr: Dict = {
         coords: { lat: 46.99, lon: 6.93 },
         summary: 'Application sur mesure de gestion du coaching, et site WordPress.',
         site: 'anakut.ch',
-        result: null,
+        result: 'De 5 à 15 clients réguliers, sans un franc de publicité.',
         shot: null,
         video: null,
-        context: null,
-        need: null,
-        built: ['Une application de gestion du coaching', 'Un site WordPress'],
-        results: null,
-        quote: null,
+        context:
+          'Anakut est un coach sportif indépendant à Neuchâtel. Avant, chaque nouveau client remplissait une fiche papier, et le suivi vivait dans des tableurs et des feuilles volantes qui finissaient par se perdre. Le coach tenait la progression de ses clients de mémoire : avec cinq clients réguliers, cela tenait déjà difficilement.',
+        need:
+          'Un endroit unique où le client réserve sa séance et suit sa progression, et où le coach voit son planning, ses notes de séance et ce que chacun lui doit. Sans intégration de paiement : le règlement reste en direct, c’est le suivi qui manquait, pas la caisse.',
+        built: [
+          'Un site WordPress, avec un lien vers l’espace client.',
+          'Un espace client où chacun réserve sa séance avec le coach.',
+          'Le calendrier du coach, connecté à son Google Agenda : une séance réservée apparaît dans l’agenda qu’il consulte déjà.',
+          'L’organisation des coachings, les notes de séance, et le suivi de performance client par client.',
+          'Le suivi de ce que chaque client doit, sans module de paiement.',
+        ],
+        results: [
+          {
+            value: '5',
+            unit: ' à 15',
+            caption: 'clients réguliers, avant et aujourd’hui',
+          },
+          {
+            prefix: '+',
+            value: '30',
+            unit: ' %',
+            caption: 'de renouvellement de cours par nouveau client',
+          },
+          {
+            value: '6',
+            unit: ' mois',
+            caption: 'de développement',
+          },
+          {
+            value: '20',
+            unit: ' à 25 000 $',
+            caption: 'la tranche du projet, hors taxes',
+          },
+        ],
+        quote: {
+          text: 'Grâce à cet outil, je vois les performances, et surtout je sais où mettre l’effort. Avant, je devais me souvenir de tout. Aujourd’hui je sais qu’un client a commencé à trois pompes, qu’il en faisait quinze deux mois plus tard et dix-sept la semaine dernière. Lui voit sa progression, et moi je vois ce qui compte pour lui.',
+          author: 'Sarim Preap, fondateur, Anakut',
+        },
       },
       {
         slug: 'mp-massage',
@@ -599,16 +632,49 @@ export const fr: Dict = {
         country: 'Suisse',
         city: 'Neuchâtel',
         coords: { lat: 46.99, lon: 6.93 },
-        summary: 'Application de gestion des massages, et site.',
+        summary: 'Application de réservation et de suivi, espaces entreprises, et site.',
         site: 'mpmassage.ch',
-        result: null,
+        result: 'Rétention en hausse de 42 %, et plus aucun rendez-vous manqué.',
         shot: null,
         video: null,
-        context: null,
-        need: null,
-        built: ['Une application de gestion des massages', 'Un site'],
-        results: null,
-        quote: null,
+        context:
+          'MP Massage est un cabinet de massage à Neuchâtel. La réservation passait par des outils du marché comme OneDoc, et elle fonctionnait : ce n’était pas le problème. Le problème était tout ce qu’il y avait autour. La plupart des clients prenaient la prestation classique et rien d’autre, le suivi se faisait à la main, et rien ne reliait une séance à la suivante.',
+        need:
+          'Savoir, avant que le client n’arrive, ce dont il souffre et ce qui a été fait la dernière fois. Et ouvrir la porte aux entreprises, qui demandaient à réserver pour leurs équipes sans avoir à appeler.',
+        built: [
+          'Une application de réservation, où le client prend son rendez-vous et retrouve son suivi.',
+          'Le suivi des douleurs et des séances, consultable avant la séance suivante.',
+          'Des espaces entreprise : chaque société réserve pour ses équipes, avec un compte par collaborateur et ce à quoi il a droit.',
+          'Le site, en Next.js, et l’application en Vue.js sur une interface Laravel, avec MariaDB.',
+        ],
+        results: [
+          {
+            prefix: '+',
+            value: '42',
+            unit: ' %',
+            caption: 'de rétention',
+          },
+          {
+            prefix: '+',
+            value: '25',
+            unit: ' %',
+            caption: 'de chiffre d’affaires',
+          },
+          {
+            value: '2',
+            unit: ' à 0',
+            caption: 'rendez-vous manqués par mois, avant et depuis trois mois',
+          },
+          {
+            value: '8',
+            unit: ' mois',
+            caption: 'de développement, étalés pour tenir le budget',
+          },
+        ],
+        quote: {
+          text: 'J’ai été subjuguée par l’efficacité de cette application. Je n’y croyais pas au début : on était déjà venu me vendre des outils similaires plusieurs fois, et je n’y avais jamais vraiment cru. Je me suis laissé tenter par Kuiper Studio, surtout pour leur souplesse sur le budget. Je n’avais pas un gros budget, et ils m’ont simplement dit qu’ils pouvaient allonger le temps de développement en le réduisant, en livrant au fur et à mesure. Économiser 30 à 35 % contre deux mois de délai, c’était tout bénéfice. On s’est mis d’accord là-dessus, on a développé, on a suivi, et c’est exactement ce qu’il me fallait.',
+          author: 'La fondatrice, MP Massage',
+        },
       },
       {
         slug: 'ocs',
@@ -623,31 +689,38 @@ export const fr: Dict = {
         result: null,
         shot: null,
         video: null,
-        context: null,
-        need: null,
-        built: ['Le pointage des équipes', 'La facturation'],
+        context:
+          'OCS fait le nettoyage d’un aéroport. Ses responsables savaient qu’un agent était venu, mais pas s’il était réellement passé dans telle zone, ni à quelle heure. Sur un site aéroportuaire, cette question-là n’est pas une question de confort.',
+        need:
+          'Prouver le passage, zone par zone, et à l’heure près. Pas seulement la présence sur le site : le passage à l’endroit précis qui devait être nettoyé.',
+        built: [
+          'Une étiquette NFC par zone, qu’un agent approche de son téléphone en arrivant.',
+          'Une application mobile pour les agents, qui enregistre le passage, la zone et l’heure.',
+          'Une interface de supervision, qui montre ce qui a été fait, où, et par qui.',
+        ],
         results: null,
         quote: null,
       },
       {
         slug: 'wave',
-        name: 'Wave',
+        name: 'Wave Network',
         sector: 'Assurance et courtage',
         country: 'Suisse',
         city: null,
         coords: null,
-        summary: 'Application mobile de fidélité, et son outil de gestion.',
+        summary: 'Programme de fidélité : deux applications mobiles, et leur back-office.',
         site: null,
         result: 'Une application chiffrée 200 000 dollars ailleurs, livrée pour 25 000.',
         shot: null,
         video: null,
         context:
-          'Wave voulait une application mobile de fidélité pour ses clients, et l’outil de gestion qui va avec. Le projet avait été chiffré ailleurs, et le devis reçu était de 200 000 dollars : un montant qui ferme le sujet pour la plupart des entreprises de cette taille.',
+          'Wave Network voulait remplacer la carte de fidélité que portaient ses clients par une application. Le projet avait été chiffré ailleurs, et le devis reçu était de 200 000 dollars : un montant qui ferme le sujet.',
         need:
-          'Obtenir la même chose pour ce qu’ils pouvaient réellement y mettre. Cela voulait dire reprendre le périmètre point par point, séparer ce dont l’application avait besoin pour exister de ce qui pouvait venir plus tard, et construire la première version sur ce tri.',
+          'Obtenir la même chose pour ce qu’ils pouvaient réellement y mettre. Cela a voulu dire reprendre le périmètre point par point, séparer ce dont l’application avait besoin pour exister de ce qui pouvait venir plus tard, et construire la première version sur ce tri.',
         built: [
-          'Une application mobile de fidélité pour les clients.',
-          'L’outil de gestion qui va avec, côté Wave.',
+          'Une application mobile pour les clients : ils scannent un QR code chez un partenaire, et voient ce qu’ils ont économisé.',
+          'Une application mobile pour les commerçants partenaires, qui enregistre le passage.',
+          'Le back-office web qui pilote les deux, côté Wave Network.',
           'Un périmètre taillé pour un premier lancement, le reste en attente plutôt qu’en option payée d’avance.',
         ],
         results: [
@@ -660,6 +733,11 @@ export const fr: Dict = {
             value: '25',
             unit: ' 000 $',
             caption: 'ce que Kuiper Studio a facturé pour le livrer',
+          },
+          {
+            value: '4,5',
+            unit: ' mois',
+            caption: 'de développement, livré dans les délais',
           },
         ],
         quote: null,
@@ -679,8 +757,22 @@ export const fr: Dict = {
     title: 'Ce qu’ils en disent',
     note: 'Publié uniquement avec l’accord écrit du client.',
     items: [
-      { company: null, author: null, role: null, text: null, photo: null },
-      { company: null, author: null, role: null, text: null, photo: null },
+      {
+        company: 'Anakut',
+        author: 'Sarim Preap',
+        role: 'Fondateur',
+        text: 'Grâce à cet outil, je vois les performances, et surtout je sais où mettre l’effort. Avant, je devais me souvenir de tout.',
+        photo: null,
+      },
+      {
+        company: 'MP Massage',
+        author: null,
+        role: 'La fondatrice',
+        text: 'Je n’y croyais pas au début : on était déjà venu me vendre des outils similaires plusieurs fois. Ce qui m’a décidée, c’est leur souplesse sur le budget.',
+        photo: null,
+      },
+      // Le troisieme attend le temoignage de Wave Network, qui n'a pas encore
+      // ete donne. Deux vrais valent mieux que trois dont un invente.
       { company: null, author: null, role: null, text: null, photo: null },
     ],
   },

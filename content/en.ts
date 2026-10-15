@@ -232,7 +232,7 @@ export const en: Dict = {
         'Monthly supervision, based on how many flows you run.',
       ],
       delays: null,
-      proof: null,
+      proof: 'anakut',
       faq: [
         {
           question: 'Where do the flows run?',
@@ -262,7 +262,7 @@ export const en: Dict = {
         'A proposal built around your budget, saying what fits inside it and what does not.',
       ],
       delays: null,
-      proof: null,
+      proof: 'wave',
       faq: [
         {
           question: 'What if my budget is small?',
@@ -290,7 +290,7 @@ export const en: Dict = {
         'A full ERP, only above a certain scope, and on quote.',
       ],
       delays: null,
-      proof: null,
+      proof: 'mp-massage',
       faq: null,
     },
     consulting: {
@@ -541,7 +541,7 @@ export const en: Dict = {
       experience: [
         'Arnaud spent three years at a data management and automated flow company, moving data between tools that were never designed for it.',
       ],
-      proof: null,
+      proof: ['anakut', 'mp-massage'],
     },
     insurance: {
       title: 'Insurance and brokerage',
@@ -581,14 +581,47 @@ export const en: Dict = {
         coords: { lat: 46.99, lon: 6.93 },
         summary: 'A custom coaching management app, and a WordPress site.',
         site: 'anakut.ch',
-        result: null,
+        result: 'From 5 to 15 regular clients, without a franc of advertising.',
         shot: null,
         video: null,
-        context: null,
-        need: null,
-        built: ['A coaching management app', 'A WordPress site'],
-        results: null,
-        quote: null,
+        context:
+          'Anakut is an independent personal trainer in Neuchâtel. Before, every new client filled in a paper form, and follow-up lived in spreadsheets and loose sheets that ended up lost. The coach kept his clients’ progress in his head: with five regular clients, that was already a stretch.',
+        need:
+          'One place where the client books a session and follows their own progress, and where the coach sees his schedule, his session notes and what each person owes him. No payment integration: payment stays direct, it was the follow-up that was missing, not the till.',
+        built: [
+          'A WordPress site, with a link into the client area.',
+          'A client area where each person books their session with the coach.',
+          'The coach’s calendar, connected to his Google Calendar: a booked session appears in the diary he already looks at.',
+          'Session scheduling, session notes, and performance tracking client by client.',
+          'A record of what each client owes, with no payment module.',
+        ],
+        results: [
+          {
+            value: '5',
+            unit: ' to 15',
+            caption: 'regular clients, before and today',
+          },
+          {
+            prefix: '+',
+            value: '30',
+            unit: '%',
+            caption: 'repeat bookings per new client',
+          },
+          {
+            value: '6',
+            unit: ' months',
+            caption: 'of development',
+          },
+          {
+            value: '20',
+            unit: ' to 25,000 $',
+            caption: 'the project bracket, excluding tax',
+          },
+        ],
+        quote: {
+          text: 'With this tool I can see the performance, and above all I know where to put the effort. Before, I had to remember everything. Today I know a client started at three push-ups, was doing fifteen two months later and seventeen last week. He sees his own progress, and I see what matters to him.',
+          author: 'Sarim Preap, founder, Anakut',
+        },
       },
       {
         slug: 'mp-massage',
@@ -597,16 +630,49 @@ export const en: Dict = {
         country: 'Switzerland',
         city: 'Neuchâtel',
         coords: { lat: 46.99, lon: 6.93 },
-        summary: 'A massage management app, and a site.',
+        summary: 'A booking and follow-up app, company accounts, and a site.',
         site: 'mpmassage.ch',
-        result: null,
+        result: 'Retention up 42%, and no missed appointments left.',
         shot: null,
         video: null,
-        context: null,
-        need: null,
-        built: ['A massage management app', 'A site'],
-        results: null,
-        quote: null,
+        context:
+          'MP Massage is a massage practice in Neuchâtel. Booking ran through off the shelf tools like OneDoc, and it worked: that was not the problem. The problem was everything around it. Most clients took the standard treatment and nothing else, follow-up was done by hand, and nothing connected one session to the next.',
+        need:
+          'To know, before the client walks in, what hurts and what was done last time. And to open the door to companies, who were asking to book for their teams without having to call.',
+        built: [
+          'A booking app, where the client takes their appointment and finds their own history.',
+          'A record of pains and sessions, readable before the next appointment.',
+          'Company accounts: each company books for its teams, with an account per employee and what they are entitled to.',
+          'The site in Next.js, and the app in Vue.js on a Laravel back end, with MariaDB.',
+        ],
+        results: [
+          {
+            prefix: '+',
+            value: '42',
+            unit: '%',
+            caption: 'retention',
+          },
+          {
+            prefix: '+',
+            value: '25',
+            unit: '%',
+            caption: 'revenue',
+          },
+          {
+            value: '2',
+            unit: ' to 0',
+            caption: 'missed appointments a month, before and for the last three months',
+          },
+          {
+            value: '8',
+            unit: ' months',
+            caption: 'of development, spread out to fit the budget',
+          },
+        ],
+        quote: {
+          text: 'I was won over by how well this app works. I did not believe in it at first: people had come to sell me similar tools several times, and I had never really believed them. I let Kuiper Studio tempt me, mostly for how flexible they were on budget. I did not have a big budget, and they simply said they could stretch the development time while cutting the cost, delivering in stages. Saving 30 to 35% against two months of extra lead time was all upside. We agreed on that, we built it, we followed it through, and it is exactly what I needed.',
+          author: 'The founder, MP Massage',
+        },
       },
       {
         slug: 'ocs',
@@ -615,36 +681,43 @@ export const en: Dict = {
         country: 'Cambodia',
         city: null,
         coords: null,
-        summary: 'Tracking cleaning teams at an airport, with clock-in and invoicing.',
+        summary: 'Cleaning team tracking in an airport, with clock in and billing.',
         site: null,
         result: null,
         shot: null,
         video: null,
-        context: null,
-        need: null,
-        built: ['Team clock-in', 'Invoicing'],
+        context:
+          'OCS cleans an airport. Its managers knew an officer had turned up, but not whether they had actually been through a given zone, or at what time. On an airport site, that question is not a matter of comfort.',
+        need:
+          'To prove the visit, zone by zone, to the minute. Not just presence on site: presence at the exact spot that was due to be cleaned.',
+        built: [
+          'An NFC tag per zone, which an officer taps with their phone on arrival.',
+          'A mobile app for the officers, which records the visit, the zone and the time.',
+          'A supervision interface showing what was done, where, and by whom.',
+        ],
         results: null,
         quote: null,
       },
       {
         slug: 'wave',
-        name: 'Wave',
+        name: 'Wave Network',
         sector: 'Insurance and brokerage',
         country: 'Switzerland',
         city: null,
         coords: null,
-        summary: 'A mobile loyalty app, and the tool that runs it.',
+        summary: 'A loyalty programme: two mobile apps, and their back office.',
         site: null,
         result: 'An app quoted at 200,000 dollars elsewhere, delivered for 25,000.',
         shot: null,
         video: null,
         context:
-          'Wave wanted a mobile loyalty app for their clients, and the management tool to go with it. The project had been quoted elsewhere, and the quote came back at 200,000 dollars: a figure that closes the subject for most companies of that size.',
+          'Wave Network wanted to replace the loyalty card their clients carried with an app. The project had been quoted elsewhere, and the quote came back at 200,000 dollars: a figure that closes the subject.',
         need:
           'To get the same thing for what they could actually put in. That meant going through the scope point by point, separating what the app needed in order to exist from what could come later, and building the first version on that sort.',
         built: [
-          'A mobile loyalty app for their clients.',
-          'The management tool that goes with it, on Wave’s side.',
+          'A mobile app for clients: they scan a QR code at a partner, and see what they have saved.',
+          'A mobile app for partner merchants, which records the visit.',
+          'The web back office that drives both, on Wave Network’s side.',
           'A scope cut for a first launch, with the rest held back rather than sold as options paid for upfront.',
         ],
         results: [
@@ -657,6 +730,11 @@ export const en: Dict = {
             value: '25',
             unit: ',000 $',
             caption: 'what Kuiper Studio charged to deliver it',
+          },
+          {
+            value: '4.5',
+            unit: ' months',
+            caption: 'of development, delivered on time',
           },
         ],
         quote: null,
@@ -676,8 +754,22 @@ export const en: Dict = {
     title: 'What they say',
     note: 'Published only with the client’s written consent.',
     items: [
-      { company: null, author: null, role: null, text: null, photo: null },
-      { company: null, author: null, role: null, text: null, photo: null },
+      {
+        company: 'Anakut',
+        author: 'Sarim Preap',
+        role: 'Founder',
+        text: 'With this tool I can see the performance, and above all I know where to put the effort. Before, I had to remember everything.',
+        photo: null,
+      },
+      {
+        company: 'MP Massage',
+        author: null,
+        role: 'The founder',
+        text: 'I did not believe in it at first: people had come to sell me similar tools several times. What decided me was how flexible they were on budget.',
+        photo: null,
+      },
+      // The third waits on Wave Network's testimonial, which has not been
+      // given yet. Two real ones beat three with one made up.
       { company: null, author: null, role: null, text: null, photo: null },
     ],
   },

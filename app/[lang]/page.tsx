@@ -22,6 +22,7 @@ import Reveal from '@/components/Reveal'
 import ScrollSequence from '@/components/sequence/ScrollSequence'
 import { accent } from '@/components/accent'
 import SectionBlock from '@/components/SectionBlock'
+import Testimonials from '@/components/Testimonials'
 import SplitHeading from '@/components/SplitHeading'
 import Typewriter from '@/components/Typewriter'
 import { Tbd } from '@/components/Tbd'
@@ -178,31 +179,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
       {/* les temoignages : fournis par le client, ou rien */}
       <SectionBlock tone="peach" id="temoignages">
-        <Reveal>
-          <div className="section__head">
-            <SplitHeading text={t.testimonials.title} />
-            <p className="lead">{t.testimonials.note}</p>
-          </div>
-        </Reveal>
-        <div className="grid grid--3">
-          {t.testimonials.items.map((item, i) => (
-            <Reveal key={i}>
-              <div className="card">
-                {item.text ? (
-                  <>
-                    <p className="card__quote">« {item.text} »</p>
-                    <p className="muted small" style={{ marginBottom: 0 }}>
-                      {item.author}
-                      {item.company ? `, ${item.company}` : ''}
-                    </p>
-                  </>
-                ) : (
-                  <Tbd locale={lang} what={t.words.testimonial} />
-                )}
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        <Testimonials locale={lang} />
       </SectionBlock>
 
       {/* la FAQ */}
