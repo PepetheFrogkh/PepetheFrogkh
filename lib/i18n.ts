@@ -200,9 +200,27 @@ export function others(locale: Locale): Locale[] {
  * une construction ou `NEXT_PUBLIC_SITE_URL` n'est pas defini (GitHub Actions,
  * si la variable du depot manque) publierait tous les canonical vers une adresse
  * qui redirige, et le referencement se diluerait entre deux domaines.
+ *
+ * La variable est traitee comme absente quand elle est VIDE, et pas seulement
+ * quand elle n'existe pas : un workflow qui ecrit `NEXT_PUBLIC_SITE_URL:
+ * ${{ vars.X }}` avec un `X` non defini transmet une chaine vide, que `??`
+ * laisserait passer. Le site se construirait alors avec une origine vide, et
+ * tout ce qui fabrique une URL absolue casserait.
  */
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'https://www.kuiperstudio.com'
+const CANONICAL_ORIGIN = 'https://www.kuiperstudio.com'
+
+function resolveSiteUrl(): string {
+  const brut = (process.env.NEXT_PUBLIC_SITE_URL ?? '').trim().replace(/\/+$/, '')
+  if (!brut) return CANONICAL_ORIGIN
+  // Une valeur presente mais inexploitable vaut mieux corrigee que propagee.
+  try {
+    return new URL(brut).origin
+  } catch {
+    return CANONICAL_ORIGIN
+  }
+}
+
+export const SITE_URL = resolveSiteUrl()
 
 /** Toutes les pages, pour les boucles de generation et de resolution. */
 export const PAGES: PageKey[] = [
