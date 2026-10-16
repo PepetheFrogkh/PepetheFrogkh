@@ -200,8 +200,8 @@ export async function generateMetadata({
   } else if (route.kind === 'article') {
     const found = await article(lang, route.slug)
     if (!found) return {}
-    title = `${found.title} · ${t.meta.siteName}`
-    description = found.summary
+    title = `${found.seoTitle} · ${t.meta.siteName}`
+    description = found.description
   } else if (route.kind === 'page' || route.kind === 'text') {
     title = t.meta[route.page].title
     description = t.meta[route.page].description

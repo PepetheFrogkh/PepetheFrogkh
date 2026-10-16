@@ -192,8 +192,17 @@ export function others(locale: Locale): Locale[] {
   return LOCALES.filter((l) => l !== locale)
 }
 
+/**
+ * L'origine canonique du site.
+ *
+ * La valeur par defaut est le domaine AVEC `www`, parce que c'est celui que sert
+ * l'hebergeur : le domaine nu y est redirige en 301. Sans ce `www` par defaut,
+ * une construction ou `NEXT_PUBLIC_SITE_URL` n'est pas defini (GitHub Actions,
+ * si la variable du depot manque) publierait tous les canonical vers une adresse
+ * qui redirige, et le referencement se diluerait entre deux domaines.
+ */
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'https://kuiperstudio.com'
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'https://www.kuiperstudio.com'
 
 /** Toutes les pages, pour les boucles de generation et de resolution. */
 export const PAGES: PageKey[] = [

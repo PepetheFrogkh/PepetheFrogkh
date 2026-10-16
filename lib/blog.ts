@@ -16,7 +16,19 @@ import type { Locale } from './i18n'
 
 export interface Article {
   slug: string
+  /** Le titre de la page, affiche en h1. */
   title: string
+  /**
+   * Le titre court du `<title>`, suffixe de marque non compris : 60 caracteres
+   * au plus, le h1 etant souvent plus long. A defaut, le h1 sert de titre.
+   */
+  seoTitle: string
+  /**
+   * La meta description, 110 a 160 caracteres. A defaut, le chapo sert de
+   * description, au risque d'etre tronque dans les resultats de recherche.
+   */
+  description: string
+  /** Le chapo, affiche sous le titre. */
   summary: string
   /** Au format ISO, pour que le tri et le flux RSS soient d'accord. */
   date: string
@@ -38,10 +50,14 @@ function readingTime(body: string): number {
 
 function parse(slug: string, raw: string): Article {
   const { data, content } = matter(raw)
+  const title = String(data.title ?? slug)
+  const summary = String(data.summary ?? '')
   return {
     slug,
-    title: String(data.title ?? slug),
-    summary: String(data.summary ?? ''),
+    title,
+    seoTitle: String(data.seoTitle ?? title),
+    description: String(data.description ?? summary),
+    summary,
     date: String(data.date ?? ''),
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     draft: data.draft === true,

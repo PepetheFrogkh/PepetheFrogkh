@@ -1,0 +1,84 @@
+# Déploiement Hostinger : à chaque push sur main, construit l'export statique
+# (npm run build -> out/) et le publie sur la branche `deploy`. Hostinger
+# (hPanel -> Git) déploie la branche `deploy` dans public_html.
+#
+# Secret optionnel HOSTINGER_DEPLOY_WEBHOOK : l'URL « Auto deployment » fournie
+# par hPanel. Si elle est définie, le workflow l'appelle une fois la branche
+# poussée, pour que Hostinger récupère tout de suite la nouvelle version.
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Un seul déploiement à la fois, dans l'ordre des push.
+concurrency:
+  group: deploy-hostinger
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build (export statique)
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+          # Variables publiques facultatives (Settings -> Secrets and variables -> Actions -> Variables)
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+          NEXT_PUBLIC_CONTACT_WEBHOOK: ${{ vars.NEXT_PUBLIC_CONTACT_WEBHOOK }}
+
+      - name: Publier out/ sur la branche deploy
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          DIR="$RUNNER_TEMP/deploy"
+
+          # Branche existante : on repart de son dernier commit (historique linéaire,
+          # Hostinger n'a qu'à faire un pull). Sinon : branche orpheline vide.
+          if git ls-remote --exit-code --heads origin deploy >/dev/null; then
+            git fetch --depth=1 origin deploy
+            git worktree add --detach "$DIR" FETCH_HEAD
+          else
+            git worktree add --detach "$DIR"
+            git -C "$DIR" checkout --orphan deploy
+            git -C "$DIR" rm -rfq --ignore-unmatch .
+          fi
+
+          # Remplace tout le contenu par out/ (fichiers cachés compris : .htaccess).
+          find "$DIR" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a out/. "$DIR"/
+
+          cd "$DIR"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Aucun changement dans out/, rien à publier."
+            exit 0
+          fi
+          git commit -qm "Déploiement de main@${GITHUB_SHA::7}"
+          git push origin HEAD:refs/heads/deploy
+
+      - name: Prévenir Hostinger
+        env:
+          HOOK: ${{ secrets.HOSTINGER_DEPLOY_WEBHOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "Secret HOSTINGER_DEPLOY_WEBHOOK absent : Hostinger se met à jour via son propre webhook GitHub."
+          else
+            curl -fsS -X POST "$HOOK" -o /dev/null && echo "Hostinger prévenu."
+          fi
