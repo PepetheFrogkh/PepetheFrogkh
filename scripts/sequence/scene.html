@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sequence</title>
+    <style>
+      html, body { margin: 0; padding: 0; background: #fff8f3; overflow: hidden; }
+      canvas { display: block; }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      import * as THREE from './three.module.js'
+
+      /**
+       * La scene de l'en-tete : les outils s'assemblent en anneau, et l'anneau
+       * tourne. Elle illustre le titre, « les outils qui font tourner votre
+       * entreprise », au lieu de decorer a cote de lui.
+       *
+       * Rendue image par image, hors ligne : aucune de ces lignes ne part dans
+       * le navigateur du visiteur, qui ne recoit que des WebP.
+       */
+
+      const CREAM = 0xfff8f3
+      const WHITE = 0xffffff
+      const PEACH = 0xffe3cf
+      const ORANGE = 0xff6b00
+      const TERRA = 0xc2410c
+      const SLATE = 0x8a97ab
+
+      const params = new URLSearchParams(location.search)
+      const W = Number(params.get('w') ?? 1600)
+      const H = Number(params.get('h') ?? 900)
+      const PORTRAIT = H > W
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
+      renderer.setSize(W, H, false)
+      renderer.setPixelRatio(1)
+      renderer.setClearColor(CREAM, 1)
+      renderer.toneMapping = THREE.NoToneMapping
+      renderer.shadowMap.enabled = false
+      document.body.append(renderer.domElement)
+
+      const scene = new THREE.Scene()
+      scene.background = new THREE.Color(CREAM)
+      // une brume couleur creme : les plaques du fond se fondent dans le fond
+      // au lieu de se detacher sur une ligne nette
+      scene.fog = new THREE.Fog(CREAM, 16, 34)
+
+      const camera = new THREE.PerspectiveCamera(32, W / H, 0.1, 100)
+
+      scene.add(new THREE.AmbientLight(0xffffff, 1.9))
+      const key = new THREE.DirectionalLight(0xffffff, 2.3)
+      key.position.set(4, 7, 6)
+      scene.add(key)
+      const fill = new THREE.DirectionalLight(PEACH, 1.1)
+      fill.position.set(-6, -2, 4)
+      scene.add(fill)
+
+      /** Un rectangle aux coins arrondis, extrude : la « plaque outil ». */
+      function plate(w, h, r, depth) {
+        const shape = new THREE.Shape()
+        shape.moveTo(-w / 2 + r, -h / 2)
+        shape.lineTo(w / 2 - r, -h / 2)
+        shape.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r)
+        shape.lineTo(w / 2, h / 2 - r)
+        shape.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2)
+        shape.lineTo(-w / 2 + r, h / 2)
+        shape.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r)
+        shape.lineTo(-w / 2, -h / 2 + r)
+        shape.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2)
+        const geo = new THREE.ExtrudeGeometry(shape, {
+          depth,
+          bevelEnabled: true,
+          bevelThickness: 0.015,
+          bevelSize: 0.015,
+          bevelSegments: 2,
+          curveSegments: 6,
+        })
+        geo.center()
+        return geo
+      }
+
+      const GEO = {
+        wide: plate(1.5, 0.95, 0.16, 0.09),
+        tall: plate(0.95, 1.4, 0.16, 0.09),
+        small: plate(0.78, 0.78, 0.14, 0.09),
+      }
+      const KINDS = ['wide', 'tall', 'small']
+      /** Les dimensions utiles de chaque plaque, pour y poser un logo. */
+      const SIZE = {
+        wide: [1.5, 0.95],
+        tall: [0.95, 1.4],
+        small: [0.78, 0.78],
+      }
+
+      /**
+       * Les outils, poses sur les plaques.
+       *
+       * L'anneau etait fait de plaques nues : il disait « des outils » sans
+       * dire lesquels. Il nomme maintenant ce que nous savons brancher, ce
+       * qui est tout l'interet de la scene. Les fichiers sont ceux du
+       * simulateur, dans public/tools/, copies a cote de la scene par
+       * scripts/sequence/render.mjs.
+       *
+       * Un SVG ne se pose pas directement sur un materiau Three.js : il est
+       * dessine dans un canvas, qui devient la texture. Le canvas est
+       * transparent, donc la couleur de la plaque reste visible derriere.
+       */
+      const TOOLS = [
+        'excel', 'google', 'teams', 'slack', 'whatsapp',
+        'telegram', 'hubspot', 'mailchimp', 'odoo',
+      ]
+
+      const LOGO_PX = 256
+
+      async function logoTexture(name) {
+        const image = new Image()
+        image.src = `./tools/${name}.svg`
+        await image.decode()
+        const canvas = document.createElement('canvas')
+        canvas.width = LOGO_PX
+        canvas.height = LOGO_PX
+        const ctx = canvas.getContext('2d')
+        // le logo occupe 74 % du carre, centre : il lui faut une marge, sinon
+        // il touche le bord arrondi de la plaque
+        const side = LOGO_PX * 0.74
+        const at = (LOGO_PX - side) / 2
+        ctx.drawImage(image, at, at, side, side)
+        const texture = new THREE.CanvasTexture(canvas)
+        texture.colorSpace = THREE.SRGBColorSpace
+        texture.anisotropy = 4
+        return texture
+      }
+
+      const LOGOS = await Promise.all(TOOLS.map(logoTexture))
+
+      const MATS = [
+        new THREE.MeshStandardMaterial({ color: WHITE, roughness: 0.52, metalness: 0 }),
+        new THREE.MeshStandardMaterial({ color: PEACH, roughness: 0.58, metalness: 0 }),
+        new THREE.MeshStandardMaterial({ color: ORANGE, roughness: 0.42, metalness: 0 }),
+        new THREE.MeshStandardMaterial({ color: SLATE, roughness: 0.6, metalness: 0 }),
+      ]
+      // une plaque sur six est orange vif, une sur huit est ardoise : les
+      // accents ponctuent, ils ne couvrent pas
+      function materialFor(i) {
+        if (i % 6 === 2) return MATS[2]
+        if (i % 8 === 5) return MATS[3]
+        if (i % 3 === 1) return MATS[1]
+        return MATS[0]
+      }
+
+      /** Un tirage reproductible : la meme sequence a chaque rendu. */
+      function rng(seed) {
+        let s = seed >>> 0
+        return () => {
+          s = (s * 1664525 + 1013904223) >>> 0
+          return s / 4294967296
+        }
+      }
+
+      const COUNT = PORTRAIT ? 26 : 38
+      const RADIUS = PORTRAIT ? 3.1 : 4.2
+      const belt = new THREE.Group()
+      scene.add(belt)
+
+      const pieces = []
+      const rand = rng(20261014)
+      /**
+       * Une plaque sur trois porte un logo, et les neuf se suivent dans
+       * l'ordre : sur un anneau de 38 plaques, chaque outil apparait une fois
+       * et un peu plus, assez pour qu'on les lise tous en un tour.
+       */
+      let logoAt = 0
+      for (let i = 0; i < COUNT; i++) {
+        const kind = KINDS[i % KINDS.length]
+        const porteLogo = i % 3 === 0
+        // Une plaque qui porte un logo est blanche, toujours : sur l'ardoise
+        // et sur l'orange vif, un logo de marque ne se lit plus.
+        const mesh = new THREE.Mesh(GEO[kind], porteLogo ? MATS[0] : materialFor(i))
+
+        if (porteLogo) {
+          const texture = LOGOS[logoAt % LOGOS.length]
+          logoAt++
+          // Le logo tient dans le plus petit cote de la plaque, et se pose
+          // juste devant sa face : la plaque fait 0,09 d'epaisseur, centree,
+          // donc sa face avant est a 0,045.
+          const [w, h] = SIZE[kind]
+          const side = Math.min(w, h) * 0.86
+          const skin = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            depthWrite: false,
+          })
+          /**
+           * Un logo de chaque cote, et non un seul en double face.
+           *
+           * La plaque fait 0,09 d'epaisseur, plus 0,015 de biseau de chaque
+           * cote : sa face avant est a 0,06 du centre, pas a 0,045. Un badge
+           * pose a 0,047 se retrouvait dans la plaque et le test de profondeur
+           * le rejetait : les plaques sortaient nues. Et comme l'anneau
+           * tourne, la moitie des plaques montre sa face arriere : il en faut
+           * un derriere, retourne, sinon le logo n'est lisible qu'un demi-tour
+           * sur deux.
+           */
+          const geo = new THREE.PlaneGeometry(side, side)
+          const devant = new THREE.Mesh(geo, skin)
+          devant.position.z = 0.072
+          mesh.add(devant)
+
+          const derriere = new THREE.Mesh(geo, skin)
+          derriere.position.z = -0.072
+          derriere.rotation.y = Math.PI
+          mesh.add(derriere)
+        }
+        // la place d'arrivee : sur l'anneau, legerement epaissi
+        const angle = (i / COUNT) * Math.PI * 2
+        const wobble = (rand() - 0.5) * 0.5
+        const end = new THREE.Vector3(
+          Math.cos(angle) * (RADIUS + wobble),
+          (rand() - 0.5) * 0.7,
+          Math.sin(angle) * (RADIUS + wobble),
+        )
+        // le depart : disperse, loin, et de travers
+        const start = new THREE.Vector3(
+          (rand() - 0.5) * 22,
+          (rand() - 0.5) * 14,
+          (rand() - 0.5) * 20 - 4,
+        )
+        const spin = new THREE.Euler(
+          (rand() - 0.5) * Math.PI * 2,
+          (rand() - 0.5) * Math.PI * 2,
+          (rand() - 0.5) * Math.PI * 2,
+        )
+        // l'arrivee regarde vers l'exterieur de l'anneau, bien a plat
+        const rest = new THREE.Euler(0, -angle + Math.PI / 2, 0)
+        belt.add(mesh)
+        pieces.push({ mesh, start, end, spin, rest, delay: rand() * 0.42 })
+      }
+
+      /** Le noyau : la planete du logo, sans son anneau trace. */
+      const core = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(1, 4),
+        new THREE.MeshStandardMaterial({ color: WHITE, roughness: 0.35, metalness: 0 }),
+      )
+      scene.add(core)
+      const halo = new THREE.Mesh(
+        new THREE.TorusGeometry(1.72, 0.035, 10, 120),
+        new THREE.MeshStandardMaterial({ color: TERRA, roughness: 0.4, metalness: 0 }),
+      )
+      halo.rotation.x = Math.PI / 2
+      scene.add(halo)
+
+      const easeOut = (t) => 1 - Math.pow(1 - t, 3)
+      const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
+      const clamp01 = (t) => Math.min(1, Math.max(0, t))
+
+      /**
+       * Pose la scene a une progression donnee, entre 0 et 1.
+       *
+       * 0 a 0,55 : les plaques arrivent et se rangent. 0,55 a 1 : l'anneau
+       * tourne, et la camera recule un peu. Les deux phases se recouvrent,
+       * pour qu'aucune image ne soit immobile.
+       */
+      window.poseFrame = (t) => {
+        const assemble = clamp01(t / 0.62)
+        const turn = clamp01((t - 0.3) / 0.7)
+
+        for (const piece of pieces) {
+          const local = easeOut(clamp01((assemble - piece.delay) / (1 - piece.delay)))
+          piece.mesh.position.lerpVectors(piece.start, piece.end, local)
+          piece.mesh.rotation.set(
+            THREE.MathUtils.lerp(piece.spin.x, piece.rest.x, local),
+            THREE.MathUtils.lerp(piece.spin.y, piece.rest.y, local),
+            THREE.MathUtils.lerp(piece.spin.z, piece.rest.z, local),
+          )
+          const s = 0.35 + 0.65 * local
+          piece.mesh.scale.setScalar(s)
+        }
+
+        // l'anneau s'incline puis tourne : un tiers de tour sur la sequence
+        belt.rotation.y = easeInOut(turn) * Math.PI * 0.66
+        belt.rotation.x = THREE.MathUtils.lerp(0.62, 0.34, easeInOut(turn))
+        belt.rotation.z = THREE.MathUtils.lerp(0.18, 0.06, easeInOut(turn))
+
+        const grown = easeOut(clamp01((t - 0.08) / 0.5))
+        core.scale.setScalar(0.12 + 0.88 * grown)
+        core.rotation.y = t * Math.PI * 0.8
+        halo.scale.setScalar(0.12 + 0.88 * grown)
+        halo.rotation.z = belt.rotation.y * 0.5
+        halo.rotation.x = Math.PI / 2 + belt.rotation.x * 0.6
+
+        const dist = PORTRAIT ? 13.5 : 12.2
+        camera.position.set(
+          Math.sin(t * 0.22) * 0.8,
+          THREE.MathUtils.lerp(1.9, 3.1, easeInOut(t)),
+          THREE.MathUtils.lerp(dist, dist + 1.6, easeInOut(t)),
+        )
+        camera.lookAt(0, 0, 0)
+        renderer.render(scene, camera)
+      }
+
+      window.poseFrame(0)
+      window.sceneReady = true
+    </script>
+  </body>
+</html>

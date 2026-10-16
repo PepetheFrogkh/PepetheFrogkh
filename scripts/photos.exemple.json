@@ -1,0 +1,15 @@
+{
+  "restaurants": {
+    "url": "https://images.unsplash.com/photo-REMPLACER",
+    "alt": "À remplir : ce que montre la photo, en une phrase",
+    "credit": "Photo : Prénom Nom, Unsplash"
+  },
+  "retail": { "url": "", "alt": "", "credit": "" },
+  "hotels": { "url": "", "alt": "", "credit": "" },
+  "manufacturing": { "url": "", "alt": "", "credit": "" },
+  "teams": { "url": "", "alt": "", "credit": "" },
+  "crm": { "url": "", "alt": "", "credit": "" },
+  "automation": { "url": "", "alt": "", "credit": "" },
+  "ai": { "url": "", "alt": "", "credit": "" },
+  "insurance": { "url": "", "alt": "", "credit": "" }
+}

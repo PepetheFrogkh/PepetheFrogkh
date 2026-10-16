@@ -1,7 +1,16 @@
 node_modules/
 .next/
 out/
-.env*.local
 *.tsbuildinfo
-next-env.d.ts
+.env
+.env.local
 .DS_Store
+__pycache__/
+*.pyc
+
+# copie de travail de Three.js a cote de la scene, voir public/sequence/README.md
+scripts/sequence/three.*.js
+scripts/sequence/tools/
+
+# l'export statique, refait a chaque build
+/out
